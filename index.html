@@ -342,9 +342,8 @@ at a time. 💪</div>
   </footer>
 
   <script>
-    // Redirect to dashboard if already logged in
     if (localStorage.getItem("duezly_token")) {
-      document.querySelectorAll("a[href='#signup']").forEach(a => a.href = "dashboard.html");
+      window.location.href = "dashboard.html";
     }
   </script>
 
