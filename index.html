@@ -209,6 +209,33 @@
     .ical-box li { font-size: 0.875rem; color: #374151; line-height: 1.9; }
     .ical-box code { background: #fde68a; color: #92400e; padding: 1px 7px; border-radius: 5px; font-size: 0.8rem; font-weight: 700; }
 
+    /* ── FAQ ── */
+    .faq { background: var(--bg); }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .faq-question {
+      width: 100%; text-align: left;
+      padding: 18px 20px;
+      background: none; border: none; cursor: pointer;
+      font-size: 0.95rem; font-weight: 700; color: var(--text);
+      font-family: inherit;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px;
+    }
+    .faq-question:hover { background: var(--bg-warm); }
+    .faq-chevron { font-size: 0.75rem; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-answer {
+      display: none;
+      padding: 0 20px 18px;
+      font-size: 0.875rem; color: var(--muted); line-height: 1.7;
+    }
+    .faq-item.open .faq-answer { display: block; }
+
     /* ── Footer ── */
     footer {
       border-top: 1px solid var(--border);
@@ -335,6 +362,60 @@ at a time. 💪</div>
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section class="section faq">
+    <div class="section-inner">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Common questions.</h2>
+      <p class="section-sub">Everything you need to know before signing up.</p>
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Does this work for my school? <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">If your school uses Canvas, yes! We support any Canvas school — just grab your iCal feed URL from the Canvas calendar page and paste it in your dashboard.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            What does the text message look like? <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">You get a clean daily text with assignments due today, tomorrow, and later this week — including the due time when Canvas provides it. On Fridays and Sundays the message has a little personality too. 😄</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Can I choose when I get the text? <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">Yes! In your dashboard you can pick any time from 5 AM to 12 PM and set your timezone. We support all US timezones.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Is my Canvas data safe? <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">We only read your public iCal feed — a read-only link Canvas generates for you. We never ask for your Canvas username or password, and we never access your grades, messages, or account.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            How do I stop the texts? <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">Reply <strong>STOP</strong> to any text and you'll be unsubscribed immediately. You can also unsubscribe or delete your account anytime from your dashboard.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Is Duezly free? <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">Yes, Duezly is free right now. Sign in with Google, add your Canvas link and phone number, and you're all set.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer>
     <p>&copy; 2026 Duezly. All rights reserved.</p>
@@ -345,6 +426,10 @@ at a time. 💪</div>
   </footer>
 
   <script>
+    function toggleFaq(btn) {
+      btn.closest(".faq-item").classList.toggle("open");
+    }
+
     function signOut() {
       localStorage.removeItem("duezly_token");
       window.location.href = "index.html";
