@@ -47,6 +47,9 @@
       text-decoration: none; transition: opacity 0.15s, transform 0.1s;
     }
     .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+    .nav-signout { font-size: 0.875rem; color: var(--muted); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+    .nav-signout:hover { color: var(--orange); }
+    .hidden { display: none; }
 
     /* ── Hero ── */
     .hero {
@@ -232,6 +235,7 @@
   <nav>
     <div class="nav-logo">Duezly ☀️</div>
     <div style="display:flex;gap:12px;align-items:center;">
+      <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
       <a href="dashboard.html" id="nav-cta" class="nav-cta">Sign up free</a>
     </div>
   </nav>
@@ -341,10 +345,15 @@ at a time. 💪</div>
   </footer>
 
   <script>
+    function signOut() {
+      localStorage.removeItem("duezly_token");
+      window.location.href = "index.html";
+    }
     if (localStorage.getItem("duezly_token")) {
       const comingFromDash = new URLSearchParams(location.search).get("ref") === "dash";
       if (comingFromDash) {
         document.getElementById("nav-cta").textContent = "My Dashboard";
+        document.getElementById("signout-btn").classList.remove("hidden");
       } else {
         window.location.href = "dashboard.html";
       }
