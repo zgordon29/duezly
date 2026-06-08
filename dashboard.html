@@ -280,20 +280,26 @@
 
       btn.disabled = true; btn.textContent = "Saving..."; msg.style.display = "none";
 
-      const res = await fetch(`${API}/user`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-        body: JSON.stringify({ action: "update", phone, canvas_url })
-      });
-      const data = await res.json();
-      msg.className = res.ok ? "msg success" : "msg error";
-      msg.textContent = data.message;
-      msg.style.display = "block";
-      if (res.ok) {
-        document.getElementById("info-phone").textContent = phone;
-        document.getElementById("info-canvas").textContent = canvas_url;
-        document.getElementById("status-badge").className = "status-badge active";
-        document.getElementById("status-text").textContent = "Active";
+      try {
+        const res = await fetch(`${API}/user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+          body: JSON.stringify({ action: "update", phone, canvas_url })
+        });
+        const data = await res.json();
+        msg.className = res.ok ? "msg success" : "msg error";
+        msg.textContent = data.message;
+        msg.style.display = "block";
+        if (res.ok) {
+          document.getElementById("info-phone").textContent = phone;
+          document.getElementById("info-canvas").textContent = canvas_url;
+          document.getElementById("status-badge").className = "status-badge active";
+          document.getElementById("status-text").textContent = "Active";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Network error — please try again.";
+        msg.style.display = "block";
       }
       btn.disabled = false; btn.textContent = "Save changes";
     });
@@ -304,18 +310,24 @@
       if (!confirm("Are you sure you want to stop your daily reminders?")) return;
 
       btn.disabled = true;
-      const res = await fetch(`${API}/user`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-        body: JSON.stringify({ action: "unsubscribe" })
-      });
-      const data = await res.json();
-      msg.className = res.ok ? "msg success" : "msg error";
-      msg.textContent = data.message;
-      msg.style.display = "block";
-      if (res.ok) {
-        document.getElementById("status-badge").className = "status-badge inactive";
-        document.getElementById("status-text").textContent = "Inactive";
+      try {
+        const res = await fetch(`${API}/user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+          body: JSON.stringify({ action: "unsubscribe" })
+        });
+        const data = await res.json();
+        msg.className = res.ok ? "msg success" : "msg error";
+        msg.textContent = data.message;
+        msg.style.display = "block";
+        if (res.ok) {
+          document.getElementById("status-badge").className = "status-badge inactive";
+          document.getElementById("status-text").textContent = "Inactive";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Network error — please try again.";
+        msg.style.display = "block";
       }
       btn.disabled = false;
     }
