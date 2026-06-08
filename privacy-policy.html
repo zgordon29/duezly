@@ -92,7 +92,7 @@
 
   <nav>
     <a href="index.html" class="nav-logo">Duezly ☀️</a>
-    <a href="index.html#signup" class="nav-cta">Sign up free</a>
+    <a href="dashboard.html" id="nav-cta" class="nav-cta">Sign up free</a>
   </nav>
 
   <div class="page-header">
@@ -165,6 +165,14 @@
       <a href="terms.html">Terms &amp; Conditions</a>
     </div>
   </footer>
+
+  <script>
+    if (localStorage.getItem("duezly_token")) {
+      const cta = document.getElementById("nav-cta");
+      cta.textContent = "My Dashboard";
+      cta.href = "dashboard.html";
+    }
+  </script>
 
 </body>
 </html>
