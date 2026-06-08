@@ -280,6 +280,20 @@
     const API = "https://rri54forh2.execute-api.us-east-2.amazonaws.com";
     let sessionToken = localStorage.getItem("duezly_token");
 
+    const TZ_LABELS = {
+      "America/New_York": "Eastern (ET)", "America/Chicago": "Central (CT)",
+      "America/Denver": "Mountain (MT)", "America/Phoenix": "Mountain – no DST (AZ)",
+      "America/Los_Angeles": "Pacific (PT)", "America/Anchorage": "Alaska (AKT)",
+      "Pacific/Honolulu": "Hawaii (HT)"
+    };
+    const TIME_LABELS = {5:"5:00 AM",6:"6:00 AM",7:"7:00 AM",8:"8:00 AM",9:"9:00 AM",10:"10:00 AM",11:"11:00 AM",12:"12:00 PM"};
+
+    function updateSchedule(tz, st) {
+      const text = `${TIME_LABELS[st] || st} · ${TZ_LABELS[tz] || tz}`;
+      document.getElementById("info-send-time").textContent = text;
+      document.getElementById("status-schedule").textContent = `Texts sent at ${text}`;
+    }
+
     function normalizePhone(raw) {
       const digits = raw.replace(/\D/g, "");
       if (digits.length === 10) return "+1" + digits;
@@ -315,18 +329,7 @@
       if (data.timezone) document.getElementById("timezone").value = data.timezone;
       if (data.send_time != null) document.getElementById("send-time").value = data.send_time;
 
-      const tzLabels = {
-        "America/New_York": "Eastern (ET)", "America/Chicago": "Central (CT)",
-        "America/Denver": "Mountain (MT)", "America/Phoenix": "Mountain – no DST (AZ)",
-        "America/Los_Angeles": "Pacific (PT)", "America/Anchorage": "Alaska (AKT)",
-        "Pacific/Honolulu": "Hawaii (HT)"
-      };
-      const timeLabels = { 5:"5:00 AM",6:"6:00 AM",7:"7:00 AM",8:"8:00 AM",9:"9:00 AM",10:"10:00 AM",11:"11:00 AM",12:"12:00 PM" };
-      const tz = data.timezone || "America/New_York";
-      const st = data.send_time != null ? data.send_time : 8;
-      const scheduleText = `${timeLabels[st] || st} · ${tzLabels[tz] || tz}`;
-      document.getElementById("info-send-time").textContent = scheduleText;
-      document.getElementById("status-schedule").textContent = `Texts sent at ${scheduleText}`;
+      updateSchedule(data.timezone || "America/New_York", data.send_time != null ? data.send_time : 8);
 
       const badge = document.getElementById("status-badge");
       const text = document.getElementById("status-text");
@@ -382,16 +385,7 @@
           document.getElementById("info-canvas").textContent = canvas_url;
           document.getElementById("status-badge").className = "status-badge active";
           document.getElementById("status-text").textContent = "Active";
-          const tzLabels = {
-            "America/New_York": "Eastern (ET)", "America/Chicago": "Central (CT)",
-            "America/Denver": "Mountain (MT)", "America/Phoenix": "Mountain – no DST (AZ)",
-            "America/Los_Angeles": "Pacific (PT)", "America/Anchorage": "Alaska (AKT)",
-            "Pacific/Honolulu": "Hawaii (HT)"
-          };
-          const timeLabels = {5:"5:00 AM",6:"6:00 AM",7:"7:00 AM",8:"8:00 AM",9:"9:00 AM",10:"10:00 AM",11:"11:00 AM",12:"12:00 PM"};
-          const scheduleText = `${timeLabels[send_time] || send_time} · ${tzLabels[timezone] || timezone}`;
-          document.getElementById("info-send-time").textContent = scheduleText;
-          document.getElementById("status-schedule").textContent = `Texts sent at ${scheduleText}`;
+          updateSchedule(timezone, send_time);
         }
       } catch (err) {
         msg.className = "msg error";
