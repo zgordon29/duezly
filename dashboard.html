@@ -180,7 +180,7 @@
               <span class="status-dot"></span>
               <span id="status-text">Inactive</span>
             </span>
-            <span style="font-size:0.82rem;color:var(--muted);">Texts sent at 8am EST</span>
+            <span style="font-size:0.82rem;color:var(--muted);" id="status-schedule">Texts sent at 8:00 AM · Eastern (ET)</span>
           </div>
         </div>
 
@@ -324,7 +324,9 @@
       const timeLabels = { 5:"5:00 AM",6:"6:00 AM",7:"7:00 AM",8:"8:00 AM",9:"9:00 AM",10:"10:00 AM",11:"11:00 AM",12:"12:00 PM" };
       const tz = data.timezone || "America/New_York";
       const st = data.send_time != null ? data.send_time : 8;
-      document.getElementById("info-send-time").textContent = `${timeLabels[st] || st} · ${tzLabels[tz] || tz}`;
+      const scheduleText = `${timeLabels[st] || st} · ${tzLabels[tz] || tz}`;
+      document.getElementById("info-send-time").textContent = scheduleText;
+      document.getElementById("status-schedule").textContent = `Texts sent at ${scheduleText}`;
 
       const badge = document.getElementById("status-badge");
       const text = document.getElementById("status-text");
