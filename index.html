@@ -310,33 +310,23 @@ at a time. 💪</div>
     <div class="section-inner">
       <div class="section-label">Get started</div>
       <h2 class="section-title">Sign up in 30 seconds. 🚀</h2>
-      <p class="section-sub">Free forever. No credit card. Enter your phone number and Canvas calendar link below.</p>
-      <div class="signup-card">
-        <h2>Create your reminder</h2>
-        <p class="sub">You'll get a confirmation text right after signing up.</p>
-        <form id="signup-form">
-          <div class="field">
-            <label for="phone">📞 Phone number</label>
-            <input type="tel" id="phone" placeholder="(555) 000-1234" autocomplete="tel" required />
-          </div>
-          <div class="field">
-            <label for="canvas-url">🎓 Canvas iCal URL</label>
-            <input type="url" id="canvas-url" placeholder="https://yourschool.instructure.com/feeds/calendars/..." required />
-            <p class="hint">Not sure where to find this? <a href="#ical-instructions">See instructions below ↓</a></p>
-          </div>
-          <button type="submit" class="submit-btn" id="submit-btn">Text me my assignments ✉️</button>
-        </form>
-        <div class="msg" id="msg"></div>
+      <p class="section-sub">Free forever. No credit card. Just sign in with Google and add your Canvas link.</p>
+      <div class="signup-card" style="text-align:center;">
+        <div style="font-size:2rem;margin-bottom:12px;">👋</div>
+        <h2 style="margin-bottom:8px;">Create your account</h2>
+        <p class="sub" style="margin-bottom:28px;">Sign in with Google to get started. We only use your email to identify your account — we never post anything.</p>
+        <a href="dashboard.html" class="submit-btn" style="display:block;text-decoration:none;text-align:center;">Sign in with Google →</a>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:14px;">After signing in, add your phone number and Canvas calendar link in your dashboard.</p>
       </div>
 
-      <div class="ical-box" id="ical-instructions">
+      <div class="ical-box" id="ical-instructions" style="margin-top:28px;">
         <h3>🔗 How to find your Canvas iCal URL</h3>
         <ol>
           <li>Go to your school's Canvas site and log in.</li>
           <li>Click <strong>Calendar</strong> in the left sidebar.</li>
           <li>Scroll to the bottom right and click <code>Calendar Feed</code>.</li>
           <li>Copy the URL — it will contain <code>instructure.com/feeds/calendars/</code></li>
-          <li>Paste it in the field above and hit sign up!</li>
+          <li>Paste it in your dashboard after signing in.</li>
         </ol>
       </div>
     </div>
@@ -352,54 +342,10 @@ at a time. 💪</div>
   </footer>
 
   <script>
-    const API = "https://rri54forh2.execute-api.us-east-2.amazonaws.com/signup";
-
-    function normalizePhone(raw) {
-      const digits = raw.replace(/\D/g, "");
-      if (digits.length === 10) return "+1" + digits;
-      if (digits.length === 11 && digits[0] === "1") return "+" + digits;
-      return null;
+    // Redirect to dashboard if already logged in
+    if (localStorage.getItem("duezly_token")) {
+      document.querySelectorAll("a[href='#signup']").forEach(a => a.href = "dashboard.html");
     }
-
-    document.getElementById("signup-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById("submit-btn");
-      const msg = document.getElementById("msg");
-
-      const phone = normalizePhone(document.getElementById("phone").value);
-      const canvas_url = document.getElementById("canvas-url").value.trim();
-
-      if (!phone) {
-        msg.className = "msg error";
-        msg.textContent = "Please enter a valid 10-digit US phone number.";
-        msg.style.display = "block";
-        return;
-      }
-
-      btn.disabled = true;
-      btn.textContent = "Signing you up...";
-      msg.style.display = "none";
-
-      try {
-        const res = await fetch(API, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ phone, canvas_url })
-        });
-        const data = await res.json();
-        msg.className = res.ok ? "msg success" : "msg error";
-        msg.textContent = data.message;
-        msg.style.display = "block";
-        if (res.ok) document.getElementById("signup-form").reset();
-      } catch {
-        msg.className = "msg error";
-        msg.textContent = "Network error. Please try again.";
-        msg.style.display = "block";
-      }
-
-      btn.disabled = false;
-      btn.textContent = "Text me my assignments ✉️";
-    });
   </script>
 
 </body>
