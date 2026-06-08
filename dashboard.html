@@ -382,6 +382,16 @@
           document.getElementById("info-canvas").textContent = canvas_url;
           document.getElementById("status-badge").className = "status-badge active";
           document.getElementById("status-text").textContent = "Active";
+          const tzLabels = {
+            "America/New_York": "Eastern (ET)", "America/Chicago": "Central (CT)",
+            "America/Denver": "Mountain (MT)", "America/Phoenix": "Mountain – no DST (AZ)",
+            "America/Los_Angeles": "Pacific (PT)", "America/Anchorage": "Alaska (AKT)",
+            "Pacific/Honolulu": "Hawaii (HT)"
+          };
+          const timeLabels = {5:"5:00 AM",6:"6:00 AM",7:"7:00 AM",8:"8:00 AM",9:"9:00 AM",10:"10:00 AM",11:"11:00 AM",12:"12:00 PM"};
+          const scheduleText = `${timeLabels[send_time] || send_time} · ${tzLabels[timezone] || timezone}`;
+          document.getElementById("info-send-time").textContent = scheduleText;
+          document.getElementById("status-schedule").textContent = `Texts sent at ${scheduleText}`;
         }
       } catch (err) {
         msg.className = "msg error";
