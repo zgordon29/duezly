@@ -39,6 +39,10 @@
       transition: opacity 0.15s;
     }
     .nav-cta:hover { opacity: 0.9; }
+    .nav-signout { font-size: 0.875rem; color: var(--muted); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+    .nav-signout:hover { color: var(--orange); }
+    .hidden { display: none; }
+    .nav-right { display: flex; gap: 12px; align-items: center; }
 
     /* Page header */
     .page-header {
@@ -91,8 +95,11 @@
 <body>
 
   <nav>
-    <a href="index.html" class="nav-logo">Duezly ☀️</a>
-    <a href="dashboard.html" id="nav-cta" class="nav-cta">Sign up free</a>
+    <a href="index.html?ref=dash" class="nav-logo">Duezly ☀️</a>
+    <div class="nav-right">
+      <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
+      <a href="dashboard.html" id="nav-cta" class="nav-cta">Sign up free</a>
+    </div>
   </nav>
 
   <div class="page-header">
@@ -169,10 +176,13 @@
   </footer>
 
   <script>
+    function signOut() {
+      localStorage.removeItem("duezly_token");
+      window.location.href = "index.html";
+    }
     if (localStorage.getItem("duezly_token")) {
-      const cta = document.getElementById("nav-cta");
-      cta.textContent = "My Dashboard";
-      cta.href = "dashboard.html";
+      document.getElementById("nav-cta").textContent = "My Dashboard";
+      document.getElementById("signout-btn").classList.remove("hidden");
     }
   </script>
 
