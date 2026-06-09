@@ -295,13 +295,6 @@
               </select>
             </div>
             <div class="field">
-              <label for="theme-select">Theme</label>
-              <select id="theme-select" onchange="setTheme(this.value)">
-                <option value="light">☀️ Light</option>
-                <option value="dark">🌙 Dark</option>
-              </select>
-            </div>
-            <div class="field">
               <label for="timezone">Timezone</label>
               <select id="timezone">
                 <option value="America/New_York">Eastern (ET)</option>
@@ -311,6 +304,13 @@
                 <option value="America/Los_Angeles">Pacific (PT)</option>
                 <option value="America/Anchorage">Alaska (AKT)</option>
                 <option value="Pacific/Honolulu">Hawaii (HT)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="theme-select">Theme</label>
+              <select id="theme-select" onchange="setTheme(this.value)">
+                <option value="light">☀️ Light</option>
+                <option value="dark">🌙 Dark</option>
               </select>
             </div>
             <button type="submit" class="btn btn-primary" id="update-btn">Save changes</button>
@@ -528,7 +528,7 @@
       localStorage.setItem("duezly_theme", theme);
       document.getElementById("theme-select").value = theme;
     }
-    const savedTheme = localStorage.getItem("duezly_theme") || "light";
+    const savedTheme = localStorage.getItem("duezly_theme") || "dark";
     setTheme(savedTheme);
 
     // Auto-load if session exists
