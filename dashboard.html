@@ -115,6 +115,23 @@
     .status-badge.inactive { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 
+    .sub-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .sub-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .sub-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); margin-bottom: 3px; }
+    .sub-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .sub-value.active { color: #166534; }
+    .sub-value.canceled, .sub-value.past_due { color: #991b1b; }
+    .btn-subscribe {
+      padding: 9px 18px; border: none; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 700; cursor: pointer;
+      background: linear-gradient(135deg, #c2410c, #f59e0b); color: #fff;
+      transition: opacity 0.15s, transform 0.1s; white-space: nowrap;
+    }
+    .btn-subscribe:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-subscribe:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    body.dark .sub-value.active { color: #86efac; }
+    body.dark .sub-value.canceled, body.dark .sub-value.past_due { color: #fca5a5; }
+
     .info-row { display: flex; flex-direction: column; gap: 12px; }
     .info-item label { font-size: 0.78rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 3px; }
     .info-item span { font-size: 0.9rem; color: var(--text); word-break: break-all; }
@@ -234,6 +251,16 @@
             </span>
             <span style="font-size:0.82rem;color:var(--muted);" id="status-schedule">Texts sent at 8:00 AM · Eastern (ET)</span>
           </div>
+          <hr class="sub-divider" />
+          <div class="sub-row">
+            <div>
+              <div class="sub-label">Subscription</div>
+              <div id="sub-status-value" class="sub-value">Free</div>
+            </div>
+            <!-- Hidden until A2P 10DLC is approved -->
+            <button id="subscribe-btn" class="btn-subscribe hidden" onclick="subscribeNow()">Subscribe – $1.99/mo</button>
+          </div>
+          <div class="msg" id="sub-msg"></div>
         </div>
 
         <!-- Profile card -->
@@ -380,6 +407,7 @@
 
       localStorage.setItem("duezly_token", data.token);
       sessionToken = data.token;
+      userSubscriptionStatus = data.subscription_status || "free";
       showDashboard(data);
     }
 
@@ -408,7 +436,35 @@
         badge.className = "status-badge inactive";
         text.textContent = "Inactive";
       }
+
+      const saveBtn = document.getElementById("update-btn");
+      if ((data.subscription_status || "free") !== "active") {
+        saveBtn.textContent = "Save & Subscribe – $1.99/mo";
+      } else {
+        saveBtn.textContent = "Save changes";
+      }
+
+      const subEl = document.getElementById("sub-status-value");
+      const subBtn = document.getElementById("subscribe-btn");
+      const status = data.subscription_status || "free";
+      subEl.className = "sub-value " + status;
+      if (status === "active") {
+        subEl.textContent = "Active – $1.99/mo";
+        subBtn.classList.add("hidden");
+      } else if (status === "canceled") {
+        subEl.textContent = "Canceled";
+        subBtn.classList.remove("hidden");
+      } else if (status === "past_due") {
+        subEl.textContent = "Past due – update payment";
+        subBtn.textContent = "Update payment";
+        subBtn.classList.remove("hidden");
+      } else {
+        subEl.textContent = "Free";
+        subBtn.classList.remove("hidden");
+      }
     }
+
+    let userSubscriptionStatus = "free";
 
     async function loadDashboard() {
       if (!sessionToken) return;
@@ -419,6 +475,7 @@
         if (res.status === 401) { localStorage.removeItem("duezly_token"); return; }
         if (!res.ok) return;
         const data = await res.json();
+        userSubscriptionStatus = data.subscription_status || "free";
         showDashboard(data);
       } catch (err) {}
     }
@@ -436,7 +493,10 @@
         msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
       }
 
-      btn.disabled = true; btn.textContent = "Saving..."; msg.style.display = "none";
+      const isSubscribed = userSubscriptionStatus === "active";
+      btn.disabled = true;
+      btn.textContent = isSubscribed ? "Saving..." : "Saving...";
+      msg.style.display = "none";
 
       try {
         const res = await fetch(`${API}/user`, {
@@ -445,22 +505,38 @@
           body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time })
         });
         const data = await res.json();
-        msg.className = res.ok ? "msg success" : "msg error";
-        msg.textContent = data.message;
-        msg.style.display = "block";
-        if (res.ok) {
-          document.getElementById("info-phone").textContent = phone;
-          document.getElementById("info-canvas").textContent = canvas_url;
-          document.getElementById("status-badge").className = "status-badge active";
-          document.getElementById("status-text").textContent = "Active";
-          updateSchedule(timezone, send_time);
+        if (!res.ok) {
+          msg.className = "msg error";
+          msg.textContent = data.message;
+          msg.style.display = "block";
+          btn.disabled = false; btn.textContent = "Save changes";
+          return;
+        }
+
+        document.getElementById("info-phone").textContent = phone;
+        document.getElementById("info-canvas").textContent = canvas_url;
+        updateSchedule(timezone, send_time);
+
+        if (isSubscribed) {
+          msg.className = "msg success";
+          msg.textContent = "Settings saved.";
+          msg.style.display = "block";
+          btn.disabled = false; btn.textContent = "Save changes";
+        } else {
+          msg.className = "msg success";
+          msg.textContent = "Settings saved! Redirecting to checkout...";
+          msg.style.display = "block";
+          btn.textContent = "Redirecting...";
+          // Small delay so the user sees the message before redirect
+          await new Promise(r => setTimeout(r, 800));
+          await subscribeNow();
         }
       } catch (err) {
         msg.className = "msg error";
         msg.textContent = "Network error — please try again.";
         msg.style.display = "block";
+        btn.disabled = false; btn.textContent = "Save changes";
       }
-      btn.disabled = false; btn.textContent = "Save changes";
     });
 
     async function unsubscribe() {
@@ -517,10 +593,59 @@
       }
     }
 
+    async function subscribeNow() {
+      const btn = document.getElementById("subscribe-btn");
+      const msg = document.getElementById("sub-msg");
+      btn.disabled = true;
+      btn.textContent = "Loading...";
+      msg.style.display = "none";
+      try {
+        const res = await fetch(`${API}/user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+          body: JSON.stringify({ action: "create_checkout_session" })
+        });
+        const data = await res.json();
+        if (res.ok && data.checkout_url) {
+          window.location.href = data.checkout_url;
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.message || "Failed to start checkout. Please try again.";
+          msg.style.display = "block";
+          btn.disabled = false;
+          btn.textContent = "Subscribe – $1.99/mo";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Network error — please try again.";
+        msg.style.display = "block";
+        btn.disabled = false;
+        btn.textContent = "Subscribe – $1.99/mo";
+      }
+    }
+
     function signOut() {
       localStorage.removeItem("duezly_token");
       location.reload();
     }
+
+    // Handle Stripe redirect params
+    (function handleStripeRedirect() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("subscribed") === "true") {
+        const msg = document.getElementById("sub-msg");
+        msg.className = "msg success";
+        msg.textContent = "You're subscribed! Daily texts are now active.";
+        msg.style.display = "block";
+        window.history.replaceState({}, "", "dashboard.html");
+      } else if (params.get("canceled") === "true") {
+        const msg = document.getElementById("sub-msg");
+        msg.className = "msg error";
+        msg.textContent = "Checkout canceled — you have not been charged.";
+        msg.style.display = "block";
+        window.history.replaceState({}, "", "dashboard.html");
+      }
+    })();
 
     function setTheme(theme) {
       document.body.classList.toggle("dark", theme === "dark");
