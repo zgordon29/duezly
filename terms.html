@@ -14,9 +14,29 @@
       --bg: #ffffff;
       --bg-warm: #fef9f0;
     }
+    body.dark {
+      --orange: #f97316;
+      --orange-dark: #fb923c;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: #1e293b;
+      --bg: #0f172a;
+      --bg-warm: #111827;
+    }
+    body.dark nav { background: rgba(15,23,42,0.92); }
+    body.dark .card { background: #1e293b; border-color: #2d3748; }
+    body.dark p, body.dark li { color: #94a3b8; }
+    body.dark .highlight { background: rgba(249,115,22,0.1); border-color: #f97316; color: #fb923c; }
+    .theme-select {
+      font-size: 0.8rem; font-weight: 600;
+      background: rgba(0,0,0,0.06); color: var(--text);
+      border: 1px solid var(--border); border-radius: 7px;
+      padding: 5px 10px; cursor: pointer; font-family: inherit; outline: none;
+    }
+    body.dark .theme-select { background: rgba(255,255,255,0.08); border-color: #334155; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; background: var(--bg-warm); color: var(--text); -webkit-font-smoothing: antialiased; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; background: var(--bg-warm); color: var(--text); -webkit-font-smoothing: antialiased; transition: background 0.2s, color 0.2s; }
 
     /* Nav */
     nav {
@@ -97,6 +117,10 @@
   <nav>
     <a href="index.html?ref=dash" class="nav-logo">Duezly ☀️</a>
     <div class="nav-right">
+      <select class="theme-select" id="theme-select" onchange="setTheme(this.value)">
+        <option value="light">☀️ Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
       <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
       <a href="dashboard.html" id="nav-cta" class="nav-cta">Sign up free</a>
     </div>
@@ -176,6 +200,14 @@
   </footer>
 
   <script>
+    function setTheme(theme) {
+      document.body.classList.toggle("dark", theme === "dark");
+      localStorage.setItem("duezly_theme", theme);
+      document.getElementById("theme-select").value = theme;
+    }
+    const savedTheme = localStorage.getItem("duezly_theme") || "light";
+    setTheme(savedTheme);
+
     function signOut() {
       localStorage.removeItem("duezly_token");
       window.location.href = "index.html";
