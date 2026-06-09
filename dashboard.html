@@ -306,13 +306,6 @@
                 <option value="Pacific/Honolulu">Hawaii (HT)</option>
               </select>
             </div>
-            <div class="field">
-              <label for="theme-select">Theme</label>
-              <select id="theme-select" onchange="setTheme(this.value)">
-                <option value="light">☀️ Light</option>
-                <option value="dark">🌙 Dark</option>
-              </select>
-            </div>
             <button type="submit" class="btn btn-primary" id="update-btn">Save changes</button>
           </form>
           <div class="msg" id="update-msg"></div>
@@ -342,6 +335,12 @@
     <div class="footer-links">
       <a href="privacy-policy.html">Privacy Policy</a>
       <a href="terms.html">Terms &amp; Conditions</a>
+    </div>
+    <div style="margin-top:12px;">
+      <select id="theme-select" class="theme-select" onchange="setTheme(this.value)">
+        <option value="light">☀️ Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
     </div>
   </footer>
 
