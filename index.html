@@ -55,13 +55,21 @@
     .hero {
       background: linear-gradient(145deg, #c2410c 0%, #f97316 50%, #fbbf24 100%);
       padding: 72px 24px 80px;
-      text-align: center;
       position: relative; overflow: hidden;
     }
     .hero::before {
       content: "";
       position: absolute; inset: 0;
       background: radial-gradient(ellipse at 65% 25%, rgba(255,255,255,0.18) 0%, transparent 55%);
+    }
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+      position: relative;
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 6px;
@@ -70,20 +78,19 @@
       color: #fff;
       padding: 5px 14px; border-radius: 999px;
       font-size: 0.8rem; font-weight: 700; letter-spacing: 0.3px;
-      margin-bottom: 24px; position: relative;
+      margin-bottom: 24px;
     }
     .hero h1 {
-      font-size: clamp(2.1rem, 8vw, 3.25rem);
+      font-size: clamp(2.1rem, 5vw, 3.25rem);
       font-weight: 900; color: #fff;
       line-height: 1.1; letter-spacing: -1px;
-      max-width: 600px; margin: 0 auto 20px;
-      position: relative;
+      margin: 0 0 20px;
     }
     .hero p {
-      font-size: clamp(1rem, 3vw, 1.1rem);
+      font-size: clamp(1rem, 2vw, 1.1rem);
       color: rgba(255,255,255,0.88);
-      max-width: 460px; margin: 0 auto 36px;
-      line-height: 1.7; position: relative;
+      margin: 0 0 36px;
+      line-height: 1.7;
     }
     .hero-btn {
       display: inline-block;
@@ -94,10 +101,37 @@
       text-decoration: none;
       transition: transform 0.1s, box-shadow 0.15s;
       box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      position: relative;
     }
     .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(0,0,0,0.18); }
-    .hero-note { color: rgba(255,255,255,0.7); font-size: 0.82rem; margin-top: 14px; position: relative; }
+    .hero-note { color: rgba(255,255,255,0.7); font-size: 0.82rem; margin-top: 14px; }
+    .hero-right { display: flex; justify-content: center; }
+    .hero-phone {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 24px;
+      padding: 24px;
+      width: 100%;
+      max-width: 300px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    }
+    .hero-phone .phone-sender { font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-bottom: 10px; text-align: center; }
+    .hero-phone .bubble {
+      background: rgba(255,255,255,0.95);
+      color: #1c1917;
+      border-radius: 18px 18px 18px 4px;
+      padding: 16px 18px;
+      font-size: 0.8rem;
+      line-height: 1.8;
+      white-space: pre-line;
+      font-family: monospace;
+    }
+    @media (max-width: 768px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+      .hero-btn { display: block; text-align: center; }
+      .hero h1 { margin: 0 auto 20px; }
+      .hero p { margin: 0 auto 36px; }
+    }
 
     /* ── Sections ── */
     .section { padding: 72px 24px; }
@@ -269,11 +303,35 @@
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-badge">✉️ Daily SMS homework reminders</div>
-    <h1>Never miss an assignment again.</h1>
-    <p>Duezly texts you every morning with everything due today, tomorrow, and this week — pulled straight from your Canvas calendar.</p>
-    <a href="dashboard.html" class="hero-btn">Get started 🎉</a>
-    <p class="hero-note">No app download. Sign in with Google and you're done.</p>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-badge">✉️ Daily SMS homework reminders</div>
+        <h1>Never miss an assignment again.</h1>
+        <p>Duezly texts you every morning with everything due today, tomorrow, and this week — pulled straight from your Canvas calendar.</p>
+        <a href="dashboard.html" class="hero-btn">Get started 🎉</a>
+        <p class="hero-note">No app download. Sign in with Google and you're done.</p>
+      </div>
+      <div class="hero-right">
+        <div class="hero-phone">
+          <div class="phone-sender">Duezly · 8:00 AM</div>
+          <div class="bubble">Duezly Reminder — Mon Jun 9
+
+DUE TODAY:
+  - Econ 202 Problem Set (11:59 PM)
+  - Bio Lab Report (8:00 AM)
+
+DUE TOMORROW:
+  - History Essay Draft (11:59 PM)
+
+LATER THIS WEEK:
+  - Calc Midterm (Wed, 10:00 AM)
+  - Chem Quiz (Thu, 11:59 PM)
+
+You got this. One assignment
+at a time. 💪</div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- How it works -->
