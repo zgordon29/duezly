@@ -135,6 +135,30 @@
     footer a:hover { color: var(--orange); }
     .footer-links { display: flex; justify-content: center; gap: 20px; margin-top: 8px; }
 
+    .ical-help {
+      margin-top: 8px;
+      border: 1.5px solid #fde68a;
+      border-radius: 8px;
+      background: #fffbeb;
+      font-size: 0.82rem;
+    }
+    .ical-help summary {
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--orange-dark);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ical-help summary::-webkit-details-marker { display: none; }
+    .ical-help summary::before { content: "▶"; font-size: 0.65rem; transition: transform 0.15s; }
+    .ical-help[open] summary::before { transform: rotate(90deg); }
+    .ical-help ol { padding: 0 12px 10px 28px; }
+    .ical-help li { color: #374151; line-height: 1.9; }
+    .ical-help code { background: #fde68a; color: #92400e; padding: 1px 6px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; }
+
     @media (max-width: 480px) {
       main { padding: 28px 16px 64px; }
       .card { padding: 20px; }
@@ -209,7 +233,7 @@
 
         <!-- Update card -->
         <div class="card card-update">
-          <div class="card-title">Update Settings</div>
+          <div class="card-title">Duezly Settings</div>
           <form id="update-form">
             <div class="field">
               <label for="phone">Phone number</label>
@@ -219,6 +243,15 @@
             <div class="field">
               <label for="canvas-url">Canvas iCal URL</label>
               <input type="url" id="canvas-url" placeholder="https://yourschool.instructure.com/feeds/calendars/..." />
+              <details class="ical-help">
+                <summary>How do I find my Canvas iCal URL?</summary>
+                <ol>
+                  <li>Go to your school's Canvas site and log in.</li>
+                  <li>Click <strong>Calendar</strong> in the left sidebar.</li>
+                  <li>Scroll to the bottom right and click <code>Calendar Feed</code>.</li>
+                  <li>Copy the URL — it starts with <code>instructure.com/feeds/calendars/</code></li>
+                </ol>
+              </details>
             </div>
             <div class="field">
               <label for="send-time">Text me at</label>
