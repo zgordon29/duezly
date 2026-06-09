@@ -6,9 +6,64 @@
   <title>Duezly — Daily homework reminders by text</title>
   <meta name="description" content="Duezly texts you every morning with your Canvas assignments due today, tomorrow, and this week. No app. No login. Just a text." />
   <style>
+    /* ── Light theme (default) ── */
     :root {
+      --orange: #d97706;
+      --orange-accent: #f97316;
+      --yellow: #f59e0b;
+      --text: #1c1917;
+      --muted: #78716c;
+      --border: #e7e5e4;
+      --bg: #ffffff;
+      --bg-warm: #fef9f0;
+      --bg-soft: #fafaf9;
+
+      --nav-bg: rgba(255,255,255,0.92);
+      --nav-border: #e7e5e4;
+
+      --hero-bg: linear-gradient(145deg, #c2410c 0%, #f97316 50%, #fbbf24 100%);
+      --hero-glow: radial-gradient(ellipse at 65% 25%, rgba(255,255,255,0.18) 0%, transparent 55%);
+      --hero-p-color: rgba(255,255,255,0.88);
+      --hero-note-color: rgba(255,255,255,0.7);
+      --hero-badge-bg: rgba(255,255,255,0.25);
+      --hero-badge-border: rgba(255,255,255,0.4);
+      --hero-badge-color: #fff;
+      --hero-btn-bg: #fff;
+      --hero-btn-color: #d97706;
+      --hero-btn-shadow: rgba(0,0,0,0.15);
+
+      --step-bg: #ffffff;
+      --step-border: #fde68a;
+      --step-icon-bg: linear-gradient(135deg, #fef3c7, #fde68a);
+      --step-icon-border: transparent;
+
+      --preview-bg: #0f172a;
+      --bubble-bg: #f97316;
+      --bubble-color: #fff;
+
+      --card-bg: #ffffff;
+      --card-border: #fde68a;
+
+      --ical-bg: #fffbeb;
+      --ical-border: #fde68a;
+      --ical-text: #374151;
+      --ical-code-bg: #fde68a;
+      --ical-code-color: #92400e;
+      --ical-title-color: #b45309;
+
+      --faq-bg: var(--bg);
+      --faq-item-bg: transparent;
+      --faq-hover: var(--bg-warm);
+
+      --select-bg: rgba(0,0,0,0.06);
+      --select-color: #1c1917;
+      --select-border: #d6d3d1;
+    }
+
+    /* ── Dark theme ── */
+    body.dark {
       --orange: #f97316;
-      --orange-dark: #fb923c;
+      --orange-accent: #fb923c;
       --yellow: #fbbf24;
       --text: #f1f5f9;
       --muted: #94a3b8;
@@ -16,7 +71,49 @@
       --bg: #0f172a;
       --bg-warm: #111827;
       --bg-soft: #1e293b;
+
+      --nav-bg: rgba(15,23,42,0.92);
+      --nav-border: #1e293b;
+
+      --hero-bg: #0f172a;
+      --hero-glow: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.2) 0%, transparent 65%);
+      --hero-p-color: #94a3b8;
+      --hero-note-color: #94a3b8;
+      --hero-badge-bg: rgba(249,115,22,0.15);
+      --hero-badge-border: rgba(249,115,22,0.35);
+      --hero-badge-color: #fb923c;
+      --hero-btn-bg: linear-gradient(135deg, #ea580c, #f59e0b);
+      --hero-btn-color: #fff;
+      --hero-btn-shadow: rgba(249,115,22,0.4);
+
+      --step-bg: #1e293b;
+      --step-border: #2d3748;
+      --step-icon-bg: rgba(249,115,22,0.12);
+      --step-icon-border: rgba(249,115,22,0.25);
+
+      --preview-bg: #060d1a;
+      --bubble-bg: linear-gradient(135deg, #ea580c, #f59e0b);
+      --bubble-color: #fff;
+
+      --card-bg: #1e293b;
+      --card-border: #2d3748;
+
+      --ical-bg: rgba(249,115,22,0.08);
+      --ical-border: rgba(249,115,22,0.25);
+      --ical-text: #94a3b8;
+      --ical-code-bg: rgba(249,115,22,0.2);
+      --ical-code-color: #fb923c;
+      --ical-title-color: #fb923c;
+
+      --faq-bg: var(--bg);
+      --faq-item-bg: #1e293b;
+      --faq-hover: rgba(249,115,22,0.06);
+
+      --select-bg: rgba(255,255,255,0.08);
+      --select-color: #f1f5f9;
+      --select-border: #334155;
     }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -24,14 +121,15 @@
       color: var(--text);
       background: var(--bg);
       -webkit-font-smoothing: antialiased;
+      transition: background 0.2s, color 0.2s;
     }
 
     /* ── Nav ── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(15,23,42,0.92);
+      background: var(--nav-bg);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--nav-border);
       padding: 0 24px;
       height: 56px;
       display: flex; align-items: center; justify-content: space-between;
@@ -40,8 +138,9 @@
       background: linear-gradient(135deg, var(--orange), var(--yellow));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
+    .nav-right { display: flex; gap: 12px; align-items: center; }
     .nav-cta {
-      background: linear-gradient(135deg, #ea580c, #f59e0b);
+      background: linear-gradient(135deg, #c2410c, #f59e0b);
       color: #fff; padding: 8px 18px; border-radius: 8px;
       font-size: 0.875rem; font-weight: 700;
       text-decoration: none; transition: opacity 0.15s, transform 0.1s;
@@ -49,11 +148,24 @@
     .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
     .nav-signout { font-size: 0.875rem; color: var(--muted); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
     .nav-signout:hover { color: var(--orange); }
+    .theme-select {
+      font-size: 0.8rem; font-weight: 600;
+      background: var(--select-bg);
+      color: var(--select-color);
+      border: 1px solid var(--select-border);
+      border-radius: 7px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-family: inherit;
+      outline: none;
+      transition: background 0.15s;
+    }
+    .theme-select:hover { opacity: 0.85; }
     .hidden { display: none; }
 
     /* ── Hero ── */
     .hero {
-      background: var(--bg);
+      background: var(--hero-bg);
       padding: 80px 24px 88px;
       text-align: center;
       position: relative; overflow: hidden;
@@ -61,46 +173,49 @@
     .hero::before {
       content: "";
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.2) 0%, transparent 65%);
+      background: var(--hero-glow);
       pointer-events: none;
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(249,115,22,0.15);
-      border: 1px solid rgba(249,115,22,0.35);
-      color: var(--orange-dark);
+      background: var(--hero-badge-bg);
+      border: 1px solid var(--hero-badge-border);
+      color: var(--hero-badge-color);
       padding: 5px 14px; border-radius: 999px;
       font-size: 0.8rem; font-weight: 700; letter-spacing: 0.3px;
       margin-bottom: 24px; position: relative;
     }
     .hero h1 {
       font-size: clamp(2.1rem, 8vw, 3.25rem);
-      font-weight: 900;
-      background: linear-gradient(135deg, #fff 0%, #fb923c 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      font-weight: 900; color: #fff;
       line-height: 1.1; letter-spacing: -1px;
       max-width: 600px; margin: 0 auto 20px;
       position: relative;
     }
+    body.dark .hero h1 {
+      background: linear-gradient(135deg, #fff 0%, #fb923c 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      padding-bottom: 6px;
+    }
     .hero p {
       font-size: clamp(1rem, 3vw, 1.1rem);
-      color: var(--muted);
+      color: var(--hero-p-color);
       max-width: 460px; margin: 0 auto 36px;
       line-height: 1.7; position: relative;
     }
     .hero-btn {
       display: inline-block;
-      background: linear-gradient(135deg, #ea580c, #f59e0b);
-      color: #fff;
+      background: var(--hero-btn-bg);
+      color: var(--hero-btn-color);
       padding: 15px 32px; border-radius: 12px;
       font-size: 1rem; font-weight: 800;
       text-decoration: none;
       transition: transform 0.1s, box-shadow 0.15s;
-      box-shadow: 0 4px 24px rgba(249,115,22,0.4);
+      box-shadow: 0 4px 20px var(--hero-btn-shadow);
       position: relative;
     }
-    .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 32px rgba(249,115,22,0.5); }
-    .hero-note { color: var(--muted); font-size: 0.82rem; margin-top: 14px; position: relative; }
+    .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px var(--hero-btn-shadow); }
+    .hero-note { color: var(--hero-note-color); font-size: 0.82rem; margin-top: 14px; position: relative; }
 
     /* ── Sections ── */
     .section { padding: 72px 24px; }
@@ -116,16 +231,16 @@
     .how { background: var(--bg-warm); }
     .steps { display: flex; flex-direction: column; gap: 14px; }
     .step {
-      background: var(--bg-soft);
-      border: 1.5px solid #2d3748;
+      background: var(--step-bg);
+      border: 1.5px solid var(--step-border);
       border-radius: 16px;
       padding: 22px 24px;
       display: flex; gap: 18px; align-items: flex-start;
     }
     .step-icon {
       width: 44px; height: 44px; flex-shrink: 0;
-      background: rgba(249,115,22,0.15);
-      border: 1px solid rgba(249,115,22,0.25);
+      background: var(--step-icon-bg);
+      border: 1px solid var(--step-icon-border);
       border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
       font-size: 1.4rem;
@@ -134,10 +249,10 @@
     .step p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
 
     /* ── SMS Preview ── */
-    .preview-wrap { background: #060d1a; }
-    .preview-wrap .section-label { color: var(--orange); }
+    .preview-wrap { background: var(--preview-bg); }
+    .preview-wrap .section-label { color: var(--orange-accent); }
     .preview-wrap .section-title { color: #fff; }
-    .preview-wrap .section-sub { color: var(--muted); margin-bottom: 32px; }
+    .preview-wrap .section-sub { color: #94a3b8; margin-bottom: 32px; }
     .phone-mockup {
       background: #1e293b;
       border-radius: 20px;
@@ -148,11 +263,11 @@
     }
     .phone-sender { font-size: 0.75rem; color: #64748b; margin-bottom: 10px; text-align: center; }
     .bubble {
-      background: linear-gradient(135deg, #ea580c, #f59e0b);
+      background: var(--bubble-bg);
       border-radius: 18px 18px 18px 4px;
       padding: 16px 18px;
       font-size: 0.82rem;
-      color: #fff;
+      color: var(--bubble-color);
       line-height: 1.8;
       white-space: pre-line;
       font-family: monospace;
@@ -161,18 +276,17 @@
     /* ── Signup ── */
     .signup-bg { background: var(--bg-warm); }
     .signup-card {
-      background: var(--bg-soft);
-      border: 1.5px solid #2d3748;
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
       border-radius: 20px;
       padding: 36px 32px;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.08);
     }
     .signup-card h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; color: var(--text); }
     .signup-card .sub { font-size: 0.875rem; color: var(--muted); margin-bottom: 28px; }
-
     .submit-btn {
       width: 100%; padding: 14px;
-      background: linear-gradient(135deg, #ea580c, #f59e0b);
+      background: linear-gradient(135deg, #c2410c, #f59e0b);
       color: #fff; border: none; border-radius: 10px;
       font-size: 1rem; font-weight: 800;
       cursor: pointer; transition: opacity 0.15s, transform 0.1s;
@@ -181,25 +295,25 @@
 
     /* ── iCal instructions ── */
     .ical-box {
-      background: rgba(249,115,22,0.08);
-      border: 1.5px solid rgba(249,115,22,0.25);
+      background: var(--ical-bg);
+      border: 1.5px solid var(--ical-border);
       border-radius: 14px;
       padding: 24px 28px;
       margin-top: 28px;
     }
-    .ical-box h3 { font-size: 0.9rem; font-weight: 800; color: var(--orange-dark); margin-bottom: 12px; }
+    .ical-box h3 { font-size: 0.9rem; font-weight: 800; color: var(--ical-title-color); margin-bottom: 12px; }
     .ical-box ol { padding-left: 18px; }
-    .ical-box li { font-size: 0.875rem; color: var(--muted); line-height: 1.9; }
-    .ical-box code { background: rgba(249,115,22,0.2); color: var(--orange-dark); padding: 1px 7px; border-radius: 5px; font-size: 0.8rem; font-weight: 700; }
+    .ical-box li { font-size: 0.875rem; color: var(--ical-text); line-height: 1.9; }
+    .ical-box code { background: var(--ical-code-bg); color: var(--ical-code-color); padding: 1px 7px; border-radius: 5px; font-size: 0.8rem; font-weight: 700; }
 
     /* ── FAQ ── */
-    .faq { background: var(--bg); }
+    .faq { background: var(--faq-bg); }
     .faq-list { display: flex; flex-direction: column; gap: 12px; }
     .faq-item {
+      background: var(--faq-item-bg);
       border: 1.5px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
-      background: var(--bg-soft);
     }
     .faq-question {
       width: 100%; text-align: left;
@@ -210,7 +324,7 @@
       display: flex; justify-content: space-between; align-items: center;
       gap: 12px;
     }
-    .faq-question:hover { background: rgba(249,115,22,0.06); }
+    .faq-question:hover { background: var(--faq-hover); }
     .faq-chevron { font-size: 0.75rem; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
     .faq-item.open .faq-chevron { transform: rotate(180deg); }
     .faq-answer {
@@ -246,7 +360,11 @@
   <!-- Nav -->
   <nav>
     <div class="nav-logo">Duezly ☀️</div>
-    <div style="display:flex;gap:12px;align-items:center;">
+    <div class="nav-right">
+      <select class="theme-select" id="theme-select" onchange="setTheme(this.value)">
+        <option value="light">☀️ Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
       <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
       <a href="dashboard.html" id="nav-cta" class="nav-cta">Sign up free</a>
     </div>
@@ -411,6 +529,12 @@ at a time. 💪</div>
   </footer>
 
   <script>
+    function setTheme(theme) {
+      document.body.classList.toggle("dark", theme === "dark");
+      localStorage.setItem("duezly_theme", theme);
+      document.getElementById("theme-select").value = theme;
+    }
+
     function toggleFaq(btn) {
       btn.closest(".faq-item").classList.toggle("open");
     }
@@ -419,6 +543,11 @@ at a time. 💪</div>
       localStorage.removeItem("duezly_token");
       window.location.href = "index.html";
     }
+
+    // Apply saved theme on load
+    const savedTheme = localStorage.getItem("duezly_theme") || "light";
+    setTheme(savedTheme);
+
     if (localStorage.getItem("duezly_token")) {
       const comingFromDash = new URLSearchParams(location.search).get("ref") === "dash";
       if (comingFromDash) {
