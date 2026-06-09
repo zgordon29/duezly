@@ -167,9 +167,7 @@
     /* ── Hero ── */
     .hero {
       background: var(--hero-bg);
-      padding: 80px 24px;
-      text-align: center;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 88px 24px;
       position: relative; overflow: hidden;
     }
     .hero::before {
@@ -178,6 +176,16 @@
       background: var(--hero-glow);
       pointer-events: none;
     }
+    .hero-content {
+      position: relative;
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+    }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 6px;
       background: var(--hero-badge-bg);
@@ -185,14 +193,12 @@
       color: var(--hero-badge-color);
       padding: 5px 14px; border-radius: 999px;
       font-size: 0.8rem; font-weight: 700; letter-spacing: 0.3px;
-      margin-bottom: 24px; position: relative;
     }
     .hero h1 {
-      font-size: clamp(2.1rem, 8vw, 3.25rem);
+      font-size: clamp(2.2rem, 7vw, 3.4rem);
       font-weight: 900; color: #fff;
       line-height: 1.1; letter-spacing: -1px;
-      max-width: 600px; margin: 0 auto 20px;
-      position: relative;
+      width: 100%;
     }
     body.dark .hero h1 {
       background: linear-gradient(135deg, #fff 0%, #fb923c 100%);
@@ -200,24 +206,23 @@
       padding-bottom: 6px;
     }
     .hero p {
-      font-size: clamp(1rem, 3vw, 1.1rem);
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
       color: var(--hero-p-color);
-      max-width: 460px; margin: 0 auto 28px;
-      line-height: 1.7; position: relative;
+      max-width: 560px;
+      line-height: 1.7;
     }
     .hero-btn {
       display: inline-block;
       background: var(--hero-btn-bg);
       color: var(--hero-btn-color);
-      padding: 15px 32px; border-radius: 12px;
+      padding: 15px 36px; border-radius: 12px;
       font-size: 1rem; font-weight: 800;
       text-decoration: none;
       transition: transform 0.1s, box-shadow 0.15s;
       box-shadow: 0 4px 20px var(--hero-btn-shadow);
-      position: relative;
     }
     .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px var(--hero-btn-shadow); }
-    .hero-note { color: var(--hero-note-color); font-size: 0.82rem; margin-top: 14px; position: relative; }
+    .hero-note { color: var(--hero-note-color); font-size: 0.82rem; }
 
     /* ── Sections ── */
     .section { padding: 72px 24px; }
@@ -374,11 +379,13 @@
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-badge">✉️ Daily SMS homework reminders</div>
-    <h1>Never miss an assignment again.</h1>
-    <p>Duezly texts you every morning with everything due today, tomorrow, and this week — pulled straight from your Canvas calendar.</p>
-    <a href="dashboard.html" class="hero-btn">Get started 🎉</a>
-    <p class="hero-note">No app download. Sign in with Google and you're done.</p>
+    <div class="hero-content">
+      <div class="hero-badge">✉️ Daily SMS homework reminders</div>
+      <h1>Never miss an assignment again.</h1>
+      <p>Duezly texts you every morning with everything due today, tomorrow, and this week — pulled straight from your Canvas calendar.</p>
+      <a href="dashboard.html" class="hero-btn">Get started 🎉</a>
+      <p class="hero-note">No app download. Sign in with Google and you're done.</p>
+    </div>
   </section>
 
   <!-- How it works -->
