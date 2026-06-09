@@ -167,8 +167,9 @@
     /* ── Hero ── */
     .hero {
       background: var(--hero-bg);
-      padding: 80px 24px 88px;
+      padding: 80px 24px;
       text-align: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       position: relative; overflow: hidden;
     }
     .hero::before {
@@ -201,7 +202,7 @@
     .hero p {
       font-size: clamp(1rem, 3vw, 1.1rem);
       color: var(--hero-p-color);
-      max-width: 460px; margin: 0 auto 36px;
+      max-width: 460px; margin: 0 auto 28px;
       line-height: 1.7; position: relative;
     }
     .hero-btn {
