@@ -197,13 +197,7 @@
 
   <nav>
     <a href="index.html?ref=dash" class="nav-logo">Duezly ☀️</a>
-    <div style="display:flex;gap:12px;align-items:center;">
-      <select class="theme-select" id="theme-select" onchange="setTheme(this.value)">
-        <option value="light">☀️ Light</option>
-        <option value="dark">🌙 Dark</option>
-      </select>
-      <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
-    </div>
+    <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
   </nav>
 
   <div class="page-header">
@@ -298,6 +292,13 @@
                 <option value="10">10:00 AM</option>
                 <option value="11">11:00 AM</option>
                 <option value="12">12:00 PM</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="theme-select">Theme</label>
+              <select id="theme-select" onchange="setTheme(this.value)">
+                <option value="light">☀️ Light</option>
+                <option value="dark">🌙 Dark</option>
               </select>
             </div>
             <div class="field">
