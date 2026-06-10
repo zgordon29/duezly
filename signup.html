@@ -191,6 +191,7 @@
     async function goToCheckout(token) {
       show("status-screen");
       setStatus("One moment…", "Setting up your checkout.");
+      localStorage.setItem("duezly_checkout_pending", "true");
       try {
         const res = await fetch(`${API}/user`, {
           method: "POST",
@@ -233,8 +234,9 @@
 
     function route(subStatus, phone, canvasUrl, freshSignIn) {
       if (subStatus === "active") {
+        localStorage.removeItem("duezly_checkout_pending");
         window.location.href = (phone && canvasUrl) ? "dashboard.html" : "onboarding.html";
-      } else if (freshSignIn) {
+      } else if (freshSignIn || localStorage.getItem("duezly_checkout_pending") === "true") {
         goToCheckout(sessionToken);
       } else {
         window.location.href = "dashboard.html";
@@ -246,6 +248,7 @@
       if (params.get("canceled") === "true") {
         window.history.replaceState({}, "", "signup.html");
         localStorage.removeItem("duezly_token");
+        localStorage.removeItem("duezly_checkout_pending");
         sessionToken = null;
         show("canceled-screen");
         return;
