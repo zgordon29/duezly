@@ -308,7 +308,7 @@
               <input type="tel" id="phone" placeholder="(555) 000-1234" />
               <label class="sms-consent" for="sms-consent">
                 <input type="checkbox" id="sms-consent" />
-                <span>I agree to receive daily SMS reminders from Duezly. Message and data rates may apply. Reply STOP to unsubscribe.</span>
+                <span>I agree to receive recurring automated daily SMS homework reminders from Duezly at the phone number provided above. Message frequency: ~1 message/day. Message and data rates may apply. Reply STOP to unsubscribe, HELP for help. View our <a href="terms.html" target="_blank" style="color:var(--orange-dark)">Terms and Conditions</a> and <a href="privacy-policy.html" target="_blank" style="color:var(--orange-dark)">Privacy Policy</a>.</span>
               </label>
             </div>
             <div class="field">
@@ -436,10 +436,7 @@
       document.getElementById("info-phone").textContent = data.phone || "Not set";
       document.getElementById("info-canvas").textContent = data.canvas_url || "Not set";
 
-      if (data.phone) {
-        document.getElementById("phone").value = data.phone;
-        document.getElementById("sms-consent").checked = true;
-      }
+      if (data.phone) document.getElementById("phone").value = data.phone;
       if (data.canvas_url) document.getElementById("canvas-url").value = data.canvas_url;
       if (data.timezone) document.getElementById("timezone").value = data.timezone;
       if (data.send_time != null) document.getElementById("send-time").value = data.send_time;
