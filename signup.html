@@ -224,22 +224,20 @@
         if (!res.ok) { show("auth-screen"); alert("Sign in failed. Please try again."); return; }
         localStorage.setItem("duezly_token", data.token);
         sessionToken = data.token;
-        route(data.subscription_status, data.phone, data.canvas_url);
+        route(data.subscription_status, data.phone, data.canvas_url, true);
       } catch {
         show("auth-screen");
         alert("Network error. Please try again.");
       }
     }
 
-    function route(subStatus, phone, canvasUrl) {
+    function route(subStatus, phone, canvasUrl, freshSignIn) {
       if (subStatus === "active") {
-        if (phone && canvasUrl) {
-          window.location.href = "dashboard.html";
-        } else {
-          window.location.href = "onboarding.html";
-        }
-      } else {
+        window.location.href = (phone && canvasUrl) ? "dashboard.html" : "onboarding.html";
+      } else if (freshSignIn) {
         goToCheckout(sessionToken);
+      } else {
+        window.location.href = "dashboard.html";
       }
     }
 
@@ -269,7 +267,7 @@
         }
         if (!res.ok) { show("auth-screen"); return; }
         const data = await res.json();
-        route(data.subscription_status, data.phone, data.canvas_url);
+        route(data.subscription_status, data.phone, data.canvas_url, false);
       } catch {
         show("auth-screen");
       }
