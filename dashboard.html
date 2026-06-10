@@ -377,6 +377,7 @@
           <div id="canceling-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;">
             Your subscription is set to cancel at the end of the current billing period. You'll keep receiving texts until then.
           </div>
+          <button class="btn-subscribe" id="reactivate-sub-btn" onclick="reactivateSubscription()" style="display:none;margin-top:12px;">Reactivate subscription</button>
           <div class="msg" id="cancel-sub-msg"></div>
 
           <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
@@ -466,26 +467,32 @@
       const subEl = document.getElementById("sub-status-value");
       const cancelBtn = document.getElementById("cancel-sub-btn");
       const cancelingNote = document.getElementById("canceling-note");
+      const reactivateBtn = document.getElementById("reactivate-sub-btn");
       if (subStatus === "active") {
         subEl.textContent = "Active – $1.99/mo";
         cancelBtn.style.display = "block";
         cancelingNote.style.display = "none";
+        reactivateBtn.style.display = "none";
       } else if (subStatus === "canceling") {
         subEl.textContent = "Cancels at end of billing period";
         cancelBtn.style.display = "none";
         cancelingNote.style.display = "block";
+        reactivateBtn.style.display = "inline-block";
       } else if (subStatus === "canceled") {
         subEl.textContent = "Canceled";
         cancelBtn.style.display = "none";
         cancelingNote.style.display = "none";
+        reactivateBtn.style.display = "none";
       } else if (subStatus === "past_due") {
         subEl.textContent = "Past due";
         cancelBtn.style.display = "none";
         cancelingNote.style.display = "none";
+        reactivateBtn.style.display = "none";
       } else {
         subEl.textContent = "Free";
         cancelBtn.style.display = "none";
         cancelingNote.style.display = "none";
+        reactivateBtn.style.display = "none";
       }
     }
 
@@ -658,6 +665,34 @@
       } catch {
         msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
         btn.disabled = false; btn.textContent = "Cancel subscription";
+      }
+    }
+
+    async function reactivateSubscription() {
+      const btn = document.getElementById("reactivate-sub-btn");
+      const msg = document.getElementById("cancel-sub-msg");
+      if (!confirm("Reactivate your subscription? You'll continue to be billed $1.99/month.")) return;
+      btn.disabled = true; btn.textContent = "Reactivating…";
+      msg.style.display = "none";
+      try {
+        const res = await fetch(`${API}/user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+          body: JSON.stringify({ action: "reactivate_subscription" })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          btn.style.display = "none";
+          document.getElementById("cancel-sub-btn").style.display = "block";
+          document.getElementById("sub-status-value").textContent = "Active – $1.99/mo";
+          document.getElementById("canceling-note").style.display = "none";
+        } else {
+          msg.className = "msg error"; msg.textContent = data.message; msg.style.display = "block";
+          btn.disabled = false; btn.textContent = "Reactivate subscription";
+        }
+      } catch {
+        msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
+        btn.disabled = false; btn.textContent = "Reactivate subscription";
       }
     }
 
