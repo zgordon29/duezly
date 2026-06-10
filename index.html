@@ -369,7 +369,7 @@
     <div class="nav-logo">Duezly ☀️</div>
     <div class="nav-right">
       <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
-      <a href="dashboard.html" id="nav-cta" class="nav-cta">Sign up free</a>
+      <a href="signup.html" id="nav-cta" class="nav-cta">Get started</a>
     </div>
   </nav>
 
@@ -379,8 +379,8 @@
       <div class="hero-badge">✉️ Daily SMS homework reminders</div>
       <h1>Never miss an assignment again.</h1>
       <p>Duezly texts you every morning with everything due today, tomorrow, and this week — pulled straight from your Canvas calendar.</p>
-      <a href="dashboard.html" class="hero-btn">Get started 🎉</a>
-      <p class="hero-note">No app download. Sign in with Google and you're done.</p>
+      <a href="signup.html" class="hero-btn">Get started 🎉</a>
+      <p class="hero-note">No app download. Sign in with Google and you're set up in 2 minutes.</p>
     </div>
   </section>
 
@@ -450,13 +450,13 @@ Reply STOP to unsubscribe.</div>
     <div class="section-inner">
       <div class="section-label">Get started</div>
       <h2 class="section-title">Sign up in 30 seconds. 🚀</h2>
-      <p class="section-sub">No credit card. Just sign in with Google and add your Canvas link.</p>
+      <p class="section-sub">$1.99/month — cancel anytime. Sign in with Google, enter your Canvas link, and you're done.</p>
       <div class="signup-card" style="text-align:center;">
         <div style="font-size:2rem;margin-bottom:12px;">👋</div>
         <h2 style="margin-bottom:8px;">Create your account</h2>
         <p class="sub" style="margin-bottom:28px;">Sign in with Google to get started. We only use your email to identify your account — we never post anything.</p>
-        <a href="dashboard.html" class="submit-btn" style="display:block;text-decoration:none;text-align:center;">Sign in with Google →</a>
-        <p style="font-size:0.78rem;color:var(--muted);margin-top:14px;">After signing in, add your phone number and Canvas calendar link in your dashboard.</p>
+        <a href="signup.html" class="submit-btn" style="display:block;text-decoration:none;text-align:center;">Sign in with Google →</a>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:14px;">After signing in, you'll be taken to checkout — then add your Canvas link and phone number.</p>
       </div>
 
       <div class="ical-box" id="ical-instructions" style="margin-top:28px;">
@@ -519,7 +519,7 @@ Reply STOP to unsubscribe.</div>
           <button class="faq-question" onclick="toggleFaq(this)">
             Is Duezly free? <span class="faq-chevron">▼</span>
           </button>
-          <div class="faq-answer">Yes, Duezly is free right now. Sign in with Google, add your Canvas link and phone number, and you're all set.</div>
+          <div class="faq-answer">Duezly is $1.99/month — that's it. No hidden fees, cancel anytime. Sign in with Google, complete checkout, add your Canvas link and phone number, and you're all set.</div>
         </div>
 
       </div>
@@ -566,6 +566,7 @@ Reply STOP to unsubscribe.</div>
       const comingFromDash = new URLSearchParams(location.search).get("ref") === "dash";
       if (comingFromDash) {
         document.getElementById("nav-cta").textContent = "My Dashboard";
+        document.getElementById("nav-cta").href = "dashboard.html";
         document.getElementById("signout-btn").classList.remove("hidden");
       } else {
         window.location.href = "dashboard.html";

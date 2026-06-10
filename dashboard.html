@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard – Duezly</title>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
       --orange: #d97706;
@@ -217,6 +216,31 @@
       font-size: 0.75rem; color: var(--muted); line-height: 1.5;
     }
 
+    /* Gate loading overlay */
+    .gate-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--bg-warm);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .gate-card {
+      background: var(--bg);
+      border: 1.5px solid #fde68a;
+      border-radius: 20px;
+      padding: 40px 36px;
+      max-width: 360px; width: 90%;
+      text-align: center;
+    }
+    .gate-card h2 { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; color: var(--text); }
+    .gate-card p { color: var(--muted); font-size: 0.875rem; line-height: 1.6; }
+    .spinner {
+      width: 32px; height: 32px; margin: 14px auto;
+      border: 3px solid var(--border);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     @media (max-width: 480px) {
       main { padding: 28px 16px 64px; }
       .card { padding: 20px; }
@@ -235,21 +259,16 @@
     <p>Manage your Duezly reminders.</p>
   </div>
 
-  <main>
-    <!-- Login screen -->
-    <div id="login-screen" class="login-wrap">
-      <h2>Sign in to manage your account</h2>
-      <p>Use the same Google account you signed up with.<br/>We'll never post anything or access your email.</p>
-      <div class="google-btn-wrap">
-        <div id="g_id_onload"
-          data-client_id="826724045174-q4ur3modo6sje8aab2bhplo33se3353p.apps.googleusercontent.com"
-          data-callback="handleGoogleSignIn"
-          data-auto_prompt="false">
-        </div>
-        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
-      </div>
+  <!-- Gate overlay: shown while checking auth/subscription -->
+  <div id="gate-overlay" class="gate-overlay">
+    <div class="gate-card">
+      <div class="spinner"></div>
+      <h2 id="gate-title">Loading your dashboard…</h2>
+      <p id="gate-sub"></p>
     </div>
+  </div>
 
+  <main>
     <!-- Dashboard screen -->
     <div id="dashboard-screen" class="hidden">
       <div class="card-grid">
@@ -402,20 +421,6 @@
       return null;
     }
 
-    async function handleGoogleSignIn(response) {
-      const res = await fetch(`${API}/auth/google`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_token: response.credential })
-      });
-      const data = await res.json();
-      if (!res.ok) { alert("Sign in failed. Please try again."); return; }
-
-      localStorage.setItem("duezly_token", data.token);
-      sessionToken = data.token;
-      showDashboard(data);
-    }
-
     function showDashboard(data) {
       document.getElementById("login-screen").classList.add("hidden");
       document.getElementById("dashboard-screen").classList.remove("hidden");
@@ -444,15 +449,52 @@
 
     }
 
+    async function redirectToCheckout() {
+      document.getElementById("gate-title").textContent = "Setting up checkout…";
+      document.getElementById("gate-sub").textContent = "You'll be redirected to Stripe in just a second.";
+      try {
+        const res = await fetch(`${API}/user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+          body: JSON.stringify({ action: "create_checkout_session" })
+        });
+        const data = await res.json();
+        if (res.ok && data.checkout_url) {
+          window.location.href = data.checkout_url;
+        } else {
+          document.getElementById("gate-title").textContent = "Something went wrong";
+          document.getElementById("gate-sub").textContent = "Failed to start checkout. Please refresh or contact hello@duezly.com.";
+        }
+      } catch {
+        document.getElementById("gate-title").textContent = "Network error";
+        document.getElementById("gate-sub").textContent = "Please refresh the page to try again.";
+      }
+    }
+
     async function loadDashboard() {
-      if (!sessionToken) return;
+      if (!sessionToken) { window.location.href = "signup.html"; return; }
       try {
         const res = await fetch(`${API}/user`, {
           headers: { "Authorization": `Bearer ${sessionToken}` }
         });
-        if (res.status === 401) { localStorage.removeItem("duezly_token"); return; }
+        if (res.status === 401) {
+          localStorage.removeItem("duezly_token");
+          window.location.href = "signup.html";
+          return;
+        }
         if (!res.ok) return;
         const data = await res.json();
+
+        if (data.subscription_status !== "active") {
+          redirectToCheckout();
+          return;
+        }
+        if (!data.phone || !data.canvas_url) {
+          window.location.href = "onboarding.html";
+          return;
+        }
+
+        document.getElementById("gate-overlay").style.display = "none";
         showDashboard(data);
       } catch (err) {}
     }
