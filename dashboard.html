@@ -484,16 +484,6 @@
         }
         if (!res.ok) return;
         const data = await res.json();
-
-        if (data.subscription_status !== "active") {
-          redirectToCheckout();
-          return;
-        }
-        if (!data.phone || !data.canvas_url) {
-          window.location.href = "onboarding.html";
-          return;
-        }
-
         document.getElementById("gate-overlay").style.display = "none";
         showDashboard(data);
       } catch (err) {}
