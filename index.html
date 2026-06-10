@@ -563,14 +563,9 @@ Reply STOP to unsubscribe.</div>
     setTheme(savedTheme);
 
     if (localStorage.getItem("duezly_token")) {
-      const comingFromDash = new URLSearchParams(location.search).get("ref") === "dash";
-      if (comingFromDash) {
-        document.getElementById("nav-cta").textContent = "My Dashboard";
-        document.getElementById("nav-cta").href = "dashboard.html";
-        document.getElementById("signout-btn").classList.remove("hidden");
-      } else {
-        window.location.href = "dashboard.html";
-      }
+      document.getElementById("nav-cta").textContent = "My Dashboard";
+      document.getElementById("nav-cta").href = "dashboard.html";
+      document.getElementById("signout-btn").classList.remove("hidden");
     }
   </script>
 
