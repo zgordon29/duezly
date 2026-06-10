@@ -363,10 +363,26 @@
           <div class="msg" id="update-msg"></div>
         </div>
 
-        <!-- Unsubscribe + Delete card -->
+        <!-- Subscription + Unsubscribe + Delete card -->
         <div class="card card-unsub">
-          <div class="card-title">Unsubscribe</div>
-          <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">Stop receiving daily texts. You can resubscribe anytime by updating your settings above.</p>
+
+          <div class="card-title">Subscription</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:0.78rem;font-weight:700;color:var(--muted);margin-bottom:3px;">Status</div>
+              <div id="sub-status-value" style="font-size:0.9rem;font-weight:600;color:var(--text);">—</div>
+            </div>
+            <button class="btn btn-danger" id="cancel-sub-btn" onclick="cancelSubscription()" style="width:auto;padding:9px 18px;display:none;">Cancel subscription</button>
+          </div>
+          <div id="canceling-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;">
+            Your subscription is set to cancel at the end of the current billing period. You'll keep receiving texts until then.
+          </div>
+          <div class="msg" id="cancel-sub-msg"></div>
+
+          <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
+
+          <div class="card-title">Reminders</div>
+          <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">Temporarily stop your daily texts without canceling your subscription.</p>
           <button class="btn btn-danger" id="unsub-btn" onclick="unsubscribe()">Stop my reminders</button>
           <div class="msg" id="unsub-msg"></div>
 
@@ -446,6 +462,31 @@
         text.textContent = "Inactive";
       }
 
+      const subStatus = data.subscription_status || "free";
+      const subEl = document.getElementById("sub-status-value");
+      const cancelBtn = document.getElementById("cancel-sub-btn");
+      const cancelingNote = document.getElementById("canceling-note");
+      if (subStatus === "active") {
+        subEl.textContent = "Active – $1.99/mo";
+        cancelBtn.style.display = "block";
+        cancelingNote.style.display = "none";
+      } else if (subStatus === "canceling") {
+        subEl.textContent = "Cancels at end of billing period";
+        cancelBtn.style.display = "none";
+        cancelingNote.style.display = "block";
+      } else if (subStatus === "canceled") {
+        subEl.textContent = "Canceled";
+        cancelBtn.style.display = "none";
+        cancelingNote.style.display = "none";
+      } else if (subStatus === "past_due") {
+        subEl.textContent = "Past due";
+        cancelBtn.style.display = "none";
+        cancelingNote.style.display = "none";
+      } else {
+        subEl.textContent = "Free";
+        cancelBtn.style.display = "none";
+        cancelingNote.style.display = "none";
+      }
     }
 
     async function redirectToCheckout() {
@@ -590,6 +631,33 @@
       } catch (err) {
         msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
         btn.disabled = false; btn.textContent = "Delete my account";
+      }
+    }
+
+    async function cancelSubscription() {
+      const btn = document.getElementById("cancel-sub-btn");
+      const msg = document.getElementById("cancel-sub-msg");
+      if (!confirm("Cancel your subscription? You'll keep receiving texts until the end of your current billing period, then access stops. No charge next month.")) return;
+      btn.disabled = true; btn.textContent = "Canceling…";
+      msg.style.display = "none";
+      try {
+        const res = await fetch(`${API}/user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+          body: JSON.stringify({ action: "cancel_subscription" })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          btn.style.display = "none";
+          document.getElementById("sub-status-value").textContent = "Cancels at end of billing period";
+          document.getElementById("canceling-note").style.display = "block";
+        } else {
+          msg.className = "msg error"; msg.textContent = data.message; msg.style.display = "block";
+          btn.disabled = false; btn.textContent = "Cancel subscription";
+        }
+      } catch {
+        msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
+        btn.disabled = false; btn.textContent = "Cancel subscription";
       }
     }
 
