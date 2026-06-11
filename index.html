@@ -322,6 +322,7 @@
       border-radius: 14px;
       overflow: hidden;
     }
+    body.dark .faq-item { border-color: #334155; }
     .faq-question {
       width: 100%; text-align: left;
       padding: 18px 20px;
@@ -340,6 +341,10 @@
       font-size: 0.875rem; color: var(--muted); line-height: 1.7;
     }
     .faq-item.open .faq-answer { display: block; }
+    @media (max-width: 480px) {
+      .faq-question { font-size: 1rem; padding: 20px 18px; }
+      .faq-answer { font-size: 0.95rem; padding: 0 18px 22px; line-height: 1.75; }
+    }
 
     /* ── Footer ── */
     footer {
@@ -402,7 +407,7 @@
           <div class="step-icon">📅</div>
           <div>
             <h3>Connect your Canvas calendar</h3>
-            <p>Paste your Canvas iCal feed URL — a read-only link to your assignments. No password needed.</p>
+            <p>Paste your Canvas Calendar link — a read-only link to your assignments. No password needed.</p>
           </div>
         </div>
         <div class="step">
@@ -467,7 +472,7 @@ Reply STOP to unsubscribe.</div>
       </div>
 
       <div class="ical-box" id="ical-instructions" style="margin-top:28px;">
-        <h3>🔗 How to find your Canvas iCal URL</h3>
+        <h3>🔗 How to find your Canvas Calendar link</h3>
         <ol>
           <li>Go to your school's Canvas site and log in.</li>
           <li>Click <strong>Calendar</strong> in the left sidebar.</li>
@@ -491,7 +496,7 @@ Reply STOP to unsubscribe.</div>
           <button class="faq-question" onclick="toggleFaq(this)">
             Does this work for my school? <span class="faq-chevron">▼</span>
           </button>
-          <div class="faq-answer">If your school uses Canvas, yes! We support any Canvas school — just grab your iCal feed URL from the Canvas calendar page and paste it in your dashboard.</div>
+          <div class="faq-answer">If your school uses Canvas, yes! We support any Canvas school — just grab your Canvas Calendar link from the Canvas calendar page and paste it in your dashboard.</div>
         </div>
 
         <div class="faq-item">
@@ -512,7 +517,7 @@ Reply STOP to unsubscribe.</div>
           <button class="faq-question" onclick="toggleFaq(this)">
             Is my Canvas data safe? <span class="faq-chevron">▼</span>
           </button>
-          <div class="faq-answer">We only read your public iCal feed — a read-only link Canvas generates for you. We never ask for your Canvas username or password, and we never access your grades, messages, or account.</div>
+          <div class="faq-answer">We only read your Canvas Calendar link — a read-only link Canvas generates for you. We never ask for your Canvas username or password, and we never access your grades, messages, or account.</div>
         </div>
 
         <div class="faq-item">
