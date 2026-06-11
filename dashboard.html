@@ -468,7 +468,12 @@
       const cancelBtn = document.getElementById("cancel-sub-btn");
       const cancelingNote = document.getElementById("canceling-note");
       const reactivateBtn = document.getElementById("reactivate-sub-btn");
-      if (subStatus === "active") {
+      if (subStatus === "active" && data.dev_account) {
+        subEl.textContent = "Dev Account";
+        cancelBtn.style.display = "none";
+        cancelingNote.style.display = "none";
+        reactivateBtn.style.display = "none";
+      } else if (subStatus === "active") {
         subEl.textContent = "Active – $1.99/mo";
         cancelBtn.style.display = "block";
         cancelingNote.style.display = "none";
