@@ -215,10 +215,10 @@
             <input type="tel" id="phone" placeholder="(555) 000-1234" autocomplete="tel" />
           </div>
           <div class="field">
-            <label for="canvas-url">Canvas iCal URL</label>
+            <label for="canvas-url">Canvas Calendar link</label>
             <input type="url" id="canvas-url" placeholder="https://yourschool.instructure.com/feeds/calendars/..." />
             <details class="ical-help">
-              <summary>How do I find my Canvas iCal URL?</summary>
+              <summary>How do I find my Canvas Calendar link?</summary>
               <ol>
                 <li>Go to your school's Canvas site and log in.</li>
                 <li>Click <strong>Calendar</strong> in the left sidebar.</li>
@@ -368,7 +368,7 @@
         msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
       }
       if (!canvas_url) {
-        msg.className = "msg error"; msg.textContent = "Please enter your Canvas iCal URL."; msg.style.display = "block"; return;
+        msg.className = "msg error"; msg.textContent = "Please enter your Canvas Calendar link."; msg.style.display = "block"; return;
       }
       if (!document.getElementById("sms-consent").checked) {
         msg.className = "msg error"; msg.textContent = "Please check the consent box above to continue."; msg.style.display = "block"; return;
