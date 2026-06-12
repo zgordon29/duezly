@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How It Works — Duezly</title>
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png" />
+  <style>
+    :root {
+      --orange: #d97706;
+      --orange-dark: #b45309;
+      --text: #1c1917;
+      --muted: #78716c;
+      --border: #e7e5e4;
+      --bg: #ffffff;
+      --bg-warm: #fef9f0;
+    }
+    body.dark {
+      --orange: #f97316;
+      --orange-dark: #fb923c;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: #1e293b;
+      --bg: #0f172a;
+      --bg-warm: #111827;
+    }
+    body.dark nav { background: rgba(15,23,42,0.92); }
+    body.dark .card { background: #1e293b; border-color: #2d3748; }
+    body.dark .consent-box { background: #1e293b; border-color: #334155; }
+    body.dark .flow-step { background: #1e293b; border-color: #2d3748; }
+    body.dark .reviewer-notice { background: rgba(249,115,22,0.1); border-color: rgba(249,115,22,0.3); }
+    body.dark .field-mock input,
+    body.dark .field-mock select { background: #0f172a; border-color: #334155; color: #f1f5f9; }
+    body.dark .checkbox-mock { background: #0f172a; border-color: #334155; }
+    .theme-select {
+      font-size: 0.8rem; font-weight: 600;
+      background: rgba(0,0,0,0.06); color: var(--text);
+      border: 1px solid var(--border); border-radius: 7px;
+      padding: 5px 10px; cursor: pointer; font-family: inherit; outline: none;
+    }
+    body.dark .theme-select { background: rgba(255,255,255,0.08); border-color: #334155; }
+    body.dark .theme-select option { background: #1e293b; color: #f1f5f9; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-warm); color: var(--text);
+      -webkit-font-smoothing: antialiased; transition: background 0.2s, color 0.2s;
+    }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 1.3rem; font-weight: 900; letter-spacing: -0.5px; text-decoration: none;
+      background: linear-gradient(135deg, #c2410c, #f59e0b);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .nav-right { display: flex; gap: 12px; align-items: center; }
+
+    .page-header {
+      background: linear-gradient(145deg, #c2410c 0%, #f97316 50%, #fbbf24 100%);
+      padding: 56px 24px; text-align: center;
+    }
+    .page-header h1 { color: #fff; font-size: clamp(1.6rem, 5vw, 2.2rem); font-weight: 900; letter-spacing: -0.5px; }
+    .page-header p { color: rgba(255,255,255,0.85); margin-top: 8px; font-size: 0.95rem; max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+
+    main { max-width: 600px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    .section-label { font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; color: var(--orange); text-transform: uppercase; margin-bottom: 16px; }
+
+    /* Reviewer notice */
+    .reviewer-notice {
+      background: #fffbeb;
+      border: 2px solid #f59e0b;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+    }
+    .reviewer-notice h3 { font-size: 0.9rem; font-weight: 800; color: #92400e; margin-bottom: 8px; }
+    .reviewer-notice p { font-size: 0.85rem; color: #78350f; line-height: 1.6; }
+
+    /* Flow steps */
+    .flow-steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 48px; }
+    .flow-step {
+      background: var(--bg);
+      border: 1.5px solid #fde68a;
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .step-num {
+      width: 32px; height: 32px; flex-shrink: 0;
+      background: linear-gradient(135deg, #c2410c, #f59e0b);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 900; color: #fff;
+    }
+    .flow-step h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+    .flow-step p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+    /* Consent screen mockup */
+    .card {
+      background: var(--bg);
+      border: 1.5px solid #fde68a;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 48px;
+    }
+    .card-title { font-size: 0.78rem; font-weight: 800; letter-spacing: 1px; color: var(--orange); text-transform: uppercase; margin-bottom: 20px; }
+    .field-mock { margin-bottom: 14px; }
+    .field-mock label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .field-mock input, .field-mock select {
+      width: 100%; padding: 10px 13px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 0.9rem; color: var(--muted);
+      background: var(--bg-warm);
+      font-family: inherit; pointer-events: none;
+    }
+
+    .consent-box {
+      background: #fffbeb;
+      border: 2px solid #fbbf24;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 20px 0;
+    }
+    .consent-row {
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .checkbox-mock {
+      width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px;
+      border: 2px solid #d97706; border-radius: 3px;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .checkbox-mock.checked { background: #d97706; }
+    .checkbox-mock.checked::after { content: "✓"; color: #fff; font-size: 11px; font-weight: 900; }
+    .consent-text {
+      font-size: 0.8rem; color: #78350f; line-height: 1.6; font-weight: 500;
+    }
+    body.dark .consent-box { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.3); }
+    body.dark .consent-text { color: #fbbf24; }
+
+    .btn-mock {
+      width: 100%; padding: 13px;
+      border: none; border-radius: 10px;
+      font-size: 0.95rem; font-weight: 700;
+      background: linear-gradient(135deg, #c2410c, #f59e0b); color: #fff;
+      font-family: inherit; margin-top: 4px;
+      pointer-events: none; opacity: 0.85;
+    }
+
+    .required-note {
+      font-size: 0.75rem; color: var(--muted);
+      margin-top: 10px; text-align: center;
+      font-style: italic;
+    }
+
+    /* Compliance details */
+    .compliance-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 48px; }
+    .compliance-item {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 0.85rem; color: var(--text); line-height: 1.6;
+    }
+    .compliance-item strong { color: var(--orange); }
+
+    footer { border-top: 1px solid var(--border); padding: 28px 24px; text-align: center; background: var(--bg); }
+    footer p { font-size: 0.82rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--orange); }
+    .footer-links { display: flex; justify-content: center; gap: 20px; margin-top: 8px; }
+
+    @media (max-width: 480px) {
+      main { padding: 32px 16px 64px; }
+      .card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Duezly ☀️</a>
+    <div class="nav-right">
+      <select id="theme-select" class="theme-select" onchange="setTheme(this.value)">
+        <option value="light">☀️ Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>How Duezly Works</h1>
+    <p>Opt-in flow and SMS consent screen — publicly available for reviewer verification.</p>
+  </div>
+
+  <main>
+
+    <div class="reviewer-notice">
+      <h3>📋 For Twilio / Carrier Reviewers</h3>
+      <p>The SMS opt-in for Duezly occurs after users sign in with Google and complete payment. Because this step is behind authentication, this page provides a public preview of the exact consent screen, including the full checkbox language, so you can verify the opt-in without going through checkout.</p>
+    </div>
+
+    <div class="section-label">User Sign-Up Flow</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Visit duezly.com and sign in with Google</h3>
+          <p>Users arrive at duezly.com and click "Get started." They authenticate with their Google account — only their email is used to create an account.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Complete $1.99/month Stripe checkout</h3>
+          <p>Users are directed to a Stripe-hosted payment page to subscribe. No trial — subscription begins immediately.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Onboarding: enter phone number and give SMS consent</h3>
+          <p>After payment, users land on the onboarding page (shown below). They enter their phone number, Canvas Calendar link, and preferred send time, then check the mandatory SMS consent checkbox before submitting. The checkbox is unchecked by default and submission is blocked without it.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <div>
+          <h3>Daily SMS reminders begin</h3>
+          <p>Duezly sends one SMS per day at the user's chosen time listing assignments due today, tomorrow, and later that week — pulled from their Canvas calendar.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">SMS Opt-In Consent Screen (Exact Preview)</div>
+    <div class="card">
+      <div class="card-title">Your Settings</div>
+
+      <div class="field-mock">
+        <label>Phone number</label>
+        <input type="text" value="(555) 000-1234" readonly />
+      </div>
+      <div class="field-mock">
+        <label>Canvas Calendar link</label>
+        <input type="text" value="https://yourschool.instructure.com/feeds/calendars/..." readonly />
+      </div>
+      <div class="field-mock">
+        <label>Text me at</label>
+        <select disabled>
+          <option>8:00 AM</option>
+        </select>
+      </div>
+      <div class="field-mock">
+        <label>Timezone</label>
+        <select disabled>
+          <option>Eastern (ET)</option>
+        </select>
+      </div>
+
+      <div class="consent-box">
+        <div class="consent-row">
+          <div class="checkbox-mock checked"></div>
+          <span class="consent-text">I agree to receive recurring automated daily SMS homework reminders from Duezly at the phone number provided above. Message frequency: ~1 message per day. Message and data rates may apply. Reply STOP to unsubscribe, HELP for help.</span>
+        </div>
+      </div>
+
+      <button class="btn-mock">Start getting texts</button>
+      <p class="required-note">Checkbox is unchecked by default. Submission is blocked until the user checks it.</p>
+    </div>
+
+    <div class="section-label">Compliance Summary</div>
+    <div class="compliance-list">
+      <div class="compliance-item"><strong>Program name:</strong> Duezly — daily Canvas homework reminders by SMS</div>
+      <div class="compliance-item"><strong>Opt-in method:</strong> Web form — user checks a mandatory checkbox on the onboarding page after authentication and payment. Checkbox is unchecked by default.</div>
+      <div class="compliance-item"><strong>Consent language:</strong> "I agree to receive recurring automated daily SMS homework reminders from Duezly at the phone number provided above. Message frequency: ~1 message per day. Message and data rates may apply. Reply STOP to unsubscribe, HELP for help."</div>
+      <div class="compliance-item"><strong>Message frequency:</strong> Approximately 1 message per day</div>
+      <div class="compliance-item"><strong>Message and data rates:</strong> May apply — disclosed in consent checkbox</div>
+      <div class="compliance-item"><strong>Opt-out:</strong> Reply STOP to any message — immediately unsubscribes the user. Also available via dashboard.</div>
+      <div class="compliance-item"><strong>Help keyword:</strong> Reply HELP for help information</div>
+      <div class="compliance-item"><strong>Sender number:</strong> +16785782152</div>
+      <div class="compliance-item"><strong>SMS consent is not a condition of purchase:</strong> Stated in both the <a href="terms.html" style="color:var(--orange);">Terms &amp; Conditions</a> and <a href="privacy-policy.html" style="color:var(--orange);">Privacy Policy</a></div>
+      <div class="compliance-item"><strong>Mobile number sharing:</strong> Mobile numbers are not shared with third parties — stated in the <a href="privacy-policy.html" style="color:var(--orange);">Privacy Policy</a></div>
+      <div class="compliance-item"><strong>Terms &amp; Conditions:</strong> <a href="terms.html" style="color:var(--orange);">duezly.com/terms.html</a></div>
+      <div class="compliance-item"><strong>Privacy Policy:</strong> <a href="privacy-policy.html" style="color:var(--orange);">duezly.com/privacy-policy.html</a></div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Duezly. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+    </div>
+  </footer>
+
+  <script>
+    function setTheme(theme) {
+      document.body.classList.toggle("dark", theme === "dark");
+      localStorage.setItem("duezly_theme", theme);
+      const sel = document.getElementById("theme-select");
+      if (sel) sel.value = theme;
+    }
+    setTheme(localStorage.getItem("duezly_theme") || "dark");
+  </script>
+
+</body>
+</html>
