@@ -204,23 +204,27 @@
     <div class="card">
       <div class="card-title">How Opt-In Is Collected</div>
 
-      <p>SMS consent is collected on the <strong>checkout page</strong> (<a href="signup.html" style="color:var(--orange-dark)">duezly.com/signup.html</a>) alongside the payment form, before the subscription is completed. The consent checkbox is unchecked by default and the payment form cannot be submitted until the box is checked. No SMS messages are ever sent before this consent is given.</p>
+      <p>SMS consent is collected on the <strong>checkout page</strong> (<a href="checkout.html" style="color:var(--orange-dark)">duezly.com/checkout.html</a>) in a two-step flow before the subscription is completed. Step 1 is an SMS consent checkbox — unchecked by default. Step 2 is the embedded payment form, which is locked until the checkbox is checked. No SMS messages are ever sent before this consent is given.</p>
 
-      <p>This is a static preview of the consent checkbox users see on the checkout page, directly above the payment form.</p>
+      <p>This is a static preview of the checkout page users see. The checkbox and payment form cannot be interacted with here.</p>
 
       <div class="preview-card">
-        <div class="consent-row" style="margin-bottom:16px;">
+        <p style="font-size:0.7rem;font-weight:800;letter-spacing:1px;color:var(--orange);text-transform:uppercase;margin-bottom:12px;">Step 1 — SMS Consent</p>
+        <div class="consent-row" style="margin-bottom:0;">
           <input type="checkbox" disabled />
           <span class="consent-label">
-            I agree to receive recurring automated SMS homework reminders from Duezly at the number I provide. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to cancel, <strong>HELP</strong> for info. Consent is not required to purchase. See our <a href="privacy-policy.html" style="color:var(--orange-dark)">Privacy Policy</a>.
+            I agree to receive recurring automated SMS homework reminders from Duezly at the phone number I provide. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to cancel, <strong>HELP</strong> for info. Consent is not required to purchase. See our <a href="privacy-policy.html" style="color:var(--orange-dark)">Privacy Policy</a>.
           </span>
         </div>
-
-        <button class="preview-btn" disabled style="opacity:0.45;">Complete Payment</button>
-        <p class="preview-note">The payment form is disabled until the checkbox is checked. This is a static preview only.</p>
       </div>
 
-      <p>Once the checkbox is checked, the embedded payment form becomes active and the user can complete their subscription. Consent is recorded in our system at the time of onboarding setup.</p>
+      <div class="preview-card" style="margin-top:12px;">
+        <p style="font-size:0.7rem;font-weight:800;letter-spacing:1px;color:var(--orange);text-transform:uppercase;margin-bottom:12px;">Step 2 — Payment</p>
+        <p style="font-size:0.875rem;color:var(--muted);text-align:center;padding:16px 0;">Check the SMS consent box above to unlock the payment form.</p>
+        <p class="preview-note">The Stripe payment form is disabled until consent is given. This is a static preview only.</p>
+      </div>
+
+      <p>Once the checkbox is checked, the embedded Stripe payment form loads and the user can complete their subscription. Consent is recorded in our system at the time of onboarding setup.</p>
     </div>
 
     <div class="card">
