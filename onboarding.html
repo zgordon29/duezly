@@ -246,7 +246,13 @@
               <option value="Pacific/Honolulu">Hawaii (HT)</option>
             </select>
           </div>
-          <button type="submit" id="save-btn" class="btn">Start getting texts</button>
+          <div class="field" style="margin-top: 20px;">
+            <label style="display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-weight: 400; font-size: 0.85rem; color: var(--muted); line-height: 1.5;">
+              <input type="checkbox" id="sms-consent" style="margin-top: 3px; flex-shrink: 0; accent-color: var(--orange); width: 15px; height: 15px; cursor: pointer;" />
+              <span>I agree to receive recurring automated SMS reminders from Duezly. SMS consent is not a condition of purchase. Reply STOP to opt out at any time. Message &amp; data rates may apply.</span>
+            </label>
+          </div>
+          <button type="submit" id="save-btn" class="btn" disabled>Start getting texts</button>
         </form>
         <div class="msg" id="form-msg"></div>
       </div>
@@ -345,6 +351,10 @@
       }
     }
 
+    document.getElementById("sms-consent").addEventListener("change", (e) => {
+      document.getElementById("save-btn").disabled = !e.target.checked;
+    });
+
     document.getElementById("onboard-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const btn = document.getElementById("save-btn");
@@ -353,6 +363,7 @@
       const canvas_url = document.getElementById("canvas-url").value.trim();
       const timezone = document.getElementById("timezone").value;
       const send_time = parseInt(document.getElementById("send-time").value);
+      const sms_consent = document.getElementById("sms-consent").checked;
 
       if (!phone) {
         msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
@@ -367,7 +378,7 @@
         const res = await fetch(`${API}/user`, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time })
+          body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time, sms_consent })
         });
         const resData = await res.json();
         if (!res.ok) {
