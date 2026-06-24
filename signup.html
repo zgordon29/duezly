@@ -116,6 +116,14 @@
     }
     .sms-consent span { font-size: 0.75rem; color: #44403c; line-height: 1.5; }
 
+    .google-btn-wrap { position: relative; }
+    .google-btn-overlay {
+      position: absolute; inset: 0; z-index: 10;
+      cursor: not-allowed; border-radius: 4px;
+    }
+    .google-btn-wrap.consent-given .google-btn-overlay { display: none; }
+    .google-btn-wrap:not(.consent-given) .g_id_signin { opacity: 0.45; pointer-events: none; }
+
     .hidden { display: none; }
 
     footer { border-top: 1px solid var(--border); padding: 28px 24px; text-align: center; }
@@ -155,7 +163,8 @@
         <input type="checkbox" id="sms-consent-signup" />
         <span>I'd like to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for info. Consent is not required to purchase.</span>
       </label>
-      <div class="google-btn-wrap">
+      <div class="google-btn-wrap" id="google-btn-wrap-main">
+        <div class="google-btn-overlay" onclick="document.getElementById('sms-consent-signup').focus()"></div>
         <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
       </div>
       <div class="msg" id="auth-msg"></div>
@@ -184,7 +193,8 @@
         <input type="checkbox" id="sms-consent-canceled" />
         <span>I'd like to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for info. Consent is not required to purchase.</span>
       </label>
-      <div class="google-btn-wrap" style="margin-bottom:8px;">
+      <div class="google-btn-wrap" id="google-btn-wrap-canceled" style="margin-bottom:8px;">
+        <div class="google-btn-overlay" onclick="document.getElementById('sms-consent-canceled').focus()"></div>
         <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
       </div>
       <div class="msg" id="canceled-msg"></div>
@@ -245,6 +255,19 @@
       const b = document.getElementById("sms-consent-canceled");
       return (a && a.checked) || (b && b.checked);
     }
+
+    function updateConsentState() {
+      const mainChecked = document.getElementById("sms-consent-signup")?.checked;
+      const canceledChecked = document.getElementById("sms-consent-canceled")?.checked;
+      document.getElementById("google-btn-wrap-main")?.classList.toggle("consent-given", !!mainChecked);
+      document.getElementById("google-btn-wrap-canceled")?.classList.toggle("consent-given", !!canceledChecked);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("sms-consent-signup")?.addEventListener("change", updateConsentState);
+      document.getElementById("sms-consent-canceled")?.addEventListener("change", updateConsentState);
+      updateConsentState();
+    });
 
     function showAuthError(msg) {
       const authMsg = document.getElementById("auth-msg");
