@@ -126,17 +126,6 @@
     }
     .field select:focus { border-color: var(--orange); background-color: #fff; }
 
-    .sms-consent {
-      display: flex; align-items: flex-start; gap: 8px;
-      margin-bottom: 16px; cursor: pointer;
-    }
-    .sms-consent input[type="checkbox"] {
-      margin-top: 2px; flex-shrink: 0;
-      width: 16px; height: 16px;
-      accent-color: var(--orange); cursor: pointer;
-    }
-    .sms-consent span { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
-
     .btn {
       width: 100%; padding: 13px;
       border: none; border-radius: 10px;
@@ -257,10 +246,6 @@
               <option value="Pacific/Honolulu">Hawaii (HT)</option>
             </select>
           </div>
-          <label class="sms-consent" for="sms-consent">
-            <input type="checkbox" id="sms-consent" />
-            <span>I agree to receive recurring automated daily SMS homework reminders from Duezly at the phone number provided above. Message frequency: ~1 message per day. Message and data rates may apply. Reply STOP to unsubscribe, HELP for help.</span>
-          </label>
           <button type="submit" id="save-btn" class="btn">Start getting texts</button>
         </form>
         <div class="msg" id="form-msg"></div>
@@ -375,10 +360,6 @@
       if (!canvas_url) {
         msg.className = "msg error"; msg.textContent = "Please enter your Canvas Calendar link."; msg.style.display = "block"; return;
       }
-      if (!document.getElementById("sms-consent").checked) {
-        msg.className = "msg error"; msg.textContent = "Please check the consent box above to continue."; msg.style.display = "block"; return;
-      }
-
       btn.disabled = true; btn.textContent = "Saving…";
       msg.style.display = "none";
 
