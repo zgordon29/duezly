@@ -125,6 +125,7 @@
     .sub-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); margin-bottom: 3px; }
     .sub-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
     .sub-value.active { color: #166534; }
+    .sub-value.trialing { color: #7c3aed; }
     .sub-value.canceled, .sub-value.past_due { color: #991b1b; }
     .btn-subscribe {
       padding: 9px 18px; border: none; border-radius: 10px;
@@ -135,6 +136,7 @@
     .btn-subscribe:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn-subscribe:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     body.dark .sub-value.active { color: #86efac; }
+    body.dark .sub-value.trialing { color: #c4b5fd; }
     body.dark .sub-value.canceled, body.dark .sub-value.past_due { color: #fca5a5; }
 
     .info-row { display: flex; flex-direction: column; gap: 12px; }
@@ -363,6 +365,7 @@
             </div>
             <button class="btn btn-danger" id="cancel-sub-btn" onclick="cancelSubscription()" style="width:auto;padding:9px 18px;display:none;">Cancel subscription</button>
           </div>
+          <div id="trial-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;"></div>
           <div id="canceling-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;">
             Your subscription is set to cancel at the end of the current billing period. You'll keep receiving texts until then.
           </div>
@@ -467,6 +470,21 @@
         cancelBtn.style.display = "block";
         cancelingNote.style.display = "none";
         reactivateBtn.style.display = "none";
+      } else if (subStatus === "trialing") {
+        const trialEnd = data.trial_end ? new Date(data.trial_end * 1000) : null;
+        let trialText = "Free trial";
+        if (trialEnd) {
+          const daysLeft = Math.ceil((trialEnd - Date.now()) / (1000 * 60 * 60 * 24));
+          trialText = daysLeft > 1 ? `Free trial — ${daysLeft} days left` : daysLeft === 1 ? "Free trial — 1 day left" : "Free trial ending today";
+          const formatted = trialEnd.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+          document.getElementById("trial-note").textContent = `Your card won't be charged until your trial ends on ${formatted}.`;
+          document.getElementById("trial-note").style.display = "block";
+        }
+        subEl.textContent = trialText;
+        subEl.className = "sub-value trialing";
+        cancelBtn.style.display = "block";
+        cancelingNote.style.display = "none";
+        reactivateBtn.style.display = "none";
       } else if (subStatus === "canceling") {
         subEl.textContent = "Cancels at end of billing period";
         cancelBtn.style.display = "none";
@@ -525,7 +543,8 @@
         }
         if (!res.ok) return;
         const data = await res.json();
-        if (data.subscription_status !== "active") {
+        const hasAccess = ["active", "trialing", "canceling", "past_due"].includes(data.subscription_status);
+        if (!hasAccess) {
           window.location.href = "signup.html";
           return;
         }
