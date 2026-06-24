@@ -116,13 +116,16 @@
     }
     .sms-consent span { font-size: 0.75rem; color: #44403c; line-height: 1.5; }
 
-    .google-btn-wrap { position: relative; }
-    .google-btn-overlay {
-      position: absolute; inset: 0; z-index: 10;
-      cursor: not-allowed; border-radius: 4px;
+    .google-btn-wrap { display: flex; justify-content: center; }
+    .fake-google-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 12px; height: 40px; border-radius: 4px;
+      border: 1px solid #dadce0; background: #fff;
+      font-family: 'Google Sans', Roboto, sans-serif; font-size: 14px; font-weight: 500;
+      color: #3c4043; opacity: 0.45; cursor: not-allowed; user-select: none;
+      width: 220px; justify-content: center;
     }
-    .google-btn-wrap.consent-given .google-btn-overlay { display: none; }
-    .google-btn-wrap:not(.consent-given) .g_id_signin { opacity: 0.45; pointer-events: none; }
+    .fake-google-btn svg { flex-shrink: 0; }
 
     .hidden { display: none; }
 
@@ -163,9 +166,12 @@
         <input type="checkbox" id="sms-consent-signup" />
         <span>I'd like to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for info. Consent is not required to purchase.</span>
       </label>
-      <div class="google-btn-wrap" id="google-btn-wrap-main">
-        <div class="google-btn-overlay" onclick="document.getElementById('sms-consent-signup').focus()"></div>
-        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
+      <div class="google-btn-wrap">
+        <div class="fake-google-btn" id="fake-btn-main">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>
+          Sign in with Google
+        </div>
+        <div class="g_id_signin hidden" id="real-btn-main" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
       </div>
       <div class="msg" id="auth-msg"></div>
       <p class="price-note">$1.99/month &middot; Cancel anytime &middot; No spam</p>
@@ -193,9 +199,12 @@
         <input type="checkbox" id="sms-consent-canceled" />
         <span>I'd like to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for info. Consent is not required to purchase.</span>
       </label>
-      <div class="google-btn-wrap" id="google-btn-wrap-canceled" style="margin-bottom:8px;">
-        <div class="google-btn-overlay" onclick="document.getElementById('sms-consent-canceled').focus()"></div>
-        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
+      <div class="google-btn-wrap" style="margin-bottom:8px;">
+        <div class="fake-google-btn" id="fake-btn-canceled">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>
+          Sign in with Google
+        </div>
+        <div class="g_id_signin hidden" id="real-btn-canceled" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
       </div>
       <div class="msg" id="canceled-msg"></div>
       <p class="price-note">Questions? <a href="mailto:hello@duezly.com" style="color:var(--orange-dark)">hello@duezly.com</a></p>
@@ -259,8 +268,10 @@
     function updateConsentState() {
       const mainChecked = document.getElementById("sms-consent-signup")?.checked;
       const canceledChecked = document.getElementById("sms-consent-canceled")?.checked;
-      document.getElementById("google-btn-wrap-main")?.classList.toggle("consent-given", !!mainChecked);
-      document.getElementById("google-btn-wrap-canceled")?.classList.toggle("consent-given", !!canceledChecked);
+      document.getElementById("fake-btn-main")?.classList.toggle("hidden", !!mainChecked);
+      document.getElementById("real-btn-main")?.classList.toggle("hidden", !mainChecked);
+      document.getElementById("fake-btn-canceled")?.classList.toggle("hidden", !!canceledChecked);
+      document.getElementById("real-btn-canceled")?.classList.toggle("hidden", !canceledChecked);
     }
 
     document.addEventListener("DOMContentLoaded", () => {
