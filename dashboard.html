@@ -525,6 +525,10 @@
         }
         if (!res.ok) return;
         const data = await res.json();
+        if (data.subscription_status !== "active") {
+          window.location.href = "signup.html";
+          return;
+        }
         document.getElementById("gate-overlay").style.display = "none";
         showDashboard(data);
       } catch (err) {}
