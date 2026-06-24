@@ -204,23 +204,23 @@
     <div class="card">
       <div class="card-title">How Opt-In Is Collected</div>
 
-      <p>SMS consent is collected on the <strong>sign-in page</strong> (<a href="signup.html" style="color:var(--orange-dark)">duezly.com/signup.html</a>) before the user pays or enters any contact information. The consent checkbox is unchecked by default and the "Sign in with Google" button is disabled until the box is checked. No SMS messages are ever sent before this consent is given.</p>
+      <p>SMS consent is collected on the <strong>checkout page</strong> (<a href="signup.html" style="color:var(--orange-dark)">duezly.com/signup.html</a>) alongside the payment form, before the subscription is completed. The consent checkbox is unchecked by default and the payment form cannot be submitted until the box is checked. No SMS messages are ever sent before this consent is given.</p>
 
-      <p>This is a static preview of the sign-in page users see. The Google button and checkbox cannot be interacted with here.</p>
+      <p>This is a static preview of the consent checkbox users see on the checkout page, directly above the payment form.</p>
 
       <div class="preview-card">
         <div class="consent-row" style="margin-bottom:16px;">
           <input type="checkbox" disabled />
           <span class="consent-label">
-            I'd like to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to cancel, <strong>HELP</strong> for info. Consent is not required to purchase.
+            I agree to receive recurring automated SMS homework reminders from Duezly at the number I provide. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to cancel, <strong>HELP</strong> for info. Consent is not required to purchase. See our <a href="privacy-policy.html" style="color:var(--orange-dark)">Privacy Policy</a>.
           </span>
         </div>
 
-        <button class="preview-btn" disabled style="opacity:0.45;">Sign in with Google</button>
-        <p class="preview-note">The Google button is disabled until the checkbox is checked. This is a static preview only.</p>
+        <button class="preview-btn" disabled style="opacity:0.45;">Complete Payment</button>
+        <p class="preview-note">The payment form is disabled until the checkbox is checked. This is a static preview only.</p>
       </div>
 
-      <p>Once the checkbox is checked, the real Google sign-in button appears and the user can authenticate. If a user somehow reaches checkout without consent recorded, the backend will not activate SMS delivery.</p>
+      <p>Once the checkbox is checked, the embedded payment form becomes active and the user can complete their subscription. Consent is recorded in our system at the time of onboarding setup.</p>
     </div>
 
     <div class="card">
