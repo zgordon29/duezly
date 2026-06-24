@@ -204,38 +204,23 @@
     <div class="card">
       <div class="card-title">How Opt-In Is Collected</div>
 
-      <p>After a user subscribes to Duezly and signs in, they are presented with a setup form before any SMS messages are sent. The form collects the user's phone number, Canvas calendar link, preferred send time, and timezone. SMS consent is captured via a mandatory, unchecked-by-default checkbox using the exact language shown below. The form cannot be submitted without checking the consent box.</p>
+      <p>SMS consent is collected on the <strong>sign-in page</strong> (<a href="signup.html" style="color:var(--orange-dark)">duezly.com/signup.html</a>) before the user pays or enters any contact information. The consent checkbox is unchecked by default and the "Sign in with Google" button is disabled until the box is checked. No SMS messages are ever sent before this consent is given.</p>
 
-      <p>This is a static preview of the form users see. It cannot be submitted here.</p>
+      <p>This is a static preview of the sign-in page users see. The Google button and checkbox cannot be interacted with here.</p>
 
       <div class="preview-card">
-        <span class="preview-label">Phone number</span>
-        <div class="preview-field">(555) 000-1234</div>
-
-        <span class="preview-label">Canvas Calendar link</span>
-        <div class="preview-field">https://yourschool.instructure.com/feeds/calendars/…</div>
-
-        <span class="preview-label">Text me at</span>
-        <div class="preview-field">8:00 AM</div>
-
-        <span class="preview-label">Timezone</span>
-        <div class="preview-field">Eastern (ET)</div>
-
-        <div class="consent-row">
+        <div class="consent-row" style="margin-bottom:16px;">
           <input type="checkbox" disabled />
           <span class="consent-label">
-            I agree to receive recurring automated daily SMS homework reminders from Duezly at the phone number provided above.
-            Message frequency: ~1 message per day.
-            Message and data rates may apply.
-            Reply <strong>STOP</strong> to unsubscribe, <strong>HELP</strong> for help.
+            I'd like to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to cancel, <strong>HELP</strong> for info. Consent is not required to purchase.
           </span>
         </div>
 
-        <button class="preview-btn" disabled>Start getting texts</button>
-        <p class="preview-note">This button is disabled — this is a static preview only.</p>
+        <button class="preview-btn" disabled style="opacity:0.45;">Sign in with Google</button>
+        <p class="preview-note">The Google button is disabled until the checkbox is checked. This is a static preview only.</p>
       </div>
 
-      <p>The consent checkbox is unchecked by default. Checking it is required before the form can be submitted. Submitting the form without checking the box displays an error: <em>"Please check the consent box above to continue."</em></p>
+      <p>Once the checkbox is checked, the real Google sign-in button appears and the user can authenticate. If a user somehow reaches checkout without consent recorded, the backend will not activate SMS delivery.</p>
     </div>
 
     <div class="card">
