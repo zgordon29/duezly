@@ -32,6 +32,8 @@
     body.dark nav { background: rgba(15,23,42,0.92); }
     body.dark .card { background: #1e293b; border-color: #2d3748; }
     body.dark .msg.error { background: rgba(153,27,27,0.2); color: #fca5a5; border-color: rgba(153,27,27,0.4); }
+    body.dark .sms-consent { background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.25); }
+    body.dark .sms-consent span { color: #94a3b8; }
     .theme-select {
       font-size: 0.8rem; font-weight: 600;
       background: rgba(0,0,0,0.06); color: var(--text);
@@ -102,6 +104,17 @@
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .msg { margin-top: 14px; padding: 11px 14px; border-radius: 8px; font-size: 0.875rem; font-weight: 500; display: none; text-align: left; }
     .msg.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; display: block; }
+    .sms-consent {
+      display: flex; align-items: flex-start; gap: 8px;
+      background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px;
+      padding: 12px 14px; margin: 16px 0 4px; cursor: pointer; text-align: left;
+    }
+    .sms-consent input[type="checkbox"] {
+      margin-top: 2px; flex-shrink: 0;
+      width: 16px; height: 16px;
+      accent-color: var(--orange); cursor: pointer;
+    }
+    .sms-consent span { font-size: 0.75rem; color: #44403c; line-height: 1.5; }
 
     .hidden { display: none; }
 
@@ -138,9 +151,14 @@
         data-callback="handleGoogleSignIn"
         data-auto_prompt="false">
       </div>
+      <label class="sms-consent" for="sms-consent-signup">
+        <input type="checkbox" id="sms-consent-signup" />
+        <span>I'd like to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for info. Consent is not required to purchase.</span>
+      </label>
       <div class="google-btn-wrap">
         <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
       </div>
+      <div class="msg" id="auth-msg"></div>
       <p class="price-note">$1.99/month &middot; Cancel anytime &middot; No spam</p>
     </div>
 
@@ -162,9 +180,14 @@
         data-callback="handleGoogleSignIn"
         data-auto_prompt="false">
       </div>
+      <label class="sms-consent" for="sms-consent-canceled">
+        <input type="checkbox" id="sms-consent-canceled" />
+        <span>I'd like to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for info. Consent is not required to purchase.</span>
+      </label>
       <div class="google-btn-wrap" style="margin-bottom:8px;">
         <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
       </div>
+      <div class="msg" id="canceled-msg"></div>
       <p class="price-note">Questions? <a href="mailto:hello@duezly.com" style="color:var(--orange-dark)">hello@duezly.com</a></p>
     </div>
 
@@ -217,6 +240,19 @@
       }
     }
 
+    function getConsentChecked() {
+      const a = document.getElementById("sms-consent-signup");
+      const b = document.getElementById("sms-consent-canceled");
+      return (a && a.checked) || (b && b.checked);
+    }
+
+    function showAuthError(msg) {
+      const authMsg = document.getElementById("auth-msg");
+      const canceledMsg = document.getElementById("canceled-msg");
+      if (authMsg) { authMsg.className = "msg error"; authMsg.textContent = msg; }
+      if (canceledMsg) { canceledMsg.className = "msg error"; canceledMsg.textContent = msg; }
+    }
+
     async function handleGoogleSignIn(response) {
       show("status-screen");
       setStatus("Signing you in…", "Just a second.");
@@ -230,6 +266,13 @@
         if (!res.ok) { show("auth-screen"); alert("Sign in failed. Please try again."); return; }
         localStorage.setItem("duezly_token", data.token);
         sessionToken = data.token;
+
+        if (data.subscription_status !== "active" && !getConsentChecked()) {
+          show("auth-screen");
+          showAuthError("Please check the SMS consent box above to continue.");
+          return;
+        }
+
         route(data.subscription_status, data.phone, data.canvas_url, true);
       } catch {
         show("auth-screen");
