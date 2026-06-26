@@ -78,7 +78,6 @@
     .card .price-note { font-size: 0.78rem; color: var(--muted); margin-top: 16px; margin-bottom: 0; }
     .google-btn-wrap { display: flex; justify-content: center; }
 
-    /* Status screen (loading / redirecting / canceled) */
     .status-icon { font-size: 2.5rem; margin-bottom: 16px; }
     .status-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; color: var(--text); }
     .status-sub { color: var(--muted); font-size: 0.875rem; line-height: 1.6; margin-bottom: 0; }
@@ -90,16 +89,7 @@
       animation: spin 0.7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .btn {
-      width: 100%; padding: 13px; margin-top: 20px;
-      border: none; border-radius: 10px;
-      font-size: 0.95rem; font-weight: 700;
-      cursor: pointer; transition: opacity 0.15s;
-      font-family: inherit;
-      background: linear-gradient(135deg, #c2410c, #f59e0b); color: #fff;
-    }
-    .btn:hover { opacity: 0.9; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
     .msg { margin-top: 14px; padding: 11px 14px; border-radius: 8px; font-size: 0.875rem; font-weight: 500; display: none; text-align: left; }
     .msg.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; display: block; }
 
@@ -139,35 +129,17 @@
         data-auto_prompt="false">
       </div>
       <div class="google-btn-wrap">
-        <div class="g_id_signin" id="real-btn-main" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
+        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
       </div>
       <div class="msg" id="auth-msg"></div>
       <p class="price-note">$1.99/month &middot; Cancel anytime &middot; No spam</p>
     </div>
 
-    <!-- Status: loading / redirecting to Stripe -->
+    <!-- Status: loading / signing in -->
     <div id="status-screen" class="card hidden">
       <div class="spinner"></div>
       <div class="status-title" id="status-title">One moment…</div>
-      <div class="status-sub" id="status-sub">Setting up your checkout.</div>
-    </div>
-
-    <!-- Canceled: payment was canceled -->
-    <div id="canceled-screen" class="card hidden">
-      <div class="emoji">😔</div>
-      <h2>Payment canceled</h2>
-      <p>No worries — you haven't been charged. Sign in again to retry.</p>
-      <div
-        id="g_id_onload_canceled"
-        data-client_id="826724045174-q4ur3modo6sje8aab2bhplo33se3353p.apps.googleusercontent.com"
-        data-callback="handleGoogleSignIn"
-        data-auto_prompt="false">
-      </div>
-      <div class="google-btn-wrap" style="margin-bottom:8px;">
-        <div class="g_id_signin" id="real-btn-canceled" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular"></div>
-      </div>
-      <div class="msg" id="canceled-msg"></div>
-      <p class="price-note">Questions? <a href="mailto:hello@duezly.com" style="color:var(--orange-dark)">hello@duezly.com</a></p>
+      <div class="status-sub" id="status-sub"></div>
     </div>
 
   </div>
@@ -185,7 +157,7 @@
     let sessionToken = localStorage.getItem("duezly_token");
 
     function show(id) {
-      ["auth-screen","status-screen","canceled-screen"].forEach(s =>
+      ["auth-screen","status-screen"].forEach(s =>
         document.getElementById(s).classList.toggle("hidden", s !== id)
       );
     }
@@ -195,35 +167,9 @@
       document.getElementById("status-sub").textContent = sub;
     }
 
-    async function goToCheckout(token) {
-      show("status-screen");
-      setStatus("One moment…", "Setting up your checkout.");
-      localStorage.setItem("duezly_checkout_pending", "true");
-      try {
-        const res = await fetch(`${API}/user`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-          body: JSON.stringify({ action: "create_checkout_session" })
-        });
-        const data = await res.json();
-        if (res.ok && data.client_secret) {
-          sessionStorage.setItem("duezly_checkout_secret", data.client_secret);
-          window.location.href = "checkout.html";
-        } else {
-          show("auth-screen");
-          alert("Failed to start checkout. Please try again.");
-        }
-      } catch {
-        show("auth-screen");
-        alert("Network error. Please try again.");
-      }
-    }
-
-function showAuthError(msg) {
-      const authMsg = document.getElementById("auth-msg");
-      const canceledMsg = document.getElementById("canceled-msg");
-      if (authMsg) { authMsg.className = "msg error"; authMsg.textContent = msg; }
-      if (canceledMsg) { canceledMsg.className = "msg error"; canceledMsg.textContent = msg; }
+    function showAuthError(msg) {
+      const el = document.getElementById("auth-msg");
+      if (el) { el.className = "msg error"; el.textContent = msg; }
     }
 
     async function handleGoogleSignIn(response) {
@@ -236,34 +182,24 @@ function showAuthError(msg) {
           body: JSON.stringify({ id_token: response.credential })
         });
         const data = await res.json();
-        if (!res.ok) { show("auth-screen"); alert("Sign in failed. Please try again."); return; }
+        if (!res.ok) {
+          show("auth-screen");
+          showAuthError("Sign in failed. Please try again.");
+          return;
+        }
         localStorage.setItem("duezly_token", data.token);
-        sessionToken = data.token;
-
-        route(data.subscription_status, data.phone, data.canvas_url);
+        window.location.href = "dashboard.html";
       } catch {
         show("auth-screen");
-        alert("Network error. Please try again.");
-      }
-    }
-
-    function route(subStatus, phone, canvasUrl) {
-      if (subStatus === "active") {
-        localStorage.removeItem("duezly_checkout_pending");
-        window.location.href = (phone && canvasUrl) ? "dashboard.html" : "onboarding.html";
-      } else {
-        goToCheckout(sessionToken);
+        showAuthError("Network error. Please try again.");
       }
     }
 
     async function init() {
+      // Redirect canceled Stripe sessions from the old flow
       const params = new URLSearchParams(location.search);
       if (params.get("canceled") === "true") {
-        window.history.replaceState({}, "", "signup.html");
-        localStorage.removeItem("duezly_token");
-        localStorage.removeItem("duezly_checkout_pending");
-        sessionToken = null;
-        show("canceled-screen");
+        window.location.href = "dashboard.html?canceled=true";
         return;
       }
 
@@ -281,9 +217,7 @@ function showAuthError(msg) {
           show("auth-screen");
           return;
         }
-        if (!res.ok) { show("auth-screen"); return; }
-        const data = await res.json();
-        route(data.subscription_status, data.phone, data.canvas_url);
+        window.location.href = "dashboard.html";
       } catch {
         show("auth-screen");
       }

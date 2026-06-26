@@ -40,6 +40,11 @@
     body.dark .msg.error { background: rgba(153,27,27,0.2); color: #fca5a5; border-color: rgba(153,27,27,0.4); }
     body.dark .status-badge.active { background: rgba(21,128,61,0.2); color: #86efac; border-color: rgba(21,128,61,0.4); }
     body.dark .status-badge.inactive { background: rgba(153,27,27,0.2); color: #fca5a5; border-color: rgba(153,27,27,0.4); }
+    body.dark .consent-box { background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.25); }
+    body.dark .consent-box span { color: #94a3b8; }
+    body.dark .sms-notice { background: rgba(249,115,22,0.06); border-color: rgba(249,115,22,0.3); color: #fb923c; }
+    body.dark .sms-warning { background: rgba(154,52,18,0.15); border-color: rgba(154,52,18,0.4); color: #fdba74; }
+    body.dark .notice-canceled { background: rgba(153,27,27,0.15); border-color: rgba(153,27,27,0.4); color: #fca5a5; }
     .theme-select {
       font-size: 0.8rem; font-weight: 600;
       background: rgba(0,0,0,0.06); color: var(--text);
@@ -75,6 +80,39 @@
 
     main { max-width: 540px; margin: 0 auto; padding: 40px 24px 80px; }
 
+    /* Setup section styles */
+    .setup-wrap { max-width: 580px; margin: 0 auto; }
+    .setup-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 24px; }
+    .notice-canceled {
+      background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px;
+      padding: 12px 16px; margin-bottom: 20px;
+      font-size: 0.875rem; color: #991b1b; font-weight: 500; line-height: 1.5;
+    }
+    .sms-notice {
+      background: #fffbeb; border-left: 3px solid var(--orange);
+      border-radius: 0 8px 8px 0; padding: 10px 14px;
+      font-size: 0.82rem; color: var(--orange-dark); line-height: 1.5;
+      margin-bottom: 12px; font-weight: 500;
+    }
+    .consent-box {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px;
+      padding: 14px; cursor: pointer; margin-bottom: 8px;
+    }
+    .consent-box input[type="checkbox"] {
+      margin-top: 2px; flex-shrink: 0;
+      width: 16px; height: 16px; accent-color: var(--orange); cursor: pointer;
+    }
+    .consent-box span { font-size: 0.8rem; color: #44403c; line-height: 1.6; }
+    .consent-box a { color: var(--orange-dark); }
+    .sms-warning {
+      background: #fff7ed; border: 1px solid #fed7aa;
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 0.82rem; color: #9a3412; line-height: 1.5; margin-bottom: 12px;
+      display: none;
+    }
+    .setup-fine { font-size: 0.78rem; color: var(--muted); text-align: center; margin-top: 12px; }
+
     .card-grid { display: flex; flex-direction: column; }
 
     @media (min-width: 768px) {
@@ -93,12 +131,6 @@
       .card-update  { grid-column: 2; grid-row: 1 / 3; }
       .card-unsub   { grid-column: 1 / 3; grid-row: 3; }
     }
-
-    /* Login screen */
-    .login-wrap { text-align: center; padding: 48px 0; }
-    .login-wrap h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
-    .login-wrap p { color: var(--muted); font-size: 0.95rem; margin-bottom: 32px; line-height: 1.6; }
-    .google-btn-wrap { display: flex; justify-content: center; }
 
     /* Dashboard cards */
     .card {
@@ -254,7 +286,7 @@
     <p>Manage your Duezly reminders.</p>
   </div>
 
-  <!-- Gate overlay: shown while checking auth/subscription -->
+  <!-- Gate overlay: shown while checking auth -->
   <div id="gate-overlay" class="gate-overlay">
     <div class="gate-card">
       <div class="spinner"></div>
@@ -264,7 +296,82 @@
   </div>
 
   <main>
-    <!-- Dashboard screen -->
+
+    <!-- Setup section (for users who haven't subscribed yet) -->
+    <div id="setup-section" class="hidden">
+      <div class="setup-wrap">
+
+        <div id="setup-canceled-notice" class="notice-canceled hidden">
+          Payment was canceled — no worries, you haven't been charged. Fill in your info below and try again whenever you're ready.
+        </div>
+
+        <div class="card" style="border-color: var(--orange); border-width: 2px;">
+          <div class="card-title">Get Started with Duezly</div>
+          <p class="setup-desc">Duezly texts you a daily summary of your upcoming Canvas assignments — straight to your phone every morning. $1.99/month after a 14-day free trial. Cancel anytime.</p>
+
+          <div class="field">
+            <label for="setup-phone">Phone number</label>
+            <input type="tel" id="setup-phone" placeholder="(555) 000-1234" autocomplete="tel" />
+          </div>
+          <div class="field">
+            <label for="setup-canvas-url">Canvas Calendar link</label>
+            <input type="url" id="setup-canvas-url" placeholder="https://yourschool.instructure.com/feeds/calendars/..." />
+            <details class="ical-help">
+              <summary>How do I find my Canvas Calendar link?</summary>
+              <ol>
+                <li>Go to your school's Canvas site and log in.</li>
+                <li>Click <strong>Calendar</strong> in the left sidebar.</li>
+                <li>Scroll to the bottom right and click <code>Calendar Feed</code>.</li>
+                <li>Copy the URL — it starts with <code>instructure.com/feeds/calendars/</code></li>
+              </ol>
+            </details>
+          </div>
+          <div class="field">
+            <label for="setup-send-time">Text me at</label>
+            <select id="setup-send-time">
+              <option value="5">5:00 AM</option>
+              <option value="6">6:00 AM</option>
+              <option value="7">7:00 AM</option>
+              <option value="8" selected>8:00 AM</option>
+              <option value="9">9:00 AM</option>
+              <option value="10">10:00 AM</option>
+              <option value="11">11:00 AM</option>
+              <option value="12">12:00 PM</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="setup-timezone">Timezone</label>
+            <select id="setup-timezone">
+              <option value="America/New_York">Eastern (ET)</option>
+              <option value="America/Chicago">Central (CT)</option>
+              <option value="America/Denver">Mountain (MT)</option>
+              <option value="America/Phoenix">Mountain – no DST (AZ)</option>
+              <option value="America/Los_Angeles">Pacific (PT)</option>
+              <option value="America/Anchorage">Alaska (AKT)</option>
+              <option value="Pacific/Honolulu">Hawaii (HT)</option>
+            </select>
+          </div>
+
+          <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.</p>
+
+          <label class="consent-box" for="setup-sms-consent">
+            <input type="checkbox" id="setup-sms-consent" />
+            <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Message and data rates may apply. Reply <strong>STOP</strong> to opt out. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
+          </label>
+
+          <div id="setup-sms-warning" class="sms-warning">
+            You won't receive SMS reminders without enabling text messages. You can update this anytime in your settings.
+          </div>
+
+          <button id="setup-subscribe-btn" class="btn btn-primary" onclick="subscribe()">Subscribe — $1.99/mo</button>
+          <div class="msg" id="setup-msg"></div>
+          <p class="setup-fine">14-day free trial &middot; Cancel anytime &middot; No spam</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Dashboard screen (for subscribers) -->
     <div id="dashboard-screen" class="hidden">
       <div class="card-grid">
 
@@ -408,6 +515,7 @@
   <script>
     const API = "https://rri54forh2.execute-api.us-east-2.amazonaws.com";
     let sessionToken = localStorage.getItem("duezly_token");
+    let smsWarningShown = false;
 
     const TZ_LABELS = {
       "America/New_York": "Eastern (ET)", "America/Chicago": "Central (CT)",
@@ -428,6 +536,14 @@
       if (digits.length === 10) return "+1" + digits;
       if (digits.length === 11 && digits[0] === "1") return "+" + digits;
       return null;
+    }
+
+    function showSetup(canceled) {
+      document.getElementById("signout-btn").classList.remove("hidden");
+      document.getElementById("setup-section").classList.remove("hidden");
+      if (canceled) {
+        document.getElementById("setup-canceled-notice").classList.remove("hidden");
+      }
     }
 
     function showDashboard(data) {
@@ -508,30 +624,99 @@
       }
     }
 
-    async function redirectToCheckout() {
-      document.getElementById("gate-title").textContent = "Setting up checkout…";
-      document.getElementById("gate-sub").textContent = "You'll be redirected to Stripe in just a second.";
+    async function pollForActivation(attempts) {
+      if (attempts <= 0) {
+        document.getElementById("gate-overlay").style.display = "none";
+        showSetup(false);
+        const msg = document.getElementById("setup-msg");
+        msg.className = "msg success";
+        msg.textContent = "Payment received! Your account should activate in under a minute — refresh this page if it doesn't update.";
+        msg.style.display = "block";
+        return;
+      }
+      await new Promise(r => setTimeout(r, 2000));
       try {
         const res = await fetch(`${API}/user`, {
+          headers: { "Authorization": `Bearer ${sessionToken}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (["active", "trialing"].includes(data.subscription_status)) {
+            document.getElementById("gate-overlay").style.display = "none";
+            showDashboard(data);
+            return;
+          }
+        }
+      } catch {}
+      pollForActivation(attempts - 1);
+    }
+
+    async function subscribe() {
+      const phone = normalizePhone(document.getElementById("setup-phone").value);
+      const canvas_url = document.getElementById("setup-canvas-url").value.trim();
+      const timezone = document.getElementById("setup-timezone").value;
+      const send_time = parseInt(document.getElementById("setup-send-time").value);
+      const sms_consent = document.getElementById("setup-sms-consent").checked;
+      const btn = document.getElementById("setup-subscribe-btn");
+      const msg = document.getElementById("setup-msg");
+
+      msg.style.display = "none";
+
+      if (!phone) {
+        msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
+      }
+      if (!canvas_url) {
+        msg.className = "msg error"; msg.textContent = "Please enter your Canvas Calendar link."; msg.style.display = "block"; return;
+      }
+
+      if (!sms_consent && !smsWarningShown) {
+        smsWarningShown = true;
+        document.getElementById("setup-sms-warning").style.display = "block";
+        return;
+      }
+
+      btn.disabled = true; btn.textContent = "Loading…";
+
+      try {
+        const saveRes = await fetch(`${API}/user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+          body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time, sms_consent })
+        });
+        if (!saveRes.ok) {
+          const saveData = await saveRes.json();
+          msg.className = "msg error"; msg.textContent = saveData.message || "Failed to save your info. Please try again."; msg.style.display = "block";
+          btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo"; return;
+        }
+
+        const checkoutRes = await fetch(`${API}/user`, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
           body: JSON.stringify({ action: "create_checkout_session" })
         });
-        const data = await res.json();
-        if (res.ok && data.checkout_url) {
-          window.location.href = data.checkout_url;
+        const checkoutData = await checkoutRes.json();
+        if (checkoutRes.ok && checkoutData.checkout_url) {
+          window.location.href = checkoutData.checkout_url;
         } else {
-          document.getElementById("gate-title").textContent = "Something went wrong";
-          document.getElementById("gate-sub").textContent = "Failed to start checkout. Please refresh or contact hello@duezly.com.";
+          msg.className = "msg error"; msg.textContent = "Failed to start checkout. Please try again."; msg.style.display = "block";
+          btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo";
         }
       } catch {
-        document.getElementById("gate-title").textContent = "Network error";
-        document.getElementById("gate-sub").textContent = "Please refresh the page to try again.";
+        msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
+        btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo";
       }
     }
 
     async function loadDashboard() {
+      const params = new URLSearchParams(location.search);
+      const fromStripe = params.get("subscribed") === "true";
+      const fromCancel = params.get("canceled") === "true";
+      if (fromStripe || fromCancel) {
+        window.history.replaceState({}, "", "dashboard.html");
+      }
+
       if (!sessionToken) { window.location.href = "signup.html"; return; }
+
       try {
         const res = await fetch(`${API}/user`, {
           headers: { "Authorization": `Bearer ${sessionToken}` }
@@ -541,16 +726,31 @@
           window.location.href = "signup.html";
           return;
         }
-        if (!res.ok) return;
-        const data = await res.json();
-        const hasAccess = ["active", "trialing", "canceling", "past_due"].includes(data.subscription_status);
-        if (!hasAccess) {
-          window.location.href = "signup.html";
+        if (!res.ok) {
+          document.getElementById("gate-overlay").style.display = "none";
+          showSetup(fromCancel);
           return;
         }
+        const data = await res.json();
+        const hasAccess = ["active", "trialing", "canceling", "past_due"].includes(data.subscription_status);
+
+        if (fromStripe && !hasAccess) {
+          document.getElementById("gate-title").textContent = "Activating your account…";
+          document.getElementById("gate-sub").textContent = "Payment confirmed! Just a moment.";
+          pollForActivation(8);
+          return;
+        }
+
         document.getElementById("gate-overlay").style.display = "none";
-        showDashboard(data);
-      } catch (err) {}
+        if (hasAccess) {
+          showDashboard(data);
+        } else {
+          showSetup(fromCancel);
+        }
+      } catch {
+        document.getElementById("gate-overlay").style.display = "none";
+        showSetup(false);
+      }
     }
 
     document.getElementById("update-form").addEventListener("submit", async (e) => {
@@ -712,7 +912,7 @@
 
     function signOut() {
       localStorage.removeItem("duezly_token");
-      location.reload();
+      window.location.href = "signup.html";
     }
 
     function setTheme(theme) {
@@ -723,7 +923,6 @@
     const savedTheme = localStorage.getItem("duezly_theme") || "dark";
     setTheme(savedTheme);
 
-    // Auto-load if session exists
     loadDashboard();
   </script>
 
