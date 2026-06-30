@@ -188,7 +188,7 @@
           return;
         }
         localStorage.setItem("duezly_token", data.token);
-        window.location.href = "purchase.html";
+        window.location.href = "dashboard.html";
       } catch {
         show("auth-screen");
         showAuthError("Network error. Please try again.");
@@ -217,7 +217,7 @@
           show("auth-screen");
           return;
         }
-        window.location.href = "purchase.html";
+        window.location.href = "dashboard.html";
       } catch {
         show("auth-screen");
       }

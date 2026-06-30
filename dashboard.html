@@ -263,6 +263,68 @@
 
   <main>
 
+    <!-- Subscribe card — shown for non-subscribers -->
+    <div id="subscribe-section" class="hidden">
+      <div class="card setup-card">
+        <div class="card-title">Get Started with Duezly</div>
+        <p class="setup-desc">Duezly texts you a daily summary of your upcoming Canvas assignments straight to your phone every morning. $1.99/month after a 14-day free trial. Cancel anytime.</p>
+
+        <div class="field">
+          <label for="sub-phone">Phone number <span style="font-weight:500;color:var(--muted);">(optional — add later)</span></label>
+          <input type="tel" id="sub-phone" placeholder="(555) 000-1234" autocomplete="tel" />
+        </div>
+        <div class="field">
+          <label for="sub-canvas-url">Canvas Calendar link <span style="font-weight:500;color:var(--muted);">(optional — add later)</span></label>
+          <input type="url" id="sub-canvas-url" placeholder="https://yourschool.instructure.com/feeds/calendars/..." />
+          <details class="ical-help">
+            <summary>How do I find my Canvas Calendar link?</summary>
+            <ol>
+              <li>Go to your school's Canvas site and log in.</li>
+              <li>Click <strong>Calendar</strong> in the left sidebar.</li>
+              <li>Scroll to the bottom right and click <code>Calendar Feed</code>.</li>
+              <li>Copy the URL — it starts with <code>instructure.com/feeds/calendars/</code></li>
+            </ol>
+          </details>
+        </div>
+        <div class="field">
+          <label for="sub-send-time">Text me at</label>
+          <select id="sub-send-time">
+            <option value="5">5:00 AM</option>
+            <option value="6">6:00 AM</option>
+            <option value="7">7:00 AM</option>
+            <option value="8" selected>8:00 AM</option>
+            <option value="9">9:00 AM</option>
+            <option value="10">10:00 AM</option>
+            <option value="11">11:00 AM</option>
+            <option value="12">12:00 PM</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="sub-timezone">Timezone</label>
+          <select id="sub-timezone">
+            <option value="America/New_York">Eastern (ET)</option>
+            <option value="America/Chicago">Central (CT)</option>
+            <option value="America/Denver">Mountain (MT)</option>
+            <option value="America/Phoenix">Mountain – no DST (AZ)</option>
+            <option value="America/Los_Angeles">Pacific (PT)</option>
+            <option value="America/Anchorage">Alaska (AKT)</option>
+            <option value="Pacific/Honolulu">Hawaii (HT)</option>
+          </select>
+        </div>
+
+        <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.</p>
+
+        <label class="consent-box" for="sub-sms-consent">
+          <input type="checkbox" id="sub-sms-consent" />
+          <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
+        </label>
+
+        <button class="btn btn-primary" id="sub-btn" onclick="subscribe()">Subscribe — $1.99/mo</button>
+        <div class="msg" id="sub-msg"></div>
+        <p class="setup-fine">14-day free trial &middot; Cancel anytime &middot; No spam</p>
+      </div>
+    </div>
+
     <!-- Set Up Duezly prompt — shown at top when setup is incomplete, hidden once done -->
     <div id="setup-section" class="hidden">
       <div class="card setup-card" style="margin-bottom:16px;">
@@ -586,6 +648,63 @@
       );
     }
 
+    function showSubscribeCard(data) {
+      document.getElementById("subscribe-section").classList.remove("hidden");
+      document.getElementById("signout-btn").classList.remove("hidden");
+      if (data.phone) document.getElementById("sub-phone").value = data.phone;
+      if (data.canvas_url) document.getElementById("sub-canvas-url").value = data.canvas_url;
+      if (data.timezone) document.getElementById("sub-timezone").value = data.timezone;
+      if (data.send_time != null) document.getElementById("sub-send-time").value = data.send_time;
+      if (data.sms_consent) document.getElementById("sub-sms-consent").checked = true;
+    }
+
+    async function subscribe() {
+      const btn = document.getElementById("sub-btn");
+      const msg = document.getElementById("sub-msg");
+      const rawPhone = document.getElementById("sub-phone").value;
+      const canvas_url = document.getElementById("sub-canvas-url").value.trim();
+      const timezone = document.getElementById("sub-timezone").value;
+      const send_time = parseInt(document.getElementById("sub-send-time").value);
+      const sms_consent = document.getElementById("sub-sms-consent").checked;
+
+      btn.disabled = true; btn.textContent = "Setting up…"; msg.style.display = "none";
+
+      const phone = rawPhone ? normalizePhone(rawPhone) : null;
+      if (rawPhone && !phone) {
+        msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block";
+        btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo"; return;
+      }
+
+      try {
+        if (phone || canvas_url || sms_consent) {
+          const updateBody = { action: "update", timezone, send_time };
+          if (phone) updateBody.phone = phone;
+          if (canvas_url) updateBody.canvas_url = canvas_url;
+          updateBody.sms_consent = sms_consent;
+          await fetch(`${API}/user`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+            body: JSON.stringify(updateBody)
+          });
+        }
+
+        const res = await fetch(`${API}/user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+          body: JSON.stringify({ action: "create_checkout_session" })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          msg.className = "msg error"; msg.textContent = data.message || "Failed to start checkout. Please try again."; msg.style.display = "block";
+          btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo"; return;
+        }
+        window.location.href = data.url;
+      } catch {
+        msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
+        btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo";
+      }
+    }
+
     async function saveSetup() {
       const rawPhone = document.getElementById("setup-phone").value;
       const canvas_url = document.getElementById("setup-canvas-url").value.trim();
@@ -647,7 +766,7 @@
     async function pollForActivation(attempts) {
       if (attempts <= 0) {
         document.getElementById("gate-overlay").style.display = "none";
-        window.location.href = "purchase.html";
+        window.location.href = "dashboard.html";
         return;
       }
       await new Promise(r => setTimeout(r, 2000));
@@ -679,7 +798,7 @@
           localStorage.removeItem("duezly_token");
           window.location.href = "signup.html"; return;
         }
-        if (!res.ok) { window.location.href = "purchase.html"; return; }
+        if (!res.ok) { window.location.href = "signup.html"; return; }
 
         const data = await res.json();
         const hasAccess = ["active", "trialing", "canceling", "past_due"].includes(data.subscription_status);
@@ -692,14 +811,17 @@
 
         document.getElementById("gate-overlay").style.display = "none";
 
-        if (!hasAccess) { window.location.href = "purchase.html"; return; }
-
-        showDashboard(data);
-        maybeShowSetupPrompt(data);
+        if (!hasAccess) {
+          showSubscribeCard(data);
+          showDashboard(data);
+        } else {
+          showDashboard(data);
+          maybeShowSetupPrompt(data);
+        }
 
       } catch {
         document.getElementById("gate-overlay").style.display = "none";
-        window.location.href = "purchase.html";
+        window.location.href = "signup.html";
       }
     }
 
