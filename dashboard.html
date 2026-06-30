@@ -43,8 +43,7 @@
     body.dark .consent-box { background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.25); }
     body.dark .consent-box span { color: #94a3b8; }
     body.dark .sms-notice { background: rgba(249,115,22,0.06); border-color: rgba(249,115,22,0.3); color: #fb923c; }
-    body.dark .sms-warning { background: rgba(154,52,18,0.15); border-color: rgba(154,52,18,0.4); color: #fdba74; }
-    body.dark .notice-canceled { background: rgba(153,27,27,0.15); border-color: rgba(153,27,27,0.4); color: #fca5a5; }
+    body.dark .setup-card { border-color: var(--orange) !important; }
     .theme-select {
       font-size: 0.8rem; font-weight: 600;
       background: rgba(0,0,0,0.06); color: var(--text);
@@ -80,14 +79,19 @@
 
     main { max-width: 540px; margin: 0 auto; padding: 40px 24px 80px; }
 
-    /* Setup section styles */
-    .setup-wrap { max-width: 580px; margin: 0 auto; }
-    .setup-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 24px; }
-    .notice-canceled {
-      background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px;
-      padding: 12px 16px; margin-bottom: 20px;
-      font-size: 0.875rem; color: #991b1b; font-weight: 500; line-height: 1.5;
+    .card {
+      background: var(--bg);
+      border: 1.5px solid #fde68a;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 16px;
     }
+    .card-title { font-size: 0.78rem; font-weight: 800; letter-spacing: 1px; color: var(--orange); text-transform: uppercase; margin-bottom: 16px; }
+
+    /* Setup card */
+    .setup-card { border-color: var(--orange) !important; border-width: 2px !important; }
+    .setup-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 24px; }
+    .setup-fine { font-size: 0.78rem; color: var(--muted); text-align: center; margin-top: 12px; }
     .sms-notice {
       background: #fffbeb; border-left: 3px solid var(--orange);
       border-radius: 0 8px 8px 0; padding: 10px 14px;
@@ -105,43 +109,8 @@
     }
     .consent-box span { font-size: 0.8rem; color: #44403c; line-height: 1.6; }
     .consent-box a { color: var(--orange-dark); }
-    .sms-warning {
-      background: #fff7ed; border: 1px solid #fed7aa;
-      border-radius: 8px; padding: 10px 14px;
-      font-size: 0.82rem; color: #9a3412; line-height: 1.5; margin-bottom: 12px;
-      display: none;
-    }
-    .setup-fine { font-size: 0.78rem; color: var(--muted); text-align: center; margin-top: 12px; }
 
-    .card-grid { display: flex; flex-direction: column; }
-
-    @media (min-width: 768px) {
-      main { max-width: 960px; padding: 48px 40px 80px; }
-      .page-header { padding: 52px 40px; }
-      .card-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto 1fr auto;
-        gap: 20px;
-        align-items: start;
-      }
-      .card { margin-bottom: 0; }
-      .card-status  { grid-column: 1; grid-row: 1; }
-      .card-profile { grid-column: 1; grid-row: 2; }
-      .card-update  { grid-column: 2; grid-row: 1 / 3; }
-      .card-unsub   { grid-column: 1 / 3; grid-row: 3; }
-    }
-
-    /* Dashboard cards */
-    .card {
-      background: var(--bg);
-      border: 1.5px solid #fde68a;
-      border-radius: 16px;
-      padding: 28px;
-      margin-bottom: 16px;
-    }
-    .card-title { font-size: 0.78rem; font-weight: 800; letter-spacing: 1px; color: var(--orange); text-transform: uppercase; margin-bottom: 16px; }
-
+    /* Status card */
     .status-row { display: flex; align-items: center; justify-content: space-between; }
     .status-badge {
       display: inline-flex; align-items: center; gap: 6px;
@@ -151,30 +120,16 @@
     .status-badge.active { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
     .status-badge.inactive { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
-
-    .sub-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-    .sub-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .sub-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); margin-bottom: 3px; }
-    .sub-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
-    .sub-value.active { color: #166534; }
-    .sub-value.trialing { color: #7c3aed; }
-    .sub-value.canceled, .sub-value.past_due { color: #991b1b; }
-    .btn-subscribe {
-      padding: 9px 18px; border: none; border-radius: 10px;
-      font-size: 0.85rem; font-weight: 700; cursor: pointer;
-      background: linear-gradient(135deg, #c2410c, #f59e0b); color: #fff;
-      transition: opacity 0.15s, transform 0.1s; white-space: nowrap;
-    }
-    .btn-subscribe:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-subscribe:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     body.dark .sub-value.active { color: #86efac; }
     body.dark .sub-value.trialing { color: #c4b5fd; }
     body.dark .sub-value.canceled, body.dark .sub-value.past_due { color: #fca5a5; }
 
+    /* Info card */
     .info-row { display: flex; flex-direction: column; gap: 12px; }
     .info-item label { font-size: 0.78rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 3px; }
     .info-item span { font-size: 0.9rem; color: var(--text); word-break: break-all; }
 
+    /* Field / form */
     .field { margin-bottom: 16px; }
     .field label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
     .field input {
@@ -206,6 +161,14 @@
     .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .btn-primary { background: linear-gradient(135deg, #c2410c, #f59e0b); color: #fff; }
     .btn-danger { background: #fef2f2; color: #991b1b; border: 1.5px solid #fecaca; }
+    .btn-subscribe {
+      padding: 9px 18px; border: none; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 700; cursor: pointer;
+      background: linear-gradient(135deg, #c2410c, #f59e0b); color: #fff;
+      transition: opacity 0.15s, transform 0.1s; white-space: nowrap;
+    }
+    .btn-subscribe:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-subscribe:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     .msg { margin-top: 12px; padding: 11px 14px; border-radius: 8px; font-size: 0.875rem; font-weight: 500; display: none; }
     .msg.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
@@ -213,28 +176,31 @@
 
     .hidden { display: none; }
 
-    footer { border-top: 1px solid var(--border); padding: 28px 24px; text-align: center; }
-    footer p { font-size: 0.82rem; color: var(--muted); }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--orange); }
-    .footer-links { display: flex; justify-content: center; gap: 20px; margin-top: 8px; }
+    /* Responsive: 2-col grid for full dashboard on wider screens */
+    .card-grid { display: flex; flex-direction: column; }
+    @media (min-width: 768px) {
+      main { max-width: 960px; padding: 48px 40px 80px; }
+      .page-header { padding: 52px 40px; }
+      .card-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+      .card { margin-bottom: 0; }
+      .card-status  { grid-column: 1; grid-row: 1; }
+      .card-profile { grid-column: 1; grid-row: 2; }
+      .card-update  { grid-column: 2; grid-row: 1 / 3; }
+    }
 
     .ical-help {
-      margin-top: 8px;
-      border: 1.5px solid #fde68a;
-      border-radius: 8px;
-      background: #fffbeb;
-      font-size: 0.82rem;
+      margin-top: 8px; border: 1.5px solid #fde68a;
+      border-radius: 8px; background: #fffbeb; font-size: 0.82rem;
     }
     .ical-help summary {
-      padding: 8px 12px;
-      cursor: pointer;
-      font-weight: 700;
-      color: var(--orange-dark);
-      list-style: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      padding: 8px 12px; cursor: pointer; font-weight: 700;
+      color: var(--orange-dark); list-style: none;
+      display: flex; align-items: center; gap: 6px;
     }
     .ical-help summary::-webkit-details-marker { display: none; }
     .ical-help summary::before { content: "▶"; font-size: 0.65rem; transition: transform 0.15s; }
@@ -243,30 +209,31 @@
     .ical-help li { color: #374151; line-height: 1.9; }
     .ical-help code { background: #fde68a; color: #92400e; padding: 1px 6px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; }
 
-    /* Gate loading overlay */
+    /* Gate overlay */
     .gate-overlay {
       position: fixed; inset: 0; z-index: 200;
       background: var(--bg-warm);
       display: flex; align-items: center; justify-content: center;
     }
     .gate-card {
-      background: var(--bg);
-      border: 1.5px solid #fde68a;
-      border-radius: 20px;
-      padding: 40px 36px;
-      max-width: 360px; width: 90%;
-      text-align: center;
+      background: var(--bg); border: 1.5px solid #fde68a;
+      border-radius: 20px; padding: 40px 36px;
+      max-width: 360px; width: 90%; text-align: center;
     }
     .gate-card h2 { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; color: var(--text); }
     .gate-card p { color: var(--muted); font-size: 0.875rem; line-height: 1.6; }
     .spinner {
       width: 32px; height: 32px; margin: 14px auto;
-      border: 3px solid var(--border);
-      border-top-color: var(--orange);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      border: 3px solid var(--border); border-top-color: var(--orange);
+      border-radius: 50%; animation: spin 0.7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    footer { border-top: 1px solid var(--border); padding: 28px 24px; text-align: center; }
+    footer p { font-size: 0.82rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--orange); }
+    .footer-links { display: flex; justify-content: center; gap: 20px; margin-top: 8px; }
 
     @media (max-width: 480px) {
       main { padding: 28px 16px 64px; }
@@ -286,7 +253,6 @@
     <p>Manage your Duezly reminders.</p>
   </div>
 
-  <!-- Gate overlay: shown while checking auth -->
   <div id="gate-overlay" class="gate-overlay">
     <div class="gate-card">
       <div class="spinner"></div>
@@ -297,85 +263,98 @@
 
   <main>
 
-    <!-- Setup section (for users who haven't subscribed yet) -->
+    <!-- Set up Duezly — shown for subscribers who haven't completed setup -->
     <div id="setup-section" class="hidden">
-      <div class="setup-wrap">
 
-        <div id="setup-canceled-notice" class="notice-canceled hidden">
-          Payment was canceled — no worries, you haven't been charged. Fill in your info below and try again whenever you're ready.
+      <div class="card setup-card">
+        <div class="card-title">Set Up Duezly</div>
+        <p class="setup-desc">Complete your setup to start receiving daily assignment reminders straight to your phone.</p>
+
+        <div class="field">
+          <label for="setup-phone">Phone number</label>
+          <input type="tel" id="setup-phone" placeholder="(555) 000-1234" autocomplete="tel" />
+        </div>
+        <div class="field">
+          <label for="setup-canvas-url">Canvas Calendar link</label>
+          <input type="url" id="setup-canvas-url" placeholder="https://yourschool.instructure.com/feeds/calendars/..." />
+          <details class="ical-help">
+            <summary>How do I find my Canvas Calendar link?</summary>
+            <ol>
+              <li>Go to your school's Canvas site and log in.</li>
+              <li>Click <strong>Calendar</strong> in the left sidebar.</li>
+              <li>Scroll to the bottom right and click <code>Calendar Feed</code>.</li>
+              <li>Copy the URL — it starts with <code>instructure.com/feeds/calendars/</code></li>
+            </ol>
+          </details>
+        </div>
+        <div class="field">
+          <label for="setup-send-time">Text me at</label>
+          <select id="setup-send-time">
+            <option value="5">5:00 AM</option>
+            <option value="6">6:00 AM</option>
+            <option value="7">7:00 AM</option>
+            <option value="8" selected>8:00 AM</option>
+            <option value="9">9:00 AM</option>
+            <option value="10">10:00 AM</option>
+            <option value="11">11:00 AM</option>
+            <option value="12">12:00 PM</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="setup-timezone">Timezone</label>
+          <select id="setup-timezone">
+            <option value="America/New_York">Eastern (ET)</option>
+            <option value="America/Chicago">Central (CT)</option>
+            <option value="America/Denver">Mountain (MT)</option>
+            <option value="America/Phoenix">Mountain – no DST (AZ)</option>
+            <option value="America/Los_Angeles">Pacific (PT)</option>
+            <option value="America/Anchorage">Alaska (AKT)</option>
+            <option value="Pacific/Honolulu">Hawaii (HT)</option>
+          </select>
         </div>
 
-        <div class="card" style="border-color: var(--orange); border-width: 2px;">
-          <div class="card-title">Get Started with Duezly</div>
-          <p class="setup-desc">Duezly texts you a daily summary of your upcoming Canvas assignments — straight to your phone every morning. $1.99/month after a 14-day free trial. Cancel anytime.</p>
+        <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.</p>
 
-          <div class="field">
-            <label for="setup-phone">Phone number</label>
-            <input type="tel" id="setup-phone" placeholder="(555) 000-1234" autocomplete="tel" />
-          </div>
-          <div class="field">
-            <label for="setup-canvas-url">Canvas Calendar link</label>
-            <input type="url" id="setup-canvas-url" placeholder="https://yourschool.instructure.com/feeds/calendars/..." />
-            <details class="ical-help">
-              <summary>How do I find my Canvas Calendar link?</summary>
-              <ol>
-                <li>Go to your school's Canvas site and log in.</li>
-                <li>Click <strong>Calendar</strong> in the left sidebar.</li>
-                <li>Scroll to the bottom right and click <code>Calendar Feed</code>.</li>
-                <li>Copy the URL — it starts with <code>instructure.com/feeds/calendars/</code></li>
-              </ol>
-            </details>
-          </div>
-          <div class="field">
-            <label for="setup-send-time">Text me at</label>
-            <select id="setup-send-time">
-              <option value="5">5:00 AM</option>
-              <option value="6">6:00 AM</option>
-              <option value="7">7:00 AM</option>
-              <option value="8" selected>8:00 AM</option>
-              <option value="9">9:00 AM</option>
-              <option value="10">10:00 AM</option>
-              <option value="11">11:00 AM</option>
-              <option value="12">12:00 PM</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="setup-timezone">Timezone</label>
-            <select id="setup-timezone">
-              <option value="America/New_York">Eastern (ET)</option>
-              <option value="America/Chicago">Central (CT)</option>
-              <option value="America/Denver">Mountain (MT)</option>
-              <option value="America/Phoenix">Mountain – no DST (AZ)</option>
-              <option value="America/Los_Angeles">Pacific (PT)</option>
-              <option value="America/Anchorage">Alaska (AKT)</option>
-              <option value="Pacific/Honolulu">Hawaii (HT)</option>
-            </select>
-          </div>
+        <label class="consent-box" for="setup-sms-consent">
+          <input type="checkbox" id="setup-sms-consent" />
+          <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
+        </label>
 
-          <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.</p>
-
-          <label class="consent-box" for="setup-sms-consent">
-            <input type="checkbox" id="setup-sms-consent" />
-            <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
-          </label>
-
-          <div id="setup-sms-warning" class="sms-warning">
-            You won't receive SMS reminders without enabling text messages. You can update this anytime in your settings.
-          </div>
-
-          <button id="setup-subscribe-btn" class="btn btn-primary" onclick="subscribe()">Subscribe — $1.99/mo</button>
-          <div class="msg" id="setup-msg"></div>
-          <p class="setup-fine">14-day free trial &middot; Cancel anytime &middot; No spam</p>
-        </div>
-
+        <button class="btn btn-primary" id="setup-save-btn" onclick="saveSetup()">Save and start reminders</button>
+        <div class="msg" id="setup-msg"></div>
+        <p class="setup-fine">Reminders won't send until phone, Canvas link, and SMS consent are all saved.</p>
       </div>
+
+      <!-- Subscription management (always accessible) -->
+      <div class="card">
+        <div class="card-title">Subscription</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--muted);margin-bottom:3px;">Status</div>
+            <div id="setup-sub-status" style="font-size:0.9rem;font-weight:600;color:var(--text);">—</div>
+          </div>
+          <button class="btn btn-danger" id="setup-cancel-btn" onclick="cancelSubscription('setup')" style="width:auto;padding:9px 18px;display:none;">Cancel subscription</button>
+        </div>
+        <div id="setup-canceling-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;">
+          Your subscription is set to cancel at the end of the current billing period. You'll keep receiving texts until then.
+        </div>
+        <button class="btn-subscribe" id="setup-reactivate-btn" onclick="reactivateSubscription('setup')" style="display:none;margin-top:12px;">Reactivate subscription</button>
+        <div class="msg" id="setup-sub-msg"></div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
+
+        <div class="card-title">Delete Account</div>
+        <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">Permanently remove your account and all associated data. This cannot be undone.</p>
+        <button class="btn btn-danger" id="setup-delete-btn" onclick="deleteAccount()">Delete my account</button>
+        <div class="msg" id="setup-delete-msg"></div>
+      </div>
+
     </div>
 
-    <!-- Dashboard screen (for subscribers) -->
+    <!-- Full dashboard — shown for subscribers who have completed setup -->
     <div id="dashboard-screen" class="hidden">
       <div class="card-grid">
 
-        <!-- Status card -->
         <div class="card card-status">
           <div class="card-title">Reminder Status</div>
           <div class="status-row">
@@ -387,7 +366,6 @@
           </div>
         </div>
 
-        <!-- Profile card -->
         <div class="card card-profile">
           <div class="card-title">Your Info</div>
           <div class="info-row">
@@ -410,7 +388,6 @@
           </div>
         </div>
 
-        <!-- Update card -->
         <div class="card card-update">
           <div class="card-title">Duezly Settings</div>
           <form id="update-form">
@@ -461,41 +438,41 @@
           <div class="msg" id="update-msg"></div>
         </div>
 
-        <!-- Subscription + Unsubscribe + Delete card -->
-        <div class="card card-unsub">
+      </div>
 
-          <div class="card-title">Subscription</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-            <div>
-              <div style="font-size:0.78rem;font-weight:700;color:var(--muted);margin-bottom:3px;">Status</div>
-              <div id="sub-status-value" style="font-size:0.9rem;font-weight:600;color:var(--text);">—</div>
-            </div>
-            <button class="btn btn-danger" id="cancel-sub-btn" onclick="cancelSubscription()" style="width:auto;padding:9px 18px;display:none;">Cancel subscription</button>
+      <!-- Subscription / Reminders / Delete — below grid, always accessible -->
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title">Subscription</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--muted);margin-bottom:3px;">Status</div>
+            <div id="sub-status-value" style="font-size:0.9rem;font-weight:600;color:var(--text);">—</div>
           </div>
-          <div id="trial-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;"></div>
-          <div id="canceling-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;">
-            Your subscription is set to cancel at the end of the current billing period. You'll keep receiving texts until then.
-          </div>
-          <button class="btn-subscribe" id="reactivate-sub-btn" onclick="reactivateSubscription()" style="display:none;margin-top:12px;">Reactivate subscription</button>
-          <div class="msg" id="cancel-sub-msg"></div>
-
-          <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
-
-          <div class="card-title">Reminders</div>
-          <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">Temporarily stop your daily texts without canceling your subscription.</p>
-          <button class="btn btn-danger" id="unsub-btn" onclick="unsubscribe()">Stop my reminders</button>
-          <div class="msg" id="unsub-msg"></div>
-
-          <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
-
-          <div class="card-title">Delete Account</div>
-          <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">Permanently remove your account and all associated data. This cannot be undone.</p>
-          <button class="btn btn-danger" id="delete-btn" onclick="deleteAccount()">Delete my account</button>
-          <div class="msg" id="delete-msg"></div>
+          <button class="btn btn-danger" id="cancel-sub-btn" onclick="cancelSubscription('dash')" style="width:auto;padding:9px 18px;display:none;">Cancel subscription</button>
         </div>
+        <div id="trial-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;"></div>
+        <div id="canceling-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;">
+          Your subscription is set to cancel at the end of the current billing period. You'll keep receiving texts until then.
+        </div>
+        <button class="btn-subscribe" id="reactivate-sub-btn" onclick="reactivateSubscription('dash')" style="display:none;margin-top:12px;">Reactivate subscription</button>
+        <div class="msg" id="cancel-sub-msg"></div>
 
+        <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
+
+        <div class="card-title">Reminders</div>
+        <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">Temporarily stop your daily texts without canceling your subscription.</p>
+        <button class="btn btn-danger" id="unsub-btn" onclick="unsubscribe()">Stop my reminders</button>
+        <div class="msg" id="unsub-msg"></div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
+
+        <div class="card-title">Delete Account</div>
+        <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">Permanently remove your account and all associated data. This cannot be undone.</p>
+        <button class="btn btn-danger" id="delete-btn" onclick="deleteAccount()">Delete my account</button>
+        <div class="msg" id="delete-msg"></div>
       </div>
     </div>
+
   </main>
 
   <footer>
@@ -515,7 +492,6 @@
   <script>
     const API = "https://rri54forh2.execute-api.us-east-2.amazonaws.com";
     let sessionToken = localStorage.getItem("duezly_token");
-    let smsWarningShown = false;
 
     const TZ_LABELS = {
       "America/New_York": "Eastern (ET)", "America/Chicago": "Central (CT)",
@@ -525,10 +501,8 @@
     };
     const TIME_LABELS = {5:"5:00 AM",6:"6:00 AM",7:"7:00 AM",8:"8:00 AM",9:"9:00 AM",10:"10:00 AM",11:"11:00 AM",12:"12:00 PM"};
 
-    function updateSchedule(tz, st) {
-      const text = `${TIME_LABELS[st] || st} · ${TZ_LABELS[tz] || tz}`;
-      document.getElementById("info-send-time").textContent = text;
-      document.getElementById("status-schedule").textContent = `Texts sent at ${text}`;
+    function isSetupComplete(data) {
+      return !!(data.phone && data.canvas_url && data.sms_consent);
     }
 
     function normalizePhone(raw) {
@@ -538,12 +512,79 @@
       return null;
     }
 
-    function showSetup(canceled) {
-      document.getElementById("signout-btn").classList.remove("hidden");
-      document.getElementById("setup-section").classList.remove("hidden");
-      if (canceled) {
-        document.getElementById("setup-canceled-notice").classList.remove("hidden");
+    function updateSchedule(tz, st) {
+      const text = `${TIME_LABELS[st] || st} · ${TZ_LABELS[tz] || tz}`;
+      document.getElementById("info-send-time").textContent = text;
+      document.getElementById("status-schedule").textContent = `Texts sent at ${text}`;
+    }
+
+    function applySubStatus(statusEl, cancelBtn, cancelingNoteEl, reactivateBtn, trialNoteEl, data) {
+      const subStatus = data.subscription_status || "free";
+      if (subStatus === "active" && data.dev_account) {
+        statusEl.textContent = "Dev Account";
+        cancelBtn.style.display = "none";
+        cancelingNoteEl.style.display = "none";
+        reactivateBtn.style.display = "none";
+      } else if (subStatus === "active") {
+        statusEl.textContent = "Active – $1.99/mo";
+        cancelBtn.style.display = "block";
+        cancelingNoteEl.style.display = "none";
+        reactivateBtn.style.display = "none";
+      } else if (subStatus === "trialing") {
+        const trialEnd = data.trial_end ? new Date(data.trial_end * 1000) : null;
+        let trialText = "Free trial";
+        if (trialEnd) {
+          const daysLeft = Math.ceil((trialEnd - Date.now()) / (1000 * 60 * 60 * 24));
+          trialText = daysLeft > 1 ? `Free trial — ${daysLeft} days left` : daysLeft === 1 ? "Free trial — 1 day left" : "Free trial ending today";
+          if (trialNoteEl) {
+            const formatted = trialEnd.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+            trialNoteEl.textContent = `Your card won't be charged until your trial ends on ${formatted}.`;
+            trialNoteEl.style.display = "block";
+          }
+        }
+        statusEl.textContent = trialText;
+        cancelBtn.style.display = "block";
+        cancelingNoteEl.style.display = "none";
+        reactivateBtn.style.display = "none";
+      } else if (subStatus === "canceling") {
+        statusEl.textContent = "Cancels at end of billing period";
+        cancelBtn.style.display = "none";
+        cancelingNoteEl.style.display = "block";
+        reactivateBtn.style.display = "inline-block";
+      } else if (subStatus === "canceled") {
+        statusEl.textContent = "Canceled";
+        cancelBtn.style.display = "none";
+        cancelingNoteEl.style.display = "none";
+        reactivateBtn.style.display = "none";
+      } else if (subStatus === "past_due") {
+        statusEl.textContent = "Past due";
+        cancelBtn.style.display = "none";
+        reactivateBtn.style.display = "none";
+      } else {
+        statusEl.textContent = "Free";
+        cancelBtn.style.display = "none";
+        reactivateBtn.style.display = "none";
       }
+    }
+
+    function showSetup(data) {
+      document.getElementById("setup-section").classList.remove("hidden");
+      document.getElementById("signout-btn").classList.remove("hidden");
+
+      if (data.phone) document.getElementById("setup-phone").value = data.phone;
+      if (data.canvas_url) document.getElementById("setup-canvas-url").value = data.canvas_url;
+      if (data.timezone) document.getElementById("setup-timezone").value = data.timezone;
+      if (data.send_time != null) document.getElementById("setup-send-time").value = data.send_time;
+      if (data.sms_consent) document.getElementById("setup-sms-consent").checked = true;
+
+      applySubStatus(
+        document.getElementById("setup-sub-status"),
+        document.getElementById("setup-cancel-btn"),
+        document.getElementById("setup-canceling-note"),
+        document.getElementById("setup-reactivate-btn"),
+        null,
+        data
+      );
     }
 
     function showDashboard(data) {
@@ -571,97 +612,28 @@
         text.textContent = "Inactive";
       }
 
-      const subStatus = data.subscription_status || "free";
-      const subEl = document.getElementById("sub-status-value");
-      const cancelBtn = document.getElementById("cancel-sub-btn");
-      const cancelingNote = document.getElementById("canceling-note");
-      const reactivateBtn = document.getElementById("reactivate-sub-btn");
-      if (subStatus === "active" && data.dev_account) {
-        subEl.textContent = "Dev Account";
-        cancelBtn.style.display = "none";
-        cancelingNote.style.display = "none";
-        reactivateBtn.style.display = "none";
-      } else if (subStatus === "active") {
-        subEl.textContent = "Active – $1.99/mo";
-        cancelBtn.style.display = "block";
-        cancelingNote.style.display = "none";
-        reactivateBtn.style.display = "none";
-      } else if (subStatus === "trialing") {
-        const trialEnd = data.trial_end ? new Date(data.trial_end * 1000) : null;
-        let trialText = "Free trial";
-        if (trialEnd) {
-          const daysLeft = Math.ceil((trialEnd - Date.now()) / (1000 * 60 * 60 * 24));
-          trialText = daysLeft > 1 ? `Free trial — ${daysLeft} days left` : daysLeft === 1 ? "Free trial — 1 day left" : "Free trial ending today";
-          const formatted = trialEnd.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-          document.getElementById("trial-note").textContent = `Your card won't be charged until your trial ends on ${formatted}.`;
-          document.getElementById("trial-note").style.display = "block";
-        }
-        subEl.textContent = trialText;
-        subEl.className = "sub-value trialing";
-        cancelBtn.style.display = "block";
-        cancelingNote.style.display = "none";
-        reactivateBtn.style.display = "none";
-      } else if (subStatus === "canceling") {
-        subEl.textContent = "Cancels at end of billing period";
-        cancelBtn.style.display = "none";
-        cancelingNote.style.display = "block";
-        reactivateBtn.style.display = "inline-block";
-      } else if (subStatus === "canceled") {
-        subEl.textContent = "Canceled";
-        cancelBtn.style.display = "none";
-        cancelingNote.style.display = "none";
-        reactivateBtn.style.display = "none";
-      } else if (subStatus === "past_due") {
-        subEl.textContent = "Past due";
-        cancelBtn.style.display = "none";
-        cancelingNote.style.display = "none";
-        reactivateBtn.style.display = "none";
-      } else {
-        subEl.textContent = "Free";
-        cancelBtn.style.display = "none";
-        cancelingNote.style.display = "none";
-        reactivateBtn.style.display = "none";
-      }
+      applySubStatus(
+        document.getElementById("sub-status-value"),
+        document.getElementById("cancel-sub-btn"),
+        document.getElementById("canceling-note"),
+        document.getElementById("reactivate-sub-btn"),
+        document.getElementById("trial-note"),
+        data
+      );
     }
 
-    async function pollForActivation(attempts) {
-      if (attempts <= 0) {
-        document.getElementById("gate-overlay").style.display = "none";
-        showSetup(false);
-        const msg = document.getElementById("setup-msg");
-        msg.className = "msg success";
-        msg.textContent = "Payment received! Your account should activate in under a minute — refresh this page if it doesn't update.";
-        msg.style.display = "block";
-        return;
-      }
-      await new Promise(r => setTimeout(r, 2000));
-      try {
-        const res = await fetch(`${API}/user`, {
-          headers: { "Authorization": `Bearer ${sessionToken}` }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (["active", "trialing"].includes(data.subscription_status)) {
-            document.getElementById("gate-overlay").style.display = "none";
-            showDashboard(data);
-            return;
-          }
-        }
-      } catch {}
-      pollForActivation(attempts - 1);
-    }
-
-    async function subscribe() {
-      const phone = normalizePhone(document.getElementById("setup-phone").value);
+    async function saveSetup() {
+      const rawPhone = document.getElementById("setup-phone").value;
       const canvas_url = document.getElementById("setup-canvas-url").value.trim();
       const timezone = document.getElementById("setup-timezone").value;
       const send_time = parseInt(document.getElementById("setup-send-time").value);
       const sms_consent = document.getElementById("setup-sms-consent").checked;
-      const btn = document.getElementById("setup-subscribe-btn");
+      const btn = document.getElementById("setup-save-btn");
       const msg = document.getElementById("setup-msg");
 
       msg.style.display = "none";
 
+      const phone = normalizePhone(rawPhone);
       if (!phone) {
         msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
       }
@@ -669,87 +641,95 @@
         msg.className = "msg error"; msg.textContent = "Please enter your Canvas Calendar link."; msg.style.display = "block"; return;
       }
 
-      if (!sms_consent && !smsWarningShown) {
-        smsWarningShown = true;
-        document.getElementById("setup-sms-warning").style.display = "block";
-        return;
-      }
-
-      btn.disabled = true; btn.textContent = "Loading…";
+      btn.disabled = true; btn.textContent = "Saving…";
 
       try {
-        const saveRes = await fetch(`${API}/user`, {
+        const res = await fetch(`${API}/user`, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
           body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time, sms_consent })
         });
-        if (!saveRes.ok) {
-          const saveData = await saveRes.json();
-          msg.className = "msg error"; msg.textContent = saveData.message || "Failed to save your info. Please try again."; msg.style.display = "block";
-          btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo"; return;
+        const data = await res.json();
+        if (!res.ok) {
+          msg.className = "msg error"; msg.textContent = data.message || "Failed to save. Please try again."; msg.style.display = "block";
+          btn.disabled = false; btn.textContent = "Save and start reminders"; return;
         }
 
-        const checkoutRes = await fetch(`${API}/user`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: "create_checkout_session" })
-        });
-        const checkoutData = await checkoutRes.json();
-        if (checkoutRes.ok && checkoutData.checkout_url) {
-          window.location.href = checkoutData.checkout_url;
-        } else {
-          msg.className = "msg error"; msg.textContent = "Failed to start checkout. Please try again."; msg.style.display = "block";
-          btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo";
+        // Reload data to check if setup is now complete
+        const getRes = await fetch(`${API}/user`, { headers: { "Authorization": `Bearer ${sessionToken}` } });
+        if (getRes.ok) {
+          const fresh = await getRes.json();
+          if (isSetupComplete(fresh)) {
+            document.getElementById("setup-section").classList.add("hidden");
+            showDashboard(fresh);
+            return;
+          }
         }
+        msg.className = "msg success"; msg.textContent = "Saved! Check the SMS consent box and your reminders will start automatically.";
+        msg.style.display = "block";
+        btn.disabled = false; btn.textContent = "Save and start reminders";
       } catch {
         msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
-        btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo";
+        btn.disabled = false; btn.textContent = "Save and start reminders";
       }
+    }
+
+    async function pollForActivation(attempts) {
+      if (attempts <= 0) {
+        document.getElementById("gate-overlay").style.display = "none";
+        showSetup({ subscription_status: "free" });
+        return;
+      }
+      await new Promise(r => setTimeout(r, 2000));
+      try {
+        const res = await fetch(`${API}/user`, { headers: { "Authorization": `Bearer ${sessionToken}` } });
+        if (res.ok) {
+          const data = await res.json();
+          if (["active", "trialing"].includes(data.subscription_status)) {
+            document.getElementById("gate-overlay").style.display = "none";
+            isSetupComplete(data) ? showDashboard(data) : showSetup(data);
+            return;
+          }
+        }
+      } catch {}
+      pollForActivation(attempts - 1);
     }
 
     async function loadDashboard() {
       const params = new URLSearchParams(location.search);
       const fromStripe = params.get("subscribed") === "true";
-      const fromCancel = params.get("canceled") === "true";
-      if (fromStripe || fromCancel) {
-        window.history.replaceState({}, "", "dashboard.html");
-      }
+      if (fromStripe) window.history.replaceState({}, "", "dashboard.html");
 
       if (!sessionToken) { window.location.href = "signup.html"; return; }
 
       try {
-        const res = await fetch(`${API}/user`, {
-          headers: { "Authorization": `Bearer ${sessionToken}` }
-        });
+        const res = await fetch(`${API}/user`, { headers: { "Authorization": `Bearer ${sessionToken}` } });
         if (res.status === 401) {
           localStorage.removeItem("duezly_token");
-          window.location.href = "signup.html";
-          return;
+          window.location.href = "signup.html"; return;
         }
-        if (!res.ok) {
-          document.getElementById("gate-overlay").style.display = "none";
-          showSetup(fromCancel);
-          return;
-        }
+        if (!res.ok) { window.location.href = "purchase.html"; return; }
+
         const data = await res.json();
         const hasAccess = ["active", "trialing", "canceling", "past_due"].includes(data.subscription_status);
 
         if (fromStripe && !hasAccess) {
           document.getElementById("gate-title").textContent = "Activating your account…";
           document.getElementById("gate-sub").textContent = "Payment confirmed! Just a moment.";
-          pollForActivation(8);
-          return;
+          pollForActivation(8); return;
         }
 
         document.getElementById("gate-overlay").style.display = "none";
-        if (hasAccess) {
-          showDashboard(data);
-        } else {
-          showSetup(fromCancel);
+
+        if (!hasAccess) {
+          window.location.href = "purchase.html"; return;
         }
+
+        isSetupComplete(data) ? showDashboard(data) : showSetup(data);
+
       } catch {
         document.getElementById("gate-overlay").style.display = "none";
-        showSetup(false);
+        window.location.href = "purchase.html";
       }
     }
 
@@ -765,9 +745,7 @@
       if (!phone) {
         msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
       }
-      btn.disabled = true;
-      btn.textContent = "Saving...";
-      msg.style.display = "none";
+      btn.disabled = true; btn.textContent = "Saving..."; msg.style.display = "none";
 
       try {
         const res = await fetch(`${API}/user`, {
@@ -777,34 +755,80 @@
         });
         const data = await res.json();
         if (!res.ok) {
-          msg.className = "msg error";
-          msg.textContent = data.message;
-          msg.style.display = "block";
-          btn.disabled = false; btn.textContent = "Save changes";
-          return;
+          msg.className = "msg error"; msg.textContent = data.message; msg.style.display = "block";
+          btn.disabled = false; btn.textContent = "Save changes"; return;
         }
-
         document.getElementById("info-phone").textContent = phone;
         document.getElementById("info-canvas").textContent = canvas_url;
         updateSchedule(timezone, send_time);
-
-        msg.className = "msg success";
-        msg.textContent = "Settings saved.";
-        msg.style.display = "block";
+        msg.className = "msg success"; msg.textContent = "Settings saved."; msg.style.display = "block";
         btn.disabled = false; btn.textContent = "Save changes";
-      } catch (err) {
-        msg.className = "msg error";
-        msg.textContent = "Network error — please try again.";
-        msg.style.display = "block";
+      } catch {
+        msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
         btn.disabled = false; btn.textContent = "Save changes";
       }
     });
+
+    async function cancelSubscription(ctx) {
+      const isSetup = ctx === "setup";
+      const msgEl = document.getElementById(isSetup ? "setup-sub-msg" : "cancel-sub-msg");
+      const btnEl = document.getElementById(isSetup ? "setup-cancel-btn" : "cancel-sub-btn");
+      if (!confirm("Cancel your subscription? You'll keep receiving texts until the end of your current billing period, then access stops.")) return;
+      btnEl.disabled = true; btnEl.textContent = "Canceling…"; msgEl.style.display = "none";
+      try {
+        const res = await fetch(`${API}/user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+          body: JSON.stringify({ action: "cancel_subscription" })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          btnEl.style.display = "none";
+          document.getElementById(isSetup ? "setup-sub-status" : "sub-status-value").textContent = "Cancels at end of billing period";
+          document.getElementById(isSetup ? "setup-canceling-note" : "canceling-note").style.display = "block";
+          document.getElementById(isSetup ? "setup-reactivate-btn" : "reactivate-sub-btn").style.display = "inline-block";
+        } else {
+          msgEl.className = "msg error"; msgEl.textContent = data.message; msgEl.style.display = "block";
+          btnEl.disabled = false; btnEl.textContent = "Cancel subscription";
+        }
+      } catch {
+        msgEl.className = "msg error"; msgEl.textContent = "Network error — please try again."; msgEl.style.display = "block";
+        btnEl.disabled = false; btnEl.textContent = "Cancel subscription";
+      }
+    }
+
+    async function reactivateSubscription(ctx) {
+      const isSetup = ctx === "setup";
+      const msgEl = document.getElementById(isSetup ? "setup-sub-msg" : "cancel-sub-msg");
+      const btnEl = document.getElementById(isSetup ? "setup-reactivate-btn" : "reactivate-sub-btn");
+      if (!confirm("Reactivate your subscription? You'll continue to be billed $1.99/month.")) return;
+      btnEl.disabled = true; btnEl.textContent = "Reactivating…"; msgEl.style.display = "none";
+      try {
+        const res = await fetch(`${API}/user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
+          body: JSON.stringify({ action: "reactivate_subscription" })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          btnEl.style.display = "none";
+          document.getElementById(isSetup ? "setup-cancel-btn" : "cancel-sub-btn").style.display = "block";
+          document.getElementById(isSetup ? "setup-sub-status" : "sub-status-value").textContent = "Active – $1.99/mo";
+          document.getElementById(isSetup ? "setup-canceling-note" : "canceling-note").style.display = "none";
+        } else {
+          msgEl.className = "msg error"; msgEl.textContent = data.message; msgEl.style.display = "block";
+          btnEl.disabled = false; btnEl.textContent = "Reactivate subscription";
+        }
+      } catch {
+        msgEl.className = "msg error"; msgEl.textContent = "Network error — please try again."; msgEl.style.display = "block";
+        btnEl.disabled = false; btnEl.textContent = "Reactivate subscription";
+      }
+    }
 
     async function unsubscribe() {
       const msg = document.getElementById("unsub-msg");
       const btn = document.getElementById("unsub-btn");
       if (!confirm("Are you sure you want to stop your daily reminders?")) return;
-
       btn.disabled = true;
       try {
         const res = await fetch(`${API}/user`, {
@@ -814,25 +838,23 @@
         });
         const data = await res.json();
         msg.className = res.ok ? "msg success" : "msg error";
-        msg.textContent = data.message;
-        msg.style.display = "block";
+        msg.textContent = data.message; msg.style.display = "block";
         if (res.ok) {
           document.getElementById("status-badge").className = "status-badge inactive";
           document.getElementById("status-text").textContent = "Inactive";
         }
-      } catch (err) {
-        msg.className = "msg error";
-        msg.textContent = "Network error — please try again.";
-        msg.style.display = "block";
+      } catch {
+        msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
       }
       btn.disabled = false;
     }
 
     async function deleteAccount() {
-      const msg = document.getElementById("delete-msg");
-      const btn = document.getElementById("delete-btn");
+      const msgId = document.getElementById("setup-section").classList.contains("hidden") ? "delete-msg" : "setup-delete-msg";
+      const btnId = document.getElementById("setup-section").classList.contains("hidden") ? "delete-btn" : "setup-delete-btn";
+      const msg = document.getElementById(msgId);
+      const btn = document.getElementById(btnId);
       if (!confirm("Are you sure? This will permanently delete your account and cannot be undone.")) return;
-
       btn.disabled = true; btn.textContent = "Deleting...";
       try {
         const res = await fetch(`${API}/user`, {
@@ -848,65 +870,9 @@
           msg.className = "msg error"; msg.textContent = data.message; msg.style.display = "block";
           btn.disabled = false; btn.textContent = "Delete my account";
         }
-      } catch (err) {
+      } catch {
         msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
         btn.disabled = false; btn.textContent = "Delete my account";
-      }
-    }
-
-    async function cancelSubscription() {
-      const btn = document.getElementById("cancel-sub-btn");
-      const msg = document.getElementById("cancel-sub-msg");
-      if (!confirm("Cancel your subscription? You'll keep receiving texts until the end of your current billing period, then access stops. No charge next month.")) return;
-      btn.disabled = true; btn.textContent = "Canceling…";
-      msg.style.display = "none";
-      try {
-        const res = await fetch(`${API}/user`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: "cancel_subscription" })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          btn.style.display = "none";
-          document.getElementById("sub-status-value").textContent = "Cancels at end of billing period";
-          document.getElementById("canceling-note").style.display = "block";
-          document.getElementById("reactivate-sub-btn").style.display = "inline-block";
-        } else {
-          msg.className = "msg error"; msg.textContent = data.message; msg.style.display = "block";
-          btn.disabled = false; btn.textContent = "Cancel subscription";
-        }
-      } catch {
-        msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
-        btn.disabled = false; btn.textContent = "Cancel subscription";
-      }
-    }
-
-    async function reactivateSubscription() {
-      const btn = document.getElementById("reactivate-sub-btn");
-      const msg = document.getElementById("cancel-sub-msg");
-      if (!confirm("Reactivate your subscription? You'll continue to be billed $1.99/month.")) return;
-      btn.disabled = true; btn.textContent = "Reactivating…";
-      msg.style.display = "none";
-      try {
-        const res = await fetch(`${API}/user`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: "reactivate_subscription" })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          btn.style.display = "none";
-          document.getElementById("cancel-sub-btn").style.display = "block";
-          document.getElementById("sub-status-value").textContent = "Active – $1.99/mo";
-          document.getElementById("canceling-note").style.display = "none";
-        } else {
-          msg.className = "msg error"; msg.textContent = data.message; msg.style.display = "block";
-          btn.disabled = false; btn.textContent = "Reactivate subscription";
-        }
-      } catch {
-        msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
-        btn.disabled = false; btn.textContent = "Reactivate subscription";
       }
     }
 
