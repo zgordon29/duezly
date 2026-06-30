@@ -32,8 +32,6 @@
     body.dark .card { background: #1e293b; border-color: #2d3748; }
     body.dark p, body.dark li { color: #94a3b8; }
     body.dark .preview-card { background: #1e293b; border-color: #2d3748; }
-    body.dark .preview-field { background: #0f172a; border-color: #334155; color: #94a3b8; }
-    body.dark .consent-label { color: #94a3b8; }
     body.dark .sample-msg { background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.3); color: #f1f5f9; }
     body.dark .highlight { background: rgba(249,115,22,0.1); border-color: #f97316; color: #fb923c; }
     .theme-select {
@@ -103,33 +101,6 @@
       border-radius: 14px;
       padding: 24px;
       margin: 20px 0;
-    }
-    .preview-label {
-      display: block; font-size: 0.8rem; font-weight: 700; color: var(--text); margin-bottom: 6px; margin-top: 14px;
-    }
-    .preview-label:first-of-type { margin-top: 0; }
-    .preview-field {
-      width: 100%; padding: 11px 14px;
-      border: 1.5px solid var(--border); border-radius: 10px;
-      font-size: 0.9rem; color: var(--muted);
-      background: var(--bg-warm);
-      font-family: inherit; pointer-events: none;
-    }
-    .consent-row {
-      display: flex; align-items: flex-start; gap: 10px;
-      margin: 18px 0 16px; padding: 14px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px;
-    }
-    .consent-row input[type="checkbox"] {
-      margin-top: 2px; flex-shrink: 0; width: 16px; height: 16px;
-      accent-color: var(--orange); pointer-events: none;
-    }
-    .consent-label { font-size: 0.8rem; color: #44403c; line-height: 1.6; }
-    .consent-label strong { color: var(--text); }
-    .preview-btn {
-      width: 100%; padding: 13px;
-      background: linear-gradient(135deg, #c2410c, #f59e0b); color: #fff;
-      border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 700;
-      opacity: 0.5; cursor: not-allowed; font-family: inherit;
     }
     .preview-note {
       font-size: 0.75rem; color: var(--muted); margin-top: 10px; text-align: center; font-style: italic;
@@ -208,36 +179,11 @@
 
       <p>The consent checkbox is optional — users may subscribe without checking it. However, SMS reminders are only sent to users who have explicitly opted in. A prominent notice informs users that SMS consent is needed to receive texts, and a gentle warning is shown if they proceed without checking the box. The checkbox can be enabled at any time from the dashboard settings.</p>
 
-      <p>Below is a static preview of the dashboard signup card users see. The form cannot be interacted with here.</p>
+      <p>Below is a screenshot of the actual dashboard signup card users see after signing in with Google. The SMS consent checkbox is optional and unchecked by default — users can proceed without checking it (SMS reminders will not be sent unless they opt in).</p>
 
-      <div class="preview-card">
-        <p style="font-size:0.7rem;font-weight:800;letter-spacing:1px;color:var(--orange);text-transform:uppercase;margin-bottom:12px;">Dashboard — Signup Card</p>
-
-        <span class="preview-label">Phone number</span>
-        <div class="preview-field">(555) 000-1234</div>
-
-        <span class="preview-label">Canvas Calendar link</span>
-        <div class="preview-field">https://yourschool.instructure.com/feeds/calendars/…</div>
-
-        <span class="preview-label">Text me at</span>
-        <div class="preview-field">8:00 AM</div>
-
-        <span class="preview-label">Timezone</span>
-        <div class="preview-field">Eastern (ET)</div>
-
-        <div style="background:#fffbeb;border-left:3px solid #d97706;border-radius:0 8px 8px 0;padding:10px 14px;margin:16px 0 12px;font-size:0.8rem;color:#b45309;font-weight:500;line-height:1.5;">
-          Duezly works by texting you — SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.
-        </div>
-
-        <div class="consent-row">
-          <input type="checkbox" disabled />
-          <span class="consent-label">
-            Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" style="color:var(--orange-dark)">Privacy Policy</a> and <a href="terms.html" style="color:var(--orange-dark)">Terms</a>.
-          </span>
-        </div>
-
-        <button class="preview-btn">Subscribe — $1.99/mo</button>
-        <p class="preview-note">This is a static preview only. The checkbox is unchecked by default.</p>
+      <div class="preview-card" style="padding:16px;background:#f8f8f8;">
+        <img src="signup-card.png" alt="Screenshot of the Duezly dashboard signup card showing phone number, Canvas Calendar link, send time, timezone fields, the optional unchecked SMS consent checkbox with disclosure language, and a Subscribe button" style="width:100%;border-radius:10px;display:block;" />
+        <p class="preview-note" style="margin-top:10px;">Screenshot of the actual signup card on duezly.com/dashboard.html. The consent checkbox is unchecked by default.</p>
       </div>
 
       <p>After filling in the form, users click "Subscribe — $1.99/mo" which saves their info and redirects them to Stripe's secure checkout page. Consent is recorded in our system at the time the form is submitted.</p>
@@ -248,13 +194,10 @@
       <p>Below are representative examples of messages users receive after opting in.</p>
 
       <div class="sample-msg">
-        📚 Duezly: 3 assignments due in the next 2 days — CS101: Lab Report (today), MATH201: Problem Set #4 (tomorrow), ENG301: Essay Draft (tomorrow). Reply STOP to opt out.
+        Duezly Reminder - Mon Jun 9: DUE TODAY: - Econ 202 Problem Set (11:59 PM) - Bio Lab Report (8:00 AM). DUE TOMORROW: - History Essay Draft (11:59 PM). Reply STOP to unsubscribe.
       </div>
       <div class="sample-msg">
-        Good morning! No assignments due today. Next due: CS101 Midterm on Thursday. Reply STOP to unsubscribe.
-      </div>
-      <div class="sample-msg">
-        📚 Duezly: 1 assignment due today — HIST110: Reading Response. Reply STOP to opt out.
+        Duezly Reminder - No assignments due today. Have a great day! Reply STOP to unsubscribe.
       </div>
     </div>
 
