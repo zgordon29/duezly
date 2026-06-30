@@ -263,10 +263,9 @@
 
   <main>
 
-    <!-- Set up Duezly — shown for subscribers who haven't completed setup -->
+    <!-- Set Up Duezly prompt — shown at top when setup is incomplete, hidden once done -->
     <div id="setup-section" class="hidden">
-
-      <div class="card setup-card">
+      <div class="card setup-card" style="margin-bottom:16px;">
         <div class="card-title">Set Up Duezly</div>
         <p class="setup-desc">Complete your setup to start receiving daily assignment reminders straight to your phone.</p>
 
@@ -324,34 +323,9 @@
         <div class="msg" id="setup-msg"></div>
         <p class="setup-fine">Reminders won't send until phone, Canvas link, and SMS consent are all saved.</p>
       </div>
-
-      <!-- Subscription management (always accessible) -->
-      <div class="card">
-        <div class="card-title">Subscription</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-          <div>
-            <div style="font-size:0.78rem;font-weight:700;color:var(--muted);margin-bottom:3px;">Status</div>
-            <div id="setup-sub-status" style="font-size:0.9rem;font-weight:600;color:var(--text);">—</div>
-          </div>
-          <button class="btn btn-danger" id="setup-cancel-btn" onclick="cancelSubscription('setup')" style="width:auto;padding:9px 18px;display:none;">Cancel subscription</button>
-        </div>
-        <div id="setup-canceling-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;">
-          Your subscription is set to cancel at the end of the current billing period. You'll keep receiving texts until then.
-        </div>
-        <button class="btn-subscribe" id="setup-reactivate-btn" onclick="reactivateSubscription('setup')" style="display:none;margin-top:12px;">Reactivate subscription</button>
-        <div class="msg" id="setup-sub-msg"></div>
-
-        <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
-
-        <div class="card-title">Delete Account</div>
-        <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">Permanently remove your account and all associated data. This cannot be undone.</p>
-        <button class="btn btn-danger" id="setup-delete-btn" onclick="deleteAccount()">Delete my account</button>
-        <div class="msg" id="setup-delete-msg"></div>
-      </div>
-
     </div>
 
-    <!-- Full dashboard — shown for subscribers who have completed setup -->
+    <!-- Full dashboard — always shown for all subscribers -->
     <div id="dashboard-screen" class="hidden">
       <div class="card-grid">
 
@@ -448,13 +422,13 @@
             <div style="font-size:0.78rem;font-weight:700;color:var(--muted);margin-bottom:3px;">Status</div>
             <div id="sub-status-value" style="font-size:0.9rem;font-weight:600;color:var(--text);">—</div>
           </div>
-          <button class="btn btn-danger" id="cancel-sub-btn" onclick="cancelSubscription('dash')" style="width:auto;padding:9px 18px;display:none;">Cancel subscription</button>
+          <button class="btn btn-danger" id="cancel-sub-btn" onclick="cancelSubscription()" style="width:auto;padding:9px 18px;display:none;">Cancel subscription</button>
         </div>
         <div id="trial-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;"></div>
         <div id="canceling-note" style="display:none;margin-top:10px;font-size:0.82rem;color:var(--muted);line-height:1.5;">
           Your subscription is set to cancel at the end of the current billing period. You'll keep receiving texts until then.
         </div>
-        <button class="btn-subscribe" id="reactivate-sub-btn" onclick="reactivateSubscription('dash')" style="display:none;margin-top:12px;">Reactivate subscription</button>
+        <button class="btn-subscribe" id="reactivate-sub-btn" onclick="reactivateSubscription()" style="display:none;margin-top:12px;">Reactivate subscription</button>
         <div class="msg" id="cancel-sub-msg"></div>
 
         <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
@@ -567,24 +541,14 @@
       }
     }
 
-    function showSetup(data) {
+    function maybeShowSetupPrompt(data) {
+      if (isSetupComplete(data)) return;
       document.getElementById("setup-section").classList.remove("hidden");
-      document.getElementById("signout-btn").classList.remove("hidden");
-
       if (data.phone) document.getElementById("setup-phone").value = data.phone;
       if (data.canvas_url) document.getElementById("setup-canvas-url").value = data.canvas_url;
       if (data.timezone) document.getElementById("setup-timezone").value = data.timezone;
       if (data.send_time != null) document.getElementById("setup-send-time").value = data.send_time;
       if (data.sms_consent) document.getElementById("setup-sms-consent").checked = true;
-
-      applySubStatus(
-        document.getElementById("setup-sub-status"),
-        document.getElementById("setup-cancel-btn"),
-        document.getElementById("setup-canceling-note"),
-        document.getElementById("setup-reactivate-btn"),
-        null,
-        data
-      );
     }
 
     function showDashboard(data) {
@@ -655,17 +619,23 @@
           btn.disabled = false; btn.textContent = "Save and start reminders"; return;
         }
 
-        // Reload data to check if setup is now complete
+        // Refresh data; if setup is now complete, hide the prompt card
         const getRes = await fetch(`${API}/user`, { headers: { "Authorization": `Bearer ${sessionToken}` } });
         if (getRes.ok) {
           const fresh = await getRes.json();
+          // Update info card values
+          document.getElementById("info-phone").textContent = fresh.phone || "Not set";
+          document.getElementById("info-canvas").textContent = fresh.canvas_url || "Not set";
+          if (fresh.phone) document.getElementById("phone").value = fresh.phone;
+          if (fresh.canvas_url) document.getElementById("canvas-url").value = fresh.canvas_url;
+          updateSchedule(fresh.timezone || "America/New_York", fresh.send_time != null ? fresh.send_time : 8);
           if (isSetupComplete(fresh)) {
             document.getElementById("setup-section").classList.add("hidden");
-            showDashboard(fresh);
+            btn.disabled = false; btn.textContent = "Save and start reminders";
             return;
           }
         }
-        msg.className = "msg success"; msg.textContent = "Saved! Check the SMS consent box and your reminders will start automatically.";
+        msg.className = "msg success"; msg.textContent = "Saved! Check the SMS consent box to start receiving reminders.";
         msg.style.display = "block";
         btn.disabled = false; btn.textContent = "Save and start reminders";
       } catch {
@@ -677,7 +647,7 @@
     async function pollForActivation(attempts) {
       if (attempts <= 0) {
         document.getElementById("gate-overlay").style.display = "none";
-        showSetup({ subscription_status: "free" });
+        window.location.href = "purchase.html";
         return;
       }
       await new Promise(r => setTimeout(r, 2000));
@@ -687,7 +657,8 @@
           const data = await res.json();
           if (["active", "trialing"].includes(data.subscription_status)) {
             document.getElementById("gate-overlay").style.display = "none";
-            isSetupComplete(data) ? showDashboard(data) : showSetup(data);
+            showDashboard(data);
+            maybeShowSetupPrompt(data);
             return;
           }
         }
@@ -721,11 +692,10 @@
 
         document.getElementById("gate-overlay").style.display = "none";
 
-        if (!hasAccess) {
-          window.location.href = "purchase.html"; return;
-        }
+        if (!hasAccess) { window.location.href = "purchase.html"; return; }
 
-        isSetupComplete(data) ? showDashboard(data) : showSetup(data);
+        showDashboard(data);
+        maybeShowSetupPrompt(data);
 
       } catch {
         document.getElementById("gate-overlay").style.display = "none";
@@ -769,10 +739,9 @@
       }
     });
 
-    async function cancelSubscription(ctx) {
-      const isSetup = ctx === "setup";
-      const msgEl = document.getElementById(isSetup ? "setup-sub-msg" : "cancel-sub-msg");
-      const btnEl = document.getElementById(isSetup ? "setup-cancel-btn" : "cancel-sub-btn");
+    async function cancelSubscription() {
+      const msgEl = document.getElementById("cancel-sub-msg");
+      const btnEl = document.getElementById("cancel-sub-btn");
       if (!confirm("Cancel your subscription? You'll keep receiving texts until the end of your current billing period, then access stops.")) return;
       btnEl.disabled = true; btnEl.textContent = "Canceling…"; msgEl.style.display = "none";
       try {
@@ -784,9 +753,9 @@
         const data = await res.json();
         if (res.ok) {
           btnEl.style.display = "none";
-          document.getElementById(isSetup ? "setup-sub-status" : "sub-status-value").textContent = "Cancels at end of billing period";
-          document.getElementById(isSetup ? "setup-canceling-note" : "canceling-note").style.display = "block";
-          document.getElementById(isSetup ? "setup-reactivate-btn" : "reactivate-sub-btn").style.display = "inline-block";
+          document.getElementById("sub-status-value").textContent = "Cancels at end of billing period";
+          document.getElementById("canceling-note").style.display = "block";
+          document.getElementById("reactivate-sub-btn").style.display = "inline-block";
         } else {
           msgEl.className = "msg error"; msgEl.textContent = data.message; msgEl.style.display = "block";
           btnEl.disabled = false; btnEl.textContent = "Cancel subscription";
@@ -797,10 +766,9 @@
       }
     }
 
-    async function reactivateSubscription(ctx) {
-      const isSetup = ctx === "setup";
-      const msgEl = document.getElementById(isSetup ? "setup-sub-msg" : "cancel-sub-msg");
-      const btnEl = document.getElementById(isSetup ? "setup-reactivate-btn" : "reactivate-sub-btn");
+    async function reactivateSubscription() {
+      const msgEl = document.getElementById("cancel-sub-msg");
+      const btnEl = document.getElementById("reactivate-sub-btn");
       if (!confirm("Reactivate your subscription? You'll continue to be billed $1.99/month.")) return;
       btnEl.disabled = true; btnEl.textContent = "Reactivating…"; msgEl.style.display = "none";
       try {
@@ -812,9 +780,9 @@
         const data = await res.json();
         if (res.ok) {
           btnEl.style.display = "none";
-          document.getElementById(isSetup ? "setup-cancel-btn" : "cancel-sub-btn").style.display = "block";
-          document.getElementById(isSetup ? "setup-sub-status" : "sub-status-value").textContent = "Active – $1.99/mo";
-          document.getElementById(isSetup ? "setup-canceling-note" : "canceling-note").style.display = "none";
+          document.getElementById("cancel-sub-btn").style.display = "block";
+          document.getElementById("sub-status-value").textContent = "Active – $1.99/mo";
+          document.getElementById("canceling-note").style.display = "none";
         } else {
           msgEl.className = "msg error"; msgEl.textContent = data.message; msgEl.style.display = "block";
           btnEl.disabled = false; btnEl.textContent = "Reactivate subscription";
@@ -850,10 +818,8 @@
     }
 
     async function deleteAccount() {
-      const msgId = document.getElementById("setup-section").classList.contains("hidden") ? "delete-msg" : "setup-delete-msg";
-      const btnId = document.getElementById("setup-section").classList.contains("hidden") ? "delete-btn" : "setup-delete-btn";
-      const msg = document.getElementById(msgId);
-      const btn = document.getElementById(btnId);
+      const msg = document.getElementById("delete-msg");
+      const btn = document.getElementById("delete-btn");
       if (!confirm("Are you sure? This will permanently delete your account and cannot be undone.")) return;
       btn.disabled = true; btn.textContent = "Deleting...";
       try {
