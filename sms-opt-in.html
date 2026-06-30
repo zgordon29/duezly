@@ -158,10 +158,6 @@
       <h2>Message type</h2>
       <p>Recurring automated SMS notifications — approximately 1 message per day while enrolled, containing a summary of assignments and due dates pulled from the user's Canvas calendar feed.</p>
 
-      <div class="highlight">
-        Consent to receive SMS messages is not a condition of purchase or use of any Duezly service.
-      </div>
-
       <h2>STOP / HELP keywords</h2>
       <ul>
         <li><strong>STOP</strong> — immediately unsubscribes the number; one confirmation message is sent and no further messages follow.</li>
@@ -175,18 +171,27 @@
     <div class="card">
       <div class="card-title">How Opt-In Is Collected</div>
 
-      <p>SMS consent is collected on the <strong>dashboard signup card</strong> (<a href="dashboard.html" style="color:var(--orange-dark)">duezly.com/dashboard.html</a>) — the first screen users see after signing in with Google. The signup card appears at the top of the dashboard for any user who has not yet subscribed. It contains an optional, unchecked SMS consent checkbox alongside the phone number, Canvas Calendar link, and send-time fields.</p>
+      <p>Duezly collects SMS consent at two points in the user flow, both before any messages are ever sent. Consent is never required to complete a purchase — the service can be subscribed to and managed without opting in to SMS.</p>
 
-      <p>The consent checkbox is optional — users may subscribe without checking it. However, SMS reminders are only sent to users who have explicitly opted in. A prominent notice informs users that SMS consent is needed to receive texts, and a gentle warning is shown if they proceed without checking the box. The checkbox can be enabled at any time from the dashboard settings.</p>
-
-      <p>Below is a screenshot of the actual dashboard signup card users see after signing in with Google. The SMS consent checkbox is optional and unchecked by default — users can proceed without checking it (SMS reminders will not be sent unless they opt in).</p>
+      <h2>Step 1 — Subscribe page (duezly.com/purchase.html)</h2>
+      <p>After signing in with Google, the user lands on the Subscribe page before entering payment. This page includes an optional phone number field and an optional, unchecked SMS consent checkbox with full disclosure language. The "Subscribe — $1.99/mo" button works regardless of whether these fields are filled in.</p>
 
       <div class="preview-card" style="padding:16px;background:#f8f8f8;">
-        <img src="signup-card.png" alt="Screenshot of the Duezly dashboard signup card showing phone number, Canvas Calendar link, send time, timezone fields, the optional unchecked SMS consent checkbox with disclosure language, and a Subscribe button" style="width:100%;border-radius:10px;display:block;" />
-        <p class="preview-note" style="margin-top:10px;">Screenshot of the actual signup card on duezly.com/dashboard.html. The consent checkbox is unchecked by default.</p>
+        <img src="purchase-page.png" alt="Screenshot of the Duezly subscribe page at duezly.com/purchase.html showing optional phone number field, the unchecked SMS consent checkbox with full disclosure language, and a Subscribe button" style="width:100%;border-radius:10px;display:block;" />
+        <p class="preview-note" style="margin-top:10px;">Screenshot of duezly.com/purchase.html — the consent checkbox is optional and unchecked by default. The Subscribe button works whether or not it is checked.</p>
       </div>
 
-      <p>After filling in the form, users click "Subscribe — $1.99/mo" which saves their info and redirects them to Stripe's secure checkout page. Consent is recorded in our system at the time the form is submitted.</p>
+      <h2>Step 2 — Dashboard setup card (duezly.com/dashboard.html)</h2>
+      <p>After subscribing, users who have not yet provided a phone number, Canvas Calendar link, or SMS consent are shown a prominent "Set Up Duezly" card at the top of their dashboard. This card contains all required reminder settings plus the same optional, unchecked SMS consent checkbox. Daily reminders are only sent once the phone number, Canvas link, and SMS consent are all saved.</p>
+
+      <div class="preview-card" style="padding:16px;background:#f8f8f8;">
+        <img src="dashboard-setup.png" alt="Screenshot of the Duezly dashboard showing the Set Up Duezly card with phone number, Canvas Calendar link, send time, timezone fields, and the optional unchecked SMS consent checkbox with full disclosure language" style="width:100%;border-radius:10px;display:block;" />
+        <p class="preview-note" style="margin-top:10px;">Screenshot of duezly.com/dashboard.html for a subscribed user who hasn't completed setup. The SMS consent checkbox is optional and unchecked by default.</p>
+      </div>
+
+      <div class="highlight">
+        Consent to receive SMS messages is not a condition of purchase or use of any Duezly service. Users may subscribe and manage their account without ever opting in to SMS.
+      </div>
     </div>
 
     <div class="card">
