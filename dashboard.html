@@ -110,6 +110,8 @@
     .consent-box span { font-size: 0.8rem; color: #44403c; line-height: 1.6; }
     .consent-box a { color: var(--orange-dark); }
 
+    .card-disabled { opacity: 0.4; pointer-events: none; user-select: none; }
+
     /* Status card */
     .status-row { display: flex; align-items: center; justify-content: space-between; }
     .status-badge {
@@ -269,50 +271,7 @@
         <div class="card-title">Get Started with Duezly</div>
         <p class="setup-desc">Duezly texts you a daily summary of your upcoming Canvas assignments straight to your phone every morning. $1.99/month after a 14-day free trial. Cancel anytime.</p>
 
-        <div class="field">
-          <label for="sub-phone">Phone number <span style="font-weight:500;color:var(--muted);">(optional — add later)</span></label>
-          <input type="tel" id="sub-phone" placeholder="(555) 000-1234" autocomplete="tel" />
-        </div>
-        <div class="field">
-          <label for="sub-canvas-url">Canvas Calendar link <span style="font-weight:500;color:var(--muted);">(optional — add later)</span></label>
-          <input type="url" id="sub-canvas-url" placeholder="https://yourschool.instructure.com/feeds/calendars/..." />
-          <details class="ical-help">
-            <summary>How do I find my Canvas Calendar link?</summary>
-            <ol>
-              <li>Go to your school's Canvas site and log in.</li>
-              <li>Click <strong>Calendar</strong> in the left sidebar.</li>
-              <li>Scroll to the bottom right and click <code>Calendar Feed</code>.</li>
-              <li>Copy the URL — it starts with <code>instructure.com/feeds/calendars/</code></li>
-            </ol>
-          </details>
-        </div>
-        <div class="field">
-          <label for="sub-send-time">Text me at</label>
-          <select id="sub-send-time">
-            <option value="5">5:00 AM</option>
-            <option value="6">6:00 AM</option>
-            <option value="7">7:00 AM</option>
-            <option value="8" selected>8:00 AM</option>
-            <option value="9">9:00 AM</option>
-            <option value="10">10:00 AM</option>
-            <option value="11">11:00 AM</option>
-            <option value="12">12:00 PM</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="sub-timezone">Timezone</label>
-          <select id="sub-timezone">
-            <option value="America/New_York">Eastern (ET)</option>
-            <option value="America/Chicago">Central (CT)</option>
-            <option value="America/Denver">Mountain (MT)</option>
-            <option value="America/Phoenix">Mountain – no DST (AZ)</option>
-            <option value="America/Los_Angeles">Pacific (PT)</option>
-            <option value="America/Anchorage">Alaska (AKT)</option>
-            <option value="Pacific/Honolulu">Hawaii (HT)</option>
-          </select>
-        </div>
-
-        <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.</p>
+        <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. You can add your phone number and Canvas link after subscribing.</p>
 
         <label class="consent-box" for="sub-sms-consent">
           <input type="checkbox" id="sub-sms-consent" />
@@ -424,7 +383,7 @@
           </div>
         </div>
 
-        <div class="card card-update">
+        <div class="card card-update" id="settings-card">
           <div class="card-title">Duezly Settings</div>
           <form id="update-form">
             <div class="field">
@@ -651,40 +610,23 @@
     function showSubscribeCard(data) {
       document.getElementById("subscribe-section").classList.remove("hidden");
       document.getElementById("signout-btn").classList.remove("hidden");
-      if (data.phone) document.getElementById("sub-phone").value = data.phone;
-      if (data.canvas_url) document.getElementById("sub-canvas-url").value = data.canvas_url;
-      if (data.timezone) document.getElementById("sub-timezone").value = data.timezone;
-      if (data.send_time != null) document.getElementById("sub-send-time").value = data.send_time;
+      document.getElementById("settings-card").classList.add("card-disabled");
       if (data.sms_consent) document.getElementById("sub-sms-consent").checked = true;
     }
 
     async function subscribe() {
       const btn = document.getElementById("sub-btn");
       const msg = document.getElementById("sub-msg");
-      const rawPhone = document.getElementById("sub-phone").value;
-      const canvas_url = document.getElementById("sub-canvas-url").value.trim();
-      const timezone = document.getElementById("sub-timezone").value;
-      const send_time = parseInt(document.getElementById("sub-send-time").value);
       const sms_consent = document.getElementById("sub-sms-consent").checked;
 
       btn.disabled = true; btn.textContent = "Setting up…"; msg.style.display = "none";
 
-      const phone = rawPhone ? normalizePhone(rawPhone) : null;
-      if (rawPhone && !phone) {
-        msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block";
-        btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo"; return;
-      }
-
       try {
-        if (phone || canvas_url || sms_consent) {
-          const updateBody = { action: "update", timezone, send_time };
-          if (phone) updateBody.phone = phone;
-          if (canvas_url) updateBody.canvas_url = canvas_url;
-          updateBody.sms_consent = sms_consent;
+        if (sms_consent) {
           await fetch(`${API}/user`, {
             method: "POST",
             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-            body: JSON.stringify(updateBody)
+            body: JSON.stringify({ action: "update", sms_consent: true })
           });
         }
 
