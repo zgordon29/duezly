@@ -630,7 +630,7 @@
           msg.className = "msg error"; msg.textContent = data.message || "Failed to start checkout. Please try again."; msg.style.display = "block";
           btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo"; return;
         }
-        window.location.href = data.url;
+        window.location.href = data.checkout_url;
       } catch {
         msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
         btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo";
