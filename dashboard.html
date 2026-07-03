@@ -273,11 +273,6 @@
 
         <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. You can add your phone number and Canvas link after subscribing.</p>
 
-        <label class="consent-box" for="sub-sms-consent">
-          <input type="checkbox" id="sub-sms-consent" />
-          <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
-        </label>
-
         <button class="btn btn-primary" id="sub-btn" onclick="subscribe()">Subscribe — $1.99/mo</button>
         <div class="msg" id="sub-msg"></div>
         <p class="setup-fine">14-day free trial &middot; Cancel anytime &middot; No spam</p>
@@ -428,6 +423,10 @@
                 <option value="Pacific/Honolulu">Hawaii (HT)</option>
               </select>
             </div>
+            <label class="consent-box" for="sms-consent" style="margin-bottom:12px;">
+              <input type="checkbox" id="sms-consent" />
+              <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to use Duezly. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
+            </label>
             <button type="submit" class="btn btn-primary" id="update-btn">Save changes</button>
           </form>
           <div class="msg" id="update-msg"></div>
@@ -584,6 +583,7 @@
       if (data.canvas_url) document.getElementById("canvas-url").value = data.canvas_url;
       if (data.timezone) document.getElementById("timezone").value = data.timezone;
       if (data.send_time != null) document.getElementById("send-time").value = data.send_time;
+      document.getElementById("sms-consent").checked = !!data.sms_consent;
 
       updateSchedule(data.timezone || "America/New_York", data.send_time != null ? data.send_time : 8);
 
@@ -611,25 +611,15 @@
       document.getElementById("subscribe-section").classList.remove("hidden");
       document.getElementById("signout-btn").classList.remove("hidden");
       document.getElementById("settings-card").classList.add("card-disabled");
-      if (data.sms_consent) document.getElementById("sub-sms-consent").checked = true;
     }
 
     async function subscribe() {
       const btn = document.getElementById("sub-btn");
       const msg = document.getElementById("sub-msg");
-      const sms_consent = document.getElementById("sub-sms-consent").checked;
 
       btn.disabled = true; btn.textContent = "Setting up…"; msg.style.display = "none";
 
       try {
-        if (sms_consent) {
-          await fetch(`${API}/user`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-            body: JSON.stringify({ action: "update", sms_consent: true })
-          });
-        }
-
         const res = await fetch(`${API}/user`, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
@@ -785,7 +775,7 @@
         const res = await fetch(`${API}/user`, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time })
+          body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time, sms_consent: document.getElementById("sms-consent").checked })
         });
         const data = await res.json();
         if (!res.ok) {
