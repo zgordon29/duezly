@@ -208,7 +208,7 @@
 
     <div class="reviewer-notice">
       <h3>📋 For Twilio / Carrier Reviewers</h3>
-      <p>The SMS opt-in for Duezly occurs on the public sign-in page (<a href="signup.html" style="color:var(--orange);">duezly.com/signup.html</a>) before any payment or authentication. Users must check the consent checkbox before the Google sign-in button is enabled. This page provides a full public preview of the opt-in flow and consent language.</p>
+      <p>The SMS opt-in for Duezly occurs on a dedicated onboarding page (<a href="onboarding.html" style="color:var(--orange);">duezly.com/onboarding.html</a>), shown immediately after Stripe checkout. The consent checkbox is optional and unchecked by default — subscribing and using the service never requires SMS consent, and a "Skip to dashboard" button lets users bypass it entirely. This page provides a full public preview of the opt-in flow and consent language. For a detailed walkthrough with live screenshots, see our <a href="sms-opt-in.html" style="color:var(--orange);">SMS Opt-In page</a>.</p>
     </div>
 
     <div class="section-label">User Sign-Up Flow</div>
@@ -216,29 +216,29 @@
       <div class="flow-step">
         <div class="step-num">1</div>
         <div>
-          <h3>Check SMS consent and sign in with Google</h3>
-          <p>Users arrive at duezly.com and click "Get started." On the sign-in page, they must check the SMS consent checkbox before the Google sign-in button is enabled. Only after checking the box can they authenticate with Google.</p>
+          <h3>Sign in with Google</h3>
+          <p>Users arrive at duezly.com and click "Get started," then authenticate with Google. No SMS consent is requested at this step.</p>
         </div>
       </div>
       <div class="flow-step">
         <div class="step-num">2</div>
         <div>
-          <h3>Complete $1.99/month Stripe checkout</h3>
-          <p>Users are directed to a Stripe-hosted payment page to subscribe. No trial — subscription begins immediately.</p>
+          <h3>Subscribe — $1.99/month after a 14-day free trial</h3>
+          <p>From the dashboard, users click Subscribe and are directed to a Stripe-hosted checkout page. No consent checkbox is presented here — checkout requires no SMS opt-in.</p>
         </div>
       </div>
       <div class="flow-step">
         <div class="step-num">3</div>
         <div>
-          <h3>Onboarding: enter phone number, Canvas link, and send time</h3>
-          <p>After payment, users enter their phone number, Canvas Calendar link, preferred send time, and timezone. No additional consent checkbox — consent was already captured at sign-in.</p>
+          <h3>Onboarding: phone number, Canvas link, and SMS consent</h3>
+          <p>Immediately after checkout, users land on a dedicated onboarding page to enter their phone number, Canvas Calendar link, preferred send time, and timezone, alongside an optional, unchecked SMS consent checkbox. A "Skip to dashboard" button lets users continue without completing any of it.</p>
         </div>
       </div>
       <div class="flow-step">
         <div class="step-num">4</div>
         <div>
           <h3>Daily SMS reminders begin</h3>
-          <p>Duezly sends one SMS per day at the user's chosen time listing assignments due today, tomorrow, and later that week — pulled from their Canvas calendar.</p>
+          <p>Duezly sends one SMS per day at the user's chosen time listing assignments due today, tomorrow, and later that week — pulled from their Canvas calendar. Reminders only send once phone, Canvas link, and SMS consent are all saved; consent can be changed anytime in Duezly Settings on the dashboard.</p>
         </div>
       </div>
     </div>
@@ -270,23 +270,23 @@
 
       <div class="consent-box">
         <div class="consent-row">
-          <div class="checkbox-mock checked"></div>
-          <span class="consent-text">I'd like to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for info. Consent is not required to purchase.</span>
+          <div class="checkbox-mock"></div>
+          <span class="consent-text">Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for info. Consent is not required to subscribe. See our Privacy Policy and Terms.</span>
         </div>
       </div>
 
       <button class="btn-mock">Start getting texts</button>
-      <p class="required-note">Checkbox is unchecked by default. Submission is blocked until the user checks it.</p>
+      <p class="required-note">Checkbox is optional and unchecked by default. A "Skip to dashboard" button (not pictured) lets users continue without checking it or filling in any field.</p>
     </div>
 
     <div class="section-label">Compliance Summary</div>
     <div class="compliance-list">
       <div class="compliance-item"><strong>Program name:</strong> Duezly — daily Canvas homework reminders by SMS</div>
-      <div class="compliance-item"><strong>Opt-in method:</strong> Web form — user checks a mandatory checkbox on the public sign-in page before authenticating with Google. The Google sign-in button is disabled until the checkbox is checked. Checkbox is unchecked by default.</div>
-      <div class="compliance-item"><strong>Consent language:</strong> "I'd like to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for info. Consent is not required to purchase."</div>
+      <div class="compliance-item"><strong>Opt-in method:</strong> Web form — user optionally checks a checkbox on a dedicated onboarding page shown after Stripe checkout. Checkbox is unchecked by default and never blocks proceeding — a "Skip to dashboard" button is always present. The same optional checkbox is also always available in the Duezly Settings section of the dashboard.</div>
+      <div class="compliance-item"><strong>Consent language:</strong> "Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for info. Consent is not required to subscribe. See our Privacy Policy and Terms."</div>
       <div class="compliance-item"><strong>Message frequency:</strong> Approximately 1 message per day</div>
       <div class="compliance-item"><strong>Message and data rates:</strong> May apply — disclosed in consent checkbox</div>
-      <div class="compliance-item"><strong>Opt-out:</strong> Reply STOP to any message — immediately unsubscribes the user. Also available via dashboard.</div>
+      <div class="compliance-item"><strong>Opt-out:</strong> Reply STOP to any message — immediately unsubscribes the user. Subscribers can also stop or reactivate reminders anytime from the dashboard without affecting their subscription.</div>
       <div class="compliance-item"><strong>Help keyword:</strong> Reply HELP for help information</div>
       <div class="compliance-item"><strong>Sender number:</strong> +16785782152</div>
       <div class="compliance-item"><strong>SMS consent is not a condition of purchase:</strong> Stated in both the <a href="terms.html" style="color:var(--orange);">Terms &amp; Conditions</a> and <a href="privacy-policy.html" style="color:var(--orange);">Privacy Policy</a></div>
