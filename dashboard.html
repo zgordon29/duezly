@@ -392,8 +392,8 @@
         <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
 
         <div class="card-title">Reminders</div>
-        <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">Temporarily stop your daily texts without canceling your subscription.</p>
-        <button class="btn btn-danger" id="unsub-btn" onclick="unsubscribe()">Stop my reminders</button>
+        <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.6;" id="reminders-desc">Temporarily stop your daily texts without canceling your subscription.</p>
+        <button class="btn btn-danger" id="unsub-btn" onclick="toggleReminders()">Stop my reminders</button>
         <div class="msg" id="unsub-msg"></div>
 
         <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;" />
@@ -520,6 +520,7 @@
         badge.className = "status-badge inactive";
         text.textContent = "Inactive";
       }
+      updateRemindersButton(!!data.active);
 
       applySubStatus(
         document.getElementById("sub-status-value"),
@@ -711,23 +712,45 @@
       }
     }
 
-    async function unsubscribe() {
+    function updateRemindersButton(active) {
+      const btn = document.getElementById("unsub-btn");
+      const desc = document.getElementById("reminders-desc");
+      btn.dataset.active = active ? "true" : "false";
+      if (active) {
+        btn.className = "btn btn-danger";
+        btn.textContent = "Stop my reminders";
+        desc.textContent = "Temporarily stop your daily texts without canceling your subscription.";
+      } else {
+        btn.className = "btn btn-primary";
+        btn.textContent = "Reactivate reminders";
+        desc.textContent = "Start getting your daily texts again — no need to resubscribe.";
+      }
+    }
+
+    async function toggleReminders() {
       const msg = document.getElementById("unsub-msg");
       const btn = document.getElementById("unsub-btn");
-      if (!confirm("Are you sure you want to stop your daily reminders?")) return;
+      const isActive = btn.dataset.active === "true";
+      const action = isActive ? "unsubscribe" : "resume_reminders";
+      const confirmMsg = isActive
+        ? "Are you sure you want to stop your daily reminders?"
+        : "Start getting your daily reminders again?";
+      if (!confirm(confirmMsg)) return;
       btn.disabled = true;
       try {
         const res = await fetch(`${API}/user`, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: "unsubscribe" })
+          body: JSON.stringify({ action })
         });
         const data = await res.json();
         msg.className = res.ok ? "msg success" : "msg error";
         msg.textContent = data.message; msg.style.display = "block";
         if (res.ok) {
-          document.getElementById("status-badge").className = "status-badge inactive";
-          document.getElementById("status-text").textContent = "Inactive";
+          const nowActive = !isActive;
+          document.getElementById("status-badge").className = nowActive ? "status-badge active" : "status-badge inactive";
+          document.getElementById("status-text").textContent = nowActive ? "Active" : "Inactive";
+          updateRemindersButton(nowActive);
         }
       } catch {
         msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
