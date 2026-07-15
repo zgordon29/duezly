@@ -279,68 +279,6 @@
       </div>
     </div>
 
-    <!-- Set Up Duezly prompt — shown at top when setup is incomplete, hidden once done -->
-    <div id="setup-section" class="hidden">
-      <div class="card setup-card" style="margin-bottom:16px;">
-        <div class="card-title">Set Up Duezly</div>
-        <p class="setup-desc">Complete your setup to start receiving daily assignment reminders straight to your phone.</p>
-
-        <div class="field">
-          <label for="setup-phone">Phone number</label>
-          <input type="tel" id="setup-phone" placeholder="(555) 000-1234" autocomplete="tel" />
-        </div>
-        <div class="field">
-          <label for="setup-canvas-url">Canvas Calendar link</label>
-          <input type="url" id="setup-canvas-url" placeholder="https://yourschool.instructure.com/feeds/calendars/..." />
-          <details class="ical-help">
-            <summary>How do I find my Canvas Calendar link?</summary>
-            <ol>
-              <li>Go to your school's Canvas site and log in.</li>
-              <li>Click <strong>Calendar</strong> in the left sidebar.</li>
-              <li>Scroll to the bottom right and click <code>Calendar Feed</code>.</li>
-              <li>Copy the URL — it starts with <code>instructure.com/feeds/calendars/</code></li>
-            </ol>
-          </details>
-        </div>
-        <div class="field">
-          <label for="setup-send-time">Text me at</label>
-          <select id="setup-send-time">
-            <option value="5">5:00 AM</option>
-            <option value="6">6:00 AM</option>
-            <option value="7">7:00 AM</option>
-            <option value="8" selected>8:00 AM</option>
-            <option value="9">9:00 AM</option>
-            <option value="10">10:00 AM</option>
-            <option value="11">11:00 AM</option>
-            <option value="12">12:00 PM</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="setup-timezone">Timezone</label>
-          <select id="setup-timezone">
-            <option value="America/New_York">Eastern (ET)</option>
-            <option value="America/Chicago">Central (CT)</option>
-            <option value="America/Denver">Mountain (MT)</option>
-            <option value="America/Phoenix">Mountain – no DST (AZ)</option>
-            <option value="America/Los_Angeles">Pacific (PT)</option>
-            <option value="America/Anchorage">Alaska (AKT)</option>
-            <option value="Pacific/Honolulu">Hawaii (HT)</option>
-          </select>
-        </div>
-
-        <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.</p>
-
-        <label class="consent-box" for="setup-sms-consent">
-          <input type="checkbox" id="setup-sms-consent" />
-          <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
-        </label>
-
-        <button class="btn btn-primary" id="setup-save-btn" onclick="saveSetup()">Save and start reminders</button>
-        <div class="msg" id="setup-msg"></div>
-        <p class="setup-fine">Reminders won't send until phone, Canvas link, and SMS consent are all saved.</p>
-      </div>
-    </div>
-
     <!-- Full dashboard — always shown for all subscribers -->
     <div id="dashboard-screen" class="hidden">
       <div class="card-grid">
@@ -495,10 +433,6 @@
     };
     const TIME_LABELS = {5:"5:00 AM",6:"6:00 AM",7:"7:00 AM",8:"8:00 AM",9:"9:00 AM",10:"10:00 AM",11:"11:00 AM",12:"12:00 PM"};
 
-    function isSetupComplete(data) {
-      return !!(data.phone && data.canvas_url && data.sms_consent);
-    }
-
     function normalizePhone(raw) {
       const digits = raw.replace(/\D/g, "");
       if (digits.length === 10) return "+1" + digits;
@@ -559,16 +493,6 @@
         cancelBtn.style.display = "none";
         reactivateBtn.style.display = "none";
       }
-    }
-
-    function maybeShowSetupPrompt(data) {
-      if (isSetupComplete(data)) return;
-      document.getElementById("setup-section").classList.remove("hidden");
-      if (data.phone) document.getElementById("setup-phone").value = data.phone;
-      if (data.canvas_url) document.getElementById("setup-canvas-url").value = data.canvas_url;
-      if (data.timezone) document.getElementById("setup-timezone").value = data.timezone;
-      if (data.send_time != null) document.getElementById("setup-send-time").value = data.send_time;
-      if (data.sms_consent) document.getElementById("setup-sms-consent").checked = true;
     }
 
     function showDashboard(data) {
@@ -637,64 +561,6 @@
       }
     }
 
-    async function saveSetup() {
-      const rawPhone = document.getElementById("setup-phone").value;
-      const canvas_url = document.getElementById("setup-canvas-url").value.trim();
-      const timezone = document.getElementById("setup-timezone").value;
-      const send_time = parseInt(document.getElementById("setup-send-time").value);
-      const sms_consent = document.getElementById("setup-sms-consent").checked;
-      const btn = document.getElementById("setup-save-btn");
-      const msg = document.getElementById("setup-msg");
-
-      msg.style.display = "none";
-
-      const phone = normalizePhone(rawPhone);
-      if (!phone) {
-        msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
-      }
-      if (!canvas_url) {
-        msg.className = "msg error"; msg.textContent = "Please enter your Canvas Calendar link."; msg.style.display = "block"; return;
-      }
-
-      btn.disabled = true; btn.textContent = "Saving…";
-
-      try {
-        const res = await fetch(`${API}/user`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time, sms_consent })
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          msg.className = "msg error"; msg.textContent = data.message || "Failed to save. Please try again."; msg.style.display = "block";
-          btn.disabled = false; btn.textContent = "Save and start reminders"; return;
-        }
-
-        // Refresh data; if setup is now complete, hide the prompt card
-        const getRes = await fetch(`${API}/user`, { headers: { "Authorization": `Bearer ${sessionToken}` } });
-        if (getRes.ok) {
-          const fresh = await getRes.json();
-          // Update info card values
-          document.getElementById("info-phone").textContent = fresh.phone || "Not set";
-          document.getElementById("info-canvas").textContent = fresh.canvas_url || "Not set";
-          if (fresh.phone) document.getElementById("phone").value = fresh.phone;
-          if (fresh.canvas_url) document.getElementById("canvas-url").value = fresh.canvas_url;
-          updateSchedule(fresh.timezone || "America/New_York", fresh.send_time != null ? fresh.send_time : 8);
-          if (isSetupComplete(fresh)) {
-            document.getElementById("setup-section").classList.add("hidden");
-            btn.disabled = false; btn.textContent = "Save and start reminders";
-            return;
-          }
-        }
-        msg.className = "msg success"; msg.textContent = "Saved! Check the SMS consent box to start receiving reminders.";
-        msg.style.display = "block";
-        btn.disabled = false; btn.textContent = "Save and start reminders";
-      } catch {
-        msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
-        btn.disabled = false; btn.textContent = "Save and start reminders";
-      }
-    }
-
     async function pollForActivation(attempts) {
       if (attempts <= 0) {
         document.getElementById("gate-overlay").style.display = "none";
@@ -709,7 +575,6 @@
           if (["active", "trialing"].includes(data.subscription_status)) {
             document.getElementById("gate-overlay").style.display = "none";
             showDashboard(data);
-            maybeShowSetupPrompt(data);
             return;
           }
         }
@@ -748,7 +613,6 @@
           showDashboard(data);
         } else {
           showDashboard(data);
-          maybeShowSetupPrompt(data);
         }
 
       } catch {

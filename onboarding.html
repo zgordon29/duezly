@@ -37,6 +37,10 @@
     body.dark .ical-help li { color: #94a3b8; }
     body.dark .msg.success { background: rgba(21,128,61,0.2); color: #86efac; border-color: rgba(21,128,61,0.4); }
     body.dark .msg.error { background: rgba(153,27,27,0.2); color: #fca5a5; border-color: rgba(153,27,27,0.4); }
+    body.dark .consent-box { background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.25); }
+    body.dark .consent-box span { color: #94a3b8; }
+    body.dark .sms-notice { background: rgba(249,115,22,0.06); border-color: rgba(249,115,22,0.3); color: #fb923c; }
+    body.dark .btn-secondary { background: transparent; color: #94a3b8; }
     .theme-select {
       font-size: 0.8rem; font-weight: 600;
       background: rgba(0,0,0,0.06); color: var(--text);
@@ -136,6 +140,33 @@
     }
     .btn:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-secondary {
+      width: 100%; padding: 11px; margin-top: 10px;
+      border: none; border-radius: 10px;
+      font-size: 0.875rem; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+      background: transparent; color: var(--muted);
+      transition: color 0.15s;
+    }
+    .btn-secondary:hover { color: var(--orange); }
+
+    .sms-notice {
+      background: #fffbeb; border-left: 3px solid var(--orange);
+      border-radius: 0 8px 8px 0; padding: 10px 14px;
+      font-size: 0.82rem; color: var(--orange-dark); line-height: 1.5;
+      margin-bottom: 12px; font-weight: 500;
+    }
+    .consent-box {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px;
+      padding: 14px; cursor: pointer; margin-bottom: 16px;
+    }
+    .consent-box input[type="checkbox"] {
+      margin-top: 2px; flex-shrink: 0;
+      width: 16px; height: 16px; accent-color: var(--orange); cursor: pointer;
+    }
+    .consent-box span { font-size: 0.8rem; color: #44403c; line-height: 1.6; }
+    .consent-box a { color: var(--orange-dark); }
 
     .msg { margin-top: 12px; padding: 11px 14px; border-radius: 8px; font-size: 0.875rem; font-weight: 500; display: none; }
     .msg.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
@@ -246,8 +277,16 @@
               <option value="Pacific/Honolulu">Hawaii (HT)</option>
             </select>
           </div>
+          <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.</p>
+
+          <label class="consent-box" for="sms-consent">
+            <input type="checkbox" id="sms-consent" />
+            <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
+          </label>
+
           <button type="submit" id="save-btn" class="btn">Start getting texts</button>
         </form>
+        <button type="button" class="btn-secondary" onclick="skipToDashboard()">Skip to dashboard</button>
         <div class="msg" id="form-msg"></div>
       </div>
     </main>
@@ -275,6 +314,11 @@
     function showForm(data) {
       document.getElementById("loading-screen").classList.add("hidden");
       document.getElementById("form-screen").classList.remove("hidden");
+      if (data.phone) document.getElementById("phone").value = data.phone;
+      if (data.canvas_url) document.getElementById("canvas-url").value = data.canvas_url;
+      if (data.timezone) document.getElementById("timezone").value = data.timezone;
+      if (data.send_time != null) document.getElementById("send-time").value = data.send_time;
+      if (data.sms_consent) document.getElementById("sms-consent").checked = true;
     }
 
     async function pollForActivation(attempts) {
@@ -294,13 +338,17 @@
         });
         if (res.ok) {
           const data = await res.json();
-          if (data.subscription_status === "active") {
+          if (["active", "trialing"].includes(data.subscription_status)) {
             showForm(data);
             return;
           }
         }
       } catch {}
       pollForActivation(attempts - 1);
+    }
+
+    function skipToDashboard() {
+      window.location.href = "dashboard.html";
     }
 
     async function init() {
@@ -325,7 +373,7 @@
         if (!res.ok) { window.location.href = "signup.html"; return; }
         const data = await res.json();
 
-        if (data.subscription_status !== "active") {
+        if (!["active", "trialing"].includes(data.subscription_status)) {
           if (fromStripe) {
             pollForActivation(6);
           } else {
@@ -353,7 +401,7 @@
       const canvas_url = document.getElementById("canvas-url").value.trim();
       const timezone = document.getElementById("timezone").value;
       const send_time = parseInt(document.getElementById("send-time").value);
-      const sms_consent = true; // consent captured at signup before Stripe checkout
+      const sms_consent = document.getElementById("sms-consent").checked;
 
       if (!phone) {
         msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
