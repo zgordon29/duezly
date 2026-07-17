@@ -141,7 +141,7 @@
     <a href="index.html" class="nav-logo">Duezly ☀️</a>
     <div class="nav-right">
       <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
-      <a href="dashboard.html" id="nav-cta" class="nav-cta">Get Started</a>
+      <a href="signup.html" id="nav-cta" class="nav-cta">Get Started</a>
       <select id="theme-select" class="theme-select" onchange="setTheme(this.value)">
         <option value="light">☀️ Light</option>
         <option value="dark">🌙 Dark</option>
@@ -172,7 +172,7 @@
       <h2>STOP / HELP keywords</h2>
       <ul>
         <li><strong>STOP</strong> — immediately unsubscribes the number; one confirmation message is sent and no further messages follow.</li>
-        <li><strong>HELP</strong> — replies with support contact info (hello@duezly.com).</li>
+        <li><strong>HELP</strong> — replies with support contact info (<!--email_off-->hello@duezly.com<!--email_on-->).</li>
         <li>Subscribers can also stop or reactivate reminders anytime from the "Reminders" section of the dashboard, without affecting their subscription.</li>
       </ul>
 
@@ -199,14 +199,15 @@
       <div class="preview-card" style="background:#f8f8f8;">
         <img src="onboarding-setup.png" alt="Screenshot of the Duezly onboarding page with phone number, Canvas Calendar link, send time, timezone fields, an optional unchecked SMS consent checkbox with full disclosure language, and a Skip to dashboard button" />
         <p class="preview-note">Screenshot of duezly.com/onboarding.html for a subscriber who hasn't completed setup. The SMS consent checkbox is optional and unchecked by default, and can be skipped entirely.</p>
+        <p class="preview-note">Clicking Start getting texts saves settings; reminders only begin if the consent box was actively checked. The Skip to dashboard button allows users to proceed without consenting.</p>
       </div>
 
       <h2>Step 3 — Duezly Settings (duezly.com/dashboard.html, always visible)</h2>
-      <p>The SMS consent checkbox is also permanently present in the "Duezly Settings" section of the dashboard, directly above the Save changes button. This allows subscribers to opt in or opt out of SMS reminders at any time. The checkbox reflects the user's current saved consent status on every page load — it is unchecked by default for new users and checked only if they have previously opted in and saved.</p>
+      <p>The SMS consent checkbox is also permanently present in the "Duezly Settings" section of the dashboard, directly above the Save changes button. This allows subscribers to opt in or opt out of SMS reminders at any time. The checkbox is unchecked by default. Reminders remain inactive until the user actively checks the box and saves. Users who previously opted in can withdraw consent at any time by unchecking the box and saving.</p>
 
       <div class="preview-card" style="background:#f8f8f8;">
-        <img src="dashboard-settings.png" alt="Screenshot of the Duezly dashboard Duezly Settings section showing the SMS consent checkbox above the Save changes button" />
-        <p class="preview-note">Screenshot of duezly.com/dashboard.html for an active subscriber. The consent checkbox in Duezly Settings reflects the user's stored opt-in status and can be toggled and saved at any time.</p>
+        <img src="dashboard-settings.png" alt="Screenshot of the Duezly dashboard for a subscriber who has not opted in: Reminder Status shows Inactive and the SMS consent checkbox in Duezly Settings is unchecked above the Save changes button" />
+        <p class="preview-note">Screenshot of duezly.com/dashboard.html. The checkbox is unchecked by default. Reminders remain inactive until the user actively checks the box and saves. Users who previously opted in can withdraw consent at any time by unchecking the box and saving.</p>
       </div>
 
       <div class="highlight">
@@ -240,7 +241,7 @@
 
       <p>Full SMS program terms, opt-out instructions, and carrier disclaimers are available in our <a href="terms.html" style="color:var(--orange-dark);font-weight:700;">Terms &amp; Conditions</a> (see Section 4: SMS Consent and Messaging Terms).</p>
       <p>Information about how we collect, use, and protect SMS opt-in data is available in our <a href="privacy-policy.html" style="color:var(--orange-dark);font-weight:700;">Privacy Policy</a>.</p>
-      <p>Questions? Contact us at <strong>hello@duezly.com</strong>.</p>
+      <p>Questions? Contact us at <strong><!--email_off-->hello@duezly.com<!--email_on--></strong>.</p>
     </div>
 
   </main>
@@ -274,6 +275,7 @@
     }
     if (localStorage.getItem("duezly_token")) {
       document.getElementById("nav-cta").textContent = "My Dashboard";
+      document.getElementById("nav-cta").href = "dashboard.html";
       document.getElementById("signout-btn").classList.remove("hidden");
     }
   </script>

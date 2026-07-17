@@ -124,7 +124,7 @@
     <a href="index.html?ref=dash" class="nav-logo">Duezly ☀️</a>
     <div class="nav-right">
       <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
-      <a href="dashboard.html" id="nav-cta" class="nav-cta">Get Started</a>
+      <a href="signup.html" id="nav-cta" class="nav-cta">Get Started</a>
     </div>
   </nav>
 
@@ -159,7 +159,7 @@
       </div>
 
       <h2>3. SMS Messaging Disclosures</h2>
-      <p>SMS consent is collected at two points after subscribing. Immediately after Stripe checkout, users are taken to a dedicated onboarding page (duezly.com/onboarding.html) to enter their phone number, Canvas Calendar link, send time, and timezone, alongside an optional, unchecked SMS consent checkbox and a "Skip to dashboard" button — setup and consent are never required to proceed. The "Duezly Settings" section of the <strong>Duezly dashboard</strong> (duezly.com/dashboard.html) also always displays the same optional, unchecked consent checkbox above the Save changes button — subscribers can opt in or out at any time. Checking the box and saving indicates you consent to receive recurring automated SMS text messages from Duezly sent from <strong>+1 (678) 578-2152</strong>. SMS consent is not required to subscribe — you may complete your subscription and use the service without checking the box, but texts will only be sent after you have explicitly opted in.</p>
+      <p>After signing in, users land on the Duezly dashboard (duezly.com/dashboard.html), where the Subscribe button leads to Stripe checkout — no SMS consent is collected before or during checkout. SMS consent is collected at two points after subscribing. Immediately after Stripe checkout, users are taken to a dedicated onboarding page (duezly.com/onboarding.html) to enter their phone number, Canvas Calendar link, send time, and timezone, alongside an optional, unchecked SMS consent checkbox and a "Skip to dashboard" button — setup and consent are never required to proceed. The "Duezly Settings" section of the <strong>Duezly dashboard</strong> (duezly.com/dashboard.html) also always displays the same optional, unchecked consent checkbox above the Save changes button — subscribers can opt in or out at any time. Checking the box and saving indicates you consent to receive recurring automated SMS text messages from Duezly sent from <strong>+1 (678) 578-2152</strong>. SMS consent is not required to subscribe — you may complete your subscription and use the service without checking the box, but texts will only be sent after you have explicitly opted in.</p>
       <ul>
         <li><strong>Message frequency:</strong> approximately 1 message per day while you are enrolled.</li>
         <li><strong>Message and data rates may apply.</strong> Check with your mobile carrier for details.</li>
@@ -194,7 +194,7 @@
       <p>We may update this Privacy Policy from time to time. Continued use of the service after changes are posted constitutes acceptance of the updated policy.</p>
 
       <h2>9. Contact Us</h2>
-      <p>If you have questions about this Privacy Policy or your data, contact us at: <strong>hello@duezly.com</strong></p>
+      <p>If you have questions about this Privacy Policy or your data, contact us at: <strong><!--email_off-->hello@duezly.com<!--email_on--></strong></p>
     </div>
   </main>
 
@@ -229,6 +229,7 @@
     }
     if (localStorage.getItem("duezly_token")) {
       document.getElementById("nav-cta").textContent = "My Dashboard";
+      document.getElementById("nav-cta").href = "dashboard.html";
       document.getElementById("signout-btn").classList.remove("hidden");
     }
   </script>

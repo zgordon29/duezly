@@ -124,7 +124,7 @@
     <a href="index.html?ref=dash" class="nav-logo">Duezly ☀️</a>
     <div class="nav-right">
       <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
-      <a href="dashboard.html" id="nav-cta" class="nav-cta">Get Started</a>
+      <a href="signup.html" id="nav-cta" class="nav-cta">Get Started</a>
     </div>
   </nav>
 
@@ -148,13 +148,13 @@
       <p>You must be at least 18 years old and enrolled at an institution that uses Canvas LMS to use this Service. By using the Service, you represent that you meet these requirements.</p>
 
       <h2>4. SMS Consent and Messaging Terms</h2>
-      <p>SMS consent is collected at two points after subscribing. First, immediately after Stripe checkout, subscribers are taken to a dedicated onboarding page (duezly.com/onboarding.html) to enter their phone number, Canvas Calendar link, send time, and timezone. This page includes an optional, unchecked SMS consent checkbox alongside those fields, plus a "Skip to dashboard" button — consent, like the rest of setup, is never required to proceed. Second, the "Duezly Settings" section of the <strong>Duezly dashboard</strong> (duezly.com/dashboard.html) always displays the same optional, unchecked consent checkbox above the Save changes button, allowing subscribers to opt in or out of SMS reminders at any time. By checking this box and saving, you expressly consent to receive recurring automated SMS text messages from Duezly sent from <strong>+1 (678) 578-2152</strong>. The checkbox is optional — you may subscribe and use the service without checking it, but texts will only be sent after you have explicitly opted in. You can view exactly how this opt-in is presented on our <a href="sms-opt-in.html" style="color:var(--orange-dark);font-weight:700;">SMS Opt-In page</a>.</p>
+      <p>After signing in, users land on the Duezly dashboard (duezly.com/dashboard.html), where the Subscribe button leads to Stripe checkout — no SMS consent is collected before or during checkout. SMS consent is collected at two points after subscribing. First, immediately after Stripe checkout, subscribers are taken to a dedicated onboarding page (duezly.com/onboarding.html) to enter their phone number, Canvas Calendar link, send time, and timezone. This page includes an optional, unchecked SMS consent checkbox alongside those fields, plus a "Skip to dashboard" button — consent, like the rest of setup, is never required to proceed. Second, the "Duezly Settings" section of the <strong>Duezly dashboard</strong> (duezly.com/dashboard.html) always displays the same optional, unchecked consent checkbox above the Save changes button, allowing subscribers to opt in or out of SMS reminders at any time. By checking this box and saving, you expressly consent to receive recurring automated SMS text messages from Duezly sent from <strong>+1 (678) 578-2152</strong>. The checkbox is optional — you may subscribe and use the service without checking it, but texts will only be sent after you have explicitly opted in. You can view exactly how this opt-in is presented on our <a href="sms-opt-in.html" style="color:var(--orange-dark);font-weight:700;">SMS Opt-In page</a>.</p>
       <p><strong>Your consent to receive SMS messages is not a condition of purchasing or using any Duezly service.</strong></p>
       <ul>
         <li><strong>Message frequency:</strong> approximately 1 message per day while you are enrolled.</li>
         <li><strong>Message and data rates may apply.</strong> You are responsible for any charges imposed by your mobile carrier.</li>
         <li>To opt out at any time, reply <strong>STOP</strong> to any message. You will receive one confirmation message and no further messages will be sent.</li>
-        <li>To request help, reply <strong>HELP</strong> or contact us at hello@duezly.com.</li>
+        <li>To request help, reply <strong>HELP</strong> or contact us at <!--email_off-->hello@duezly.com<!--email_on-->.</li>
         <li>Supported carriers include, but are not limited to: AT&amp;T, Verizon, T-Mobile, Sprint, and most major US carriers.</li>
         <li>Your mobile opt-in information will never be sold, rented, or shared with third parties for marketing or promotional purposes. See our <a href="privacy-policy.html" style="color:var(--orange-dark)">Privacy Policy</a> for full details.</li>
       </ul>
@@ -194,7 +194,7 @@
       <p>These Terms are governed by the laws of the State of Georgia, without regard to conflict of law principles.</p>
 
       <h2>13. Contact</h2>
-      <p>Questions about these Terms? Contact us at: <strong>hello@duezly.com</strong></p>
+      <p>Questions about these Terms? Contact us at: <strong><!--email_off-->hello@duezly.com<!--email_on--></strong></p>
     </div>
   </main>
 
@@ -229,6 +229,7 @@
     }
     if (localStorage.getItem("duezly_token")) {
       document.getElementById("nav-cta").textContent = "My Dashboard";
+      document.getElementById("nav-cta").href = "dashboard.html";
       document.getElementById("signout-btn").classList.remove("hidden");
     }
   </script>
