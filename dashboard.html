@@ -512,15 +512,7 @@
 
       updateSchedule(data.timezone || "America/New_York", data.send_time != null ? data.send_time : 8);
 
-      const badge = document.getElementById("status-badge");
-      const text = document.getElementById("status-text");
-      if (data.active) {
-        badge.className = "status-badge active";
-        text.textContent = "Active";
-      } else {
-        badge.className = "status-badge inactive";
-        text.textContent = "Inactive";
-      }
+      setReminderBadge(!!data.active && !!data.sms_consent);
       updateRemindersButton(!!data.active);
 
       applySubStatus(
@@ -651,6 +643,7 @@
         document.getElementById("info-phone").textContent = phone;
         document.getElementById("info-canvas").textContent = canvas_url;
         updateSchedule(timezone, send_time);
+        setReminderBadge(document.getElementById("unsub-btn").dataset.active === "true" && document.getElementById("sms-consent").checked);
         msg.className = "msg success"; msg.textContent = "Settings saved."; msg.style.display = "block";
         btn.disabled = false; btn.textContent = "Save changes";
       } catch {
@@ -713,6 +706,13 @@
       }
     }
 
+    function setReminderBadge(on) {
+      const badge = document.getElementById("status-badge");
+      const text = document.getElementById("status-text");
+      badge.className = on ? "status-badge active" : "status-badge inactive";
+      text.textContent = on ? "Active" : "Inactive";
+    }
+
     function updateRemindersButton(active) {
       const btn = document.getElementById("unsub-btn");
       const desc = document.getElementById("reminders-desc");
@@ -749,8 +749,7 @@
         msg.textContent = data.message; msg.style.display = "block";
         if (res.ok) {
           const nowActive = !isActive;
-          document.getElementById("status-badge").className = nowActive ? "status-badge active" : "status-badge inactive";
-          document.getElementById("status-text").textContent = nowActive ? "Active" : "Inactive";
+          setReminderBadge(nowActive && document.getElementById("sms-consent").checked);
           updateRemindersButton(nowActive);
         }
       } catch {
