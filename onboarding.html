@@ -284,9 +284,11 @@
             <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
           </label>
 
+          <p id="public-note" class="hidden" style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">You'll sign in with Google and start your subscription before anything is saved.</p>
+
           <button type="submit" id="save-btn" class="btn">Start getting texts</button>
         </form>
-        <button type="button" class="btn-secondary" onclick="skipToDashboard()">Skip to dashboard</button>
+        <button type="button" id="skip-btn" class="btn-secondary" onclick="skipToDashboard()">Skip to dashboard</button>
         <div class="msg" id="form-msg"></div>
       </div>
     </main>
@@ -352,8 +354,16 @@
       window.location.href = "dashboard.html";
     }
 
+    // Signed-out visitors (including A2P reviewers) see the real form; saving requires sign-in.
+    function showPublicForm() {
+      showForm({});
+      document.getElementById("save-btn").textContent = "Sign in with Google to continue";
+      document.getElementById("skip-btn").classList.add("hidden");
+      document.getElementById("public-note").classList.remove("hidden");
+    }
+
     async function init() {
-      if (!sessionToken) { window.location.href = "signup.html"; return; }
+      if (!sessionToken) { showPublicForm(); return; }
 
       const params = new URLSearchParams(location.search);
       const fromStripe = params.get("subscribed") === "true";
@@ -410,6 +420,7 @@
       if (!canvas_url) {
         msg.className = "msg error"; msg.textContent = "Please enter your Canvas Calendar link."; msg.style.display = "block"; return;
       }
+      if (!sessionToken) { window.location.href = "signup.html"; return; }
       btn.disabled = true; btn.textContent = "Saving…";
       msg.style.display = "none";
 

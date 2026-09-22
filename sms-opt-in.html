@@ -116,34 +116,12 @@
       font-size: 0.75rem; color: var(--muted); margin-top: 10px; text-align: center; font-style: italic;
     }
 
-    /* Live (non-submitting) replica of the in-app SMS consent control.
-       Styles mirror .consent-box in onboarding.html and dashboard.html so the
-       control a reviewer sees here is visually identical to the real one. */
-    .consent-box {
-      display: flex; align-items: flex-start; gap: 10px;
-      background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px;
-      padding: 14px; margin-bottom: 16px;
-    }
-    .consent-box input[type="checkbox"] {
-      margin-top: 2px; flex-shrink: 0;
-      width: 16px; height: 16px; accent-color: var(--orange); cursor: pointer;
-    }
-    .consent-box span { font-size: 0.8rem; color: #44403c; line-height: 1.6; }
-    .consent-box a { color: var(--orange-dark); }
-    body.dark .consent-box { background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.25); }
-    body.dark .consent-box span { color: #94a3b8; }
-    .sms-notice {
-      background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
-      padding: 11px 14px; margin-bottom: 14px;
-      font-size: 0.8rem; line-height: 1.55; color: var(--orange-dark); font-weight: 600;
-    }
-    body.dark .sms-notice { background: rgba(249,115,22,0.06); border-color: rgba(249,115,22,0.3); color: #fb923c; }
-
     .sample-msg {
       background: #fffbeb; border: 1.5px solid #fde68a;
       border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
       font-size: 0.875rem; color: #1c1917; line-height: 1.6;
       font-family: 'Courier New', monospace;
+      white-space: pre-wrap;
     }
 
     footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; }
@@ -204,22 +182,15 @@
     </div>
 
     <div class="card">
-      <div class="card-title">The SMS Consent Checkbox</div>
+      <div class="card-title">See the Live Opt-In Form</div>
 
-      <p>This is the actual SMS consent control Duezly presents to users, reproduced here in full so it can be viewed without an account. It is rendered live on this page &mdash; it is not an image. The checkbox is <strong>unchecked by default</strong>, exactly as it appears in the product, and a user must actively click it to consent.</p>
-
-      <p class="sms-notice">Duezly works by texting you &mdash; SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.</p>
-
-      <label class="consent-box" for="sms-consent-demo">
-        <input type="checkbox" id="sms-consent-demo" />
-        <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
-      </label>
-
-      <p class="preview-note" style="text-align:left;">This copy of the control is for review purposes only &mdash; checking it here does not enrol you in anything and submits no data. Consent is recorded solely from the signed-in forms shown below.</p>
+      <p>The real form where users opt in is publicly viewable, with no account and no purchase required:</p>
 
       <div class="highlight">
-        The box is never pre-selected, at any collection point. Consent to receive SMS messages is not a condition of purchase or of using any Duezly service.
+        <a href="onboarding.html" style="color:var(--orange-dark);">duezly.com/onboarding.html</a> &mdash; the SMS consent checkbox is a separate control, <strong>unchecked by default</strong>, and never required to subscribe or to use Duezly.
       </div>
+
+      <p>Visitors who are not signed in can view and fill in the form; pressing its button takes them to Google sign-in, and nothing is saved until they have signed in and subscribed.</p>
     </div>
 
     <div class="card">
@@ -236,7 +207,7 @@
       </div>
 
       <h2>Step 2 — Onboarding (duezly.com/onboarding.html)</h2>
-      <p>Immediately after checkout, users are redirected to a dedicated onboarding page to enter their phone number, Canvas Calendar link, send time, and timezone. This page contains an optional, unchecked SMS consent checkbox with full disclosure language, plus a "Skip to dashboard" button so consent is never required to proceed. Daily reminders are only sent once the phone number, Canvas link, and SMS consent are all saved.</p>
+      <p>Immediately after checkout, users are redirected to a dedicated onboarding page to enter their phone number, Canvas Calendar link, send time, and timezone. This page contains an optional, unchecked SMS consent checkbox with full disclosure language, plus a "Skip to dashboard" button so consent is never required to proceed. Daily reminders are only sent once the phone number, Canvas link, and SMS consent are all saved. This page is publicly viewable at <a href="onboarding.html" style="color:var(--orange-dark);font-weight:700;">duezly.com/onboarding.html</a> without an account.</p>
 
       <div class="preview-card" style="background:#f8f8f8;">
         <img src="onboarding-setup.png" alt="Screenshot of the Duezly onboarding page with phone number, Canvas Calendar link, send time, timezone fields, an optional unchecked SMS consent checkbox with full disclosure language, and a Skip to dashboard button" />
@@ -261,21 +232,38 @@
       <div class="card-title">Opt-In Language</div>
       <p>The following disclosure text appears verbatim next to the SMS consent checkbox at both collection points (onboarding page and Duezly Settings):</p>
 
-      <div class="sample-msg" style="font-family:inherit;font-size:0.875rem;">
-        Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for info. Consent is not required to subscribe. See our Privacy Policy and Terms.
-      </div>
+      <div class="sample-msg" style="font-family:inherit;font-size:0.875rem;">Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for info. Consent is not required to subscribe. See our Privacy Policy and Terms.</div>
     </div>
 
     <div class="card">
       <div class="card-title">Sample Messages</div>
       <p>Below are representative examples of messages users receive after opting in.</p>
 
-      <div class="sample-msg">
-        Duezly Reminder - Mon Jun 9: DUE TODAY: - Econ 202 Problem Set (11:59 PM) - Bio Lab Report (8:00 AM). DUE TOMORROW: - History Essay Draft (11:59 PM). Reply STOP to unsubscribe.
-      </div>
-      <div class="sample-msg">
-        Duezly Reminder - No assignments due today. Have a great day! Reply STOP to unsubscribe.
-      </div>
+      <div class="sample-msg">Duezly Reminder — Tue Jun 9
+
+A few things on the plate today. Manageable — let's get it. 💪
+
+DUE TODAY:
+  - Econ 202 Problem Set (11:59 PM)
+  - Bio Lab Report (8:00 AM)
+
+DUE TOMORROW:
+  - History Essay Draft (11:59 PM)
+
+LATER THIS WEEK:
+  - Calc Midterm (Thu, 10:00 AM)
+  - Chem Quiz (Fri, 11:59 PM)
+
+Week ahead is looking light. Nice. 😎
+
+Reply STOP to unsubscribe, HELP for help.</div>
+      <div class="sample-msg">Duezly Reminder — Wed Jun 10
+
+Nothing due today — take a breath, you've earned it. 🎉
+
+Nothing else coming up either. Genuinely impressive. 🏖️
+
+Reply STOP to unsubscribe, HELP for help.</div>
     </div>
 
     <div class="card">
