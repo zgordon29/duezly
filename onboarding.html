@@ -216,7 +216,7 @@
   </nav>
 
   <!-- Loading/activation screen -->
-  <div id="loading-screen" class="loading-wrap">
+  <div id="loading-screen" class="loading-wrap hidden">
     <div class="loading-card">
       <div class="emoji">🎉</div>
       <h2>Payment confirmed!</h2>
@@ -226,7 +226,7 @@
   </div>
 
   <!-- Onboarding form (shown after subscription confirmed) -->
-  <div id="form-screen" class="hidden">
+  <div id="form-screen">
     <div class="page-header">
       <h1>Almost there! 🎉</h1>
       <p>Add your phone number and Canvas link to start getting texts.</p>
@@ -284,7 +284,7 @@
             <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
           </label>
 
-          <p id="public-note" class="hidden" style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">You'll sign in with Google and start your subscription before anything is saved.</p>
+          <p id="public-note" style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">You'll sign in with Google and start your subscription before anything is saved.</p>
 
           <button type="submit" id="save-btn" class="btn">Start getting texts</button>
         </form>
@@ -364,6 +364,11 @@
 
     async function init() {
       if (!sessionToken) { showPublicForm(); return; }
+
+      // The form is visible in the raw HTML so reviewers without JS still see it; signed-in users wait on the loading screen.
+      document.getElementById("form-screen").classList.add("hidden");
+      document.getElementById("public-note").classList.add("hidden");
+      document.getElementById("loading-screen").classList.remove("hidden");
 
       const params = new URLSearchParams(location.search);
       const fromStripe = params.get("subscribed") === "true";
