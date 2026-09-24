@@ -177,6 +177,7 @@
     .msg.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 
     .hidden { display: none; }
+    .theme-preview { display: block; width: 150px; max-width: 45%; margin-top: 10px; border-radius: 12px; border: 1px solid var(--border); }
 
     /* Responsive: 2-col grid for full dashboard on wider screens */
     .card-grid { display: flex; flex-direction: column; }
@@ -313,6 +314,10 @@
               <label>Daily text time</label>
               <span id="info-send-time">—</span>
             </div>
+            <div class="info-item">
+              <label>Reminder style</label>
+              <span id="info-theme">—</span>
+            </div>
           </div>
         </div>
 
@@ -381,6 +386,18 @@
                 <option value="America/Anchorage">Alaska (AKT)</option>
                 <option value="Pacific/Honolulu">Hawaii (HT)</option>
               </select>
+            </div>
+            <div class="field">
+              <label for="reminder-theme">Reminder style</label>
+              <select id="reminder-theme" onchange="showThemePreview()">
+                <option value="sunrise">Sun (picture)</option>
+                <option value="bubblegum">Bubblegum (picture)</option>
+                <option value="mint">Mint (picture)</option>
+                <option value="midnight">Midnight (picture)</option>
+                <option value="notebook">Notebook (picture)</option>
+                <option value="text">Plain text</option>
+              </select>
+              <img id="theme-preview" class="theme-preview" src="themes/sunrise.jpg" alt="Preview of the selected reminder style" />
             </div>
             <label class="consent-box" for="sms-consent" style="margin-bottom:12px;">
               <input type="checkbox" id="sms-consent" />
@@ -517,6 +534,16 @@
       }
     }
 
+    function showThemePreview() {
+      const select = document.getElementById("reminder-theme");
+      document.getElementById("theme-preview").src = `themes/${select.value}.jpg`;
+    }
+
+    function themeLabel(value) {
+      const option = document.querySelector(`#reminder-theme option[value="${value}"]`);
+      return option ? option.textContent : "Sun (picture)";
+    }
+
     function applyCalendarSource() {
       const google = document.getElementById("calendar-source").value === "google";
       document.getElementById("canvas-field").classList.toggle("hidden", google);
@@ -550,6 +577,9 @@
       }
       applyCalendarSource();
       showCalendarInfo(data.calendar_source || "canvas", data.canvas_url, data.google_calendar_url);
+      document.getElementById("reminder-theme").value = data.reminder_theme || "sunrise";
+      showThemePreview();
+      document.getElementById("info-theme").textContent = themeLabel(data.reminder_theme || "sunrise");
       if (data.timezone) document.getElementById("timezone").value = data.timezone;
       if (data.send_time != null) document.getElementById("send-time").value = data.send_time;
       document.getElementById("sms-consent").checked = !!data.sms_consent;
@@ -671,7 +701,8 @@
       if (!phone) {
         msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
       }
-      const payload = { action: "update", phone, canvas_url, timezone, send_time, sms_consent: document.getElementById("sms-consent").checked };
+      const reminder_theme = document.getElementById("reminder-theme").value;
+      const payload = { action: "update", phone, canvas_url, timezone, send_time, reminder_theme, sms_consent: document.getElementById("sms-consent").checked };
       const sourceAvailable = !document.getElementById("source-field").classList.contains("hidden");
       const calendar_source = sourceAvailable ? document.getElementById("calendar-source").value : "canvas";
       const google_calendar_url = document.getElementById("google-url").value.trim();
@@ -697,6 +728,7 @@
         }
         document.getElementById("info-phone").textContent = phone;
         showCalendarInfo(calendar_source, canvas_url, google_calendar_url);
+        document.getElementById("info-theme").textContent = themeLabel(reminder_theme);
         updateSchedule(timezone, send_time);
         setReminderBadge(document.getElementById("unsub-btn").dataset.active === "true" && document.getElementById("sms-consent").checked);
         msg.className = "msg success"; msg.textContent = "Settings saved."; msg.style.display = "block";

@@ -189,6 +189,7 @@
     .ical-help code { background: #fde68a; color: #92400e; padding: 1px 6px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; }
 
     .hidden { display: none; }
+    .theme-preview { display: block; width: 150px; max-width: 45%; margin-top: 10px; border-radius: 12px; border: 1px solid var(--border); }
 
     footer { border-top: 1px solid var(--border); padding: 28px 24px; text-align: center; }
     footer p { font-size: 0.82rem; color: var(--muted); }
@@ -277,6 +278,18 @@
               <option value="Pacific/Honolulu">Hawaii (HT)</option>
             </select>
           </div>
+          <div class="field">
+            <label for="reminder-theme">Reminder style</label>
+            <select id="reminder-theme" onchange="showThemePreview()">
+              <option value="sunrise">Sun (picture)</option>
+              <option value="bubblegum">Bubblegum (picture)</option>
+              <option value="mint">Mint (picture)</option>
+              <option value="midnight">Midnight (picture)</option>
+              <option value="notebook">Notebook (picture)</option>
+              <option value="text">Plain text</option>
+            </select>
+            <img id="theme-preview" class="theme-preview" src="themes/sunrise.jpg" alt="Preview of the selected reminder style" />
+          </div>
           <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.</p>
 
           <label class="consent-box" for="sms-consent">
@@ -318,6 +331,10 @@
     // carried over: the checkbox must be actively checked at the moment the settings are saved.
     const PENDING_KEY = "duezly_pending_setup";
 
+    function showThemePreview() {
+      document.getElementById("theme-preview").src = `themes/${document.getElementById("reminder-theme").value}.jpg`;
+    }
+
     function readPending() {
       try { return JSON.parse(localStorage.getItem(PENDING_KEY)) || {}; } catch { return {}; }
     }
@@ -338,6 +355,8 @@
       if (canvas) document.getElementById("canvas-url").value = canvas;
       if (tz) document.getElementById("timezone").value = tz;
       if (sendTime != null) document.getElementById("send-time").value = sendTime;
+      document.getElementById("reminder-theme").value = pending.reminder_theme || data.reminder_theme || "sunrise";
+      showThemePreview();
       if (data.sms_consent) document.getElementById("sms-consent").checked = true;
     }
 
@@ -437,6 +456,7 @@
       const timezone = document.getElementById("timezone").value;
       const send_time = parseInt(document.getElementById("send-time").value);
       const sms_consent = document.getElementById("sms-consent").checked;
+      const reminder_theme = document.getElementById("reminder-theme").value;
 
       if (!phone) {
         msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
@@ -445,7 +465,7 @@
         msg.className = "msg error"; msg.textContent = "Please enter your Canvas Calendar link."; msg.style.display = "block"; return;
       }
       if (!sessionToken) {
-        try { localStorage.setItem(PENDING_KEY, JSON.stringify({ phone, canvas_url, timezone, send_time })); } catch {}
+        try { localStorage.setItem(PENDING_KEY, JSON.stringify({ phone, canvas_url, timezone, send_time, reminder_theme })); } catch {}
         window.location.href = "signup.html";
         return;
       }
@@ -456,7 +476,7 @@
         const res = await fetch(`${API}/user`, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time, sms_consent })
+          body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time, reminder_theme, sms_consent })
         });
         const resData = await res.json();
         if (!res.ok) {
