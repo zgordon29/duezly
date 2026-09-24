@@ -228,8 +228,8 @@
   <!-- Onboarding form (shown after subscription confirmed) -->
   <div id="form-screen">
     <div class="page-header">
-      <h1>Almost there! 🎉</h1>
-      <p>Add your phone number and Canvas link to start getting texts.</p>
+      <h1 id="form-title">Set up your Duezly reminders</h1>
+      <p id="form-sub">Enter your details, then start your 14-day free trial.</p>
     </div>
     <main>
       <div class="card">
@@ -284,7 +284,7 @@
             <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
           </label>
 
-          <p id="public-note" style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">You'll sign in with Google and start your subscription before anything is saved.</p>
+          <p id="public-note" style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">Next, you'll sign in with Google and start your 14-day free trial ($1.99/month after, cancel anytime). We'll keep what you entered here.</p>
 
           <button type="submit" id="save-btn" class="btn">Start getting texts</button>
         </form>
@@ -314,13 +314,30 @@
       return null;
     }
 
+    // What a signed-out visitor typed, kept until they've signed in and subscribed. SMS consent is never
+    // carried over: the checkbox must be actively checked at the moment the settings are saved.
+    const PENDING_KEY = "duezly_pending_setup";
+
+    function readPending() {
+      try { return JSON.parse(localStorage.getItem(PENDING_KEY)) || {}; } catch { return {}; }
+    }
+
     function showForm(data) {
       document.getElementById("loading-screen").classList.add("hidden");
       document.getElementById("form-screen").classList.remove("hidden");
-      if (data.phone) document.getElementById("phone").value = data.phone;
-      if (data.canvas_url) document.getElementById("canvas-url").value = data.canvas_url;
-      if (data.timezone) document.getElementById("timezone").value = data.timezone;
-      if (data.send_time != null) document.getElementById("send-time").value = data.send_time;
+      document.getElementById("form-title").textContent = "Almost there! 🎉";
+      document.getElementById("form-sub").textContent = "Add your phone number and Canvas link to start getting texts.";
+      // The API returns default timezone/send_time for brand-new accounts, so a not-yet-configured
+      // account takes what the visitor chose before signing up.
+      const pending = (data.phone || data.canvas_url) ? {} : readPending();
+      const phone = pending.phone || data.phone;
+      const canvas = pending.canvas_url || data.canvas_url;
+      const tz = pending.timezone || data.timezone;
+      const sendTime = pending.send_time != null ? pending.send_time : data.send_time;
+      if (phone) document.getElementById("phone").value = phone;
+      if (canvas) document.getElementById("canvas-url").value = canvas;
+      if (tz) document.getElementById("timezone").value = tz;
+      if (sendTime != null) document.getElementById("send-time").value = sendTime;
       if (data.sms_consent) document.getElementById("sms-consent").checked = true;
     }
 
@@ -357,7 +374,9 @@
     // Signed-out visitors (including A2P reviewers) see the real form; saving requires sign-in.
     function showPublicForm() {
       showForm({});
-      document.getElementById("save-btn").textContent = "Sign in with Google to continue";
+      document.getElementById("form-title").textContent = "Set up your Duezly reminders";
+      document.getElementById("form-sub").textContent = "Enter your details, then start your 14-day free trial.";
+      document.getElementById("save-btn").textContent = "Continue - start free trial";
       document.getElementById("skip-btn").classList.add("hidden");
       document.getElementById("public-note").classList.remove("hidden");
     }
@@ -393,7 +412,7 @@
           if (fromStripe) {
             pollForActivation(6);
           } else {
-            window.location.href = "signup.html";
+            window.location.href = "dashboard.html";  // signed in but not subscribed: the dashboard has the Subscribe button
           }
           return;
         }
@@ -425,7 +444,11 @@
       if (!canvas_url) {
         msg.className = "msg error"; msg.textContent = "Please enter your Canvas Calendar link."; msg.style.display = "block"; return;
       }
-      if (!sessionToken) { window.location.href = "signup.html"; return; }
+      if (!sessionToken) {
+        try { localStorage.setItem(PENDING_KEY, JSON.stringify({ phone, canvas_url, timezone, send_time })); } catch {}
+        window.location.href = "signup.html";
+        return;
+      }
       btn.disabled = true; btn.textContent = "Saving…";
       msg.style.display = "none";
 
@@ -441,6 +464,7 @@
           btn.disabled = false; btn.textContent = "Start getting texts";
           return;
         }
+        try { localStorage.removeItem(PENDING_KEY); } catch {}
         window.location.href = "dashboard.html";
       } catch {
         msg.className = "msg error"; msg.textContent = "Network error. Please try again."; msg.style.display = "block";

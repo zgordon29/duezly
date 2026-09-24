@@ -523,10 +523,16 @@
       document.getElementById("google-field").classList.toggle("hidden", !google);
     }
 
+    // Calendar links work like passwords (the secret is in the path), so only the site name is shown.
+    function maskCalendarLink(url) {
+      if (!url) return "Not set";
+      try { return `${new URL(url).hostname} … saved ✓`; } catch { return "Saved ✓"; }
+    }
+
     function showCalendarInfo(source, canvasUrl, googleUrl) {
       const google = source === "google";
       document.getElementById("info-calendar-label").textContent = google ? "Google Calendar link" : "Canvas Calendar link";
-      document.getElementById("info-canvas").textContent = (google ? googleUrl : canvasUrl) || "Not set";
+      document.getElementById("info-canvas").textContent = maskCalendarLink(google ? googleUrl : canvasUrl);
     }
 
     function showDashboard(data) {
