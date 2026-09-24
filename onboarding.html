@@ -281,14 +281,14 @@
           <div class="field">
             <label for="reminder-theme">Reminder style</label>
             <select id="reminder-theme" onchange="showThemePreview()">
-              <option value="sunrise">Sun (picture)</option>
+              <option value="text">Plain text (cheapest)</option>
+                <option value="sunrise">Sun (picture)</option>
               <option value="bubblegum">Bubblegum (picture)</option>
               <option value="mint">Mint (picture)</option>
               <option value="midnight">Midnight (picture)</option>
               <option value="notebook">Notebook (picture)</option>
-              <option value="text">Plain text</option>
             </select>
-            <img id="theme-preview" class="theme-preview" src="themes/sunrise.jpg" alt="Preview of the selected reminder style" />
+            <img id="theme-preview" class="theme-preview" src="themes/text.jpg" alt="Preview of the selected reminder style" />
           </div>
           <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. Without it, we cannot send you texts.</p>
 
@@ -355,7 +355,7 @@
       if (canvas) document.getElementById("canvas-url").value = canvas;
       if (tz) document.getElementById("timezone").value = tz;
       if (sendTime != null) document.getElementById("send-time").value = sendTime;
-      document.getElementById("reminder-theme").value = pending.reminder_theme || data.reminder_theme || "sunrise";
+      document.getElementById("reminder-theme").value = pending.reminder_theme || data.reminder_theme || "text";
       showThemePreview();
       if (data.sms_consent) document.getElementById("sms-consent").checked = true;
     }
