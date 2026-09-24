@@ -306,7 +306,7 @@
               <span id="info-phone">—</span>
             </div>
             <div class="info-item">
-              <label>Canvas Calendar link</label>
+              <label id="info-calendar-label">Canvas Calendar link</label>
               <span id="info-canvas">—</span>
             </div>
             <div class="info-item">
@@ -323,7 +323,14 @@
               <label for="phone">Phone number</label>
               <input type="tel" id="phone" placeholder="(555) 000-1234" />
             </div>
-            <div class="field">
+            <div class="field hidden" id="source-field">
+              <label for="calendar-source">Get reminders from</label>
+              <select id="calendar-source" onchange="applyCalendarSource()">
+                <option value="canvas">Canvas</option>
+                <option value="google">Google Calendar</option>
+              </select>
+            </div>
+            <div class="field" id="canvas-field">
               <label for="canvas-url">Canvas Calendar link</label>
               <input type="url" id="canvas-url" placeholder="https://yourschool.instructure.com/feeds/calendars/..." />
               <details class="ical-help">
@@ -333,6 +340,20 @@
                   <li>Click <strong>Calendar</strong> in the left sidebar.</li>
                   <li>Scroll to the bottom right and click <code>Calendar Feed</code>.</li>
                   <li>Copy the URL — it starts with <code>instructure.com/feeds/calendars/</code></li>
+                </ol>
+              </details>
+            </div>
+            <div class="field hidden" id="google-field">
+              <label for="google-url">Google Calendar link</label>
+              <input type="url" id="google-url" placeholder="https://calendar.google.com/calendar/ical/.../basic.ics" />
+              <details class="ical-help">
+                <summary>How do I find my Google Calendar link?</summary>
+                <ol>
+                  <li>Open <strong>Google Calendar</strong> on a computer.</li>
+                  <li>Click the gear icon, then <strong>Settings</strong>.</li>
+                  <li>Under <strong>Settings for my calendars</strong>, click the calendar you want texts from.</li>
+                  <li>Scroll to <strong>Integrate calendar</strong> and copy <code>Secret address in iCal format</code>.</li>
+                  <li>Don't see it? Some school Google accounts hide this option — try a personal Google account.</li>
                 </ol>
               </details>
             </div>
@@ -496,16 +517,33 @@
       }
     }
 
+    function applyCalendarSource() {
+      const google = document.getElementById("calendar-source").value === "google";
+      document.getElementById("canvas-field").classList.toggle("hidden", google);
+      document.getElementById("google-field").classList.toggle("hidden", !google);
+    }
+
+    function showCalendarInfo(source, canvasUrl, googleUrl) {
+      const google = source === "google";
+      document.getElementById("info-calendar-label").textContent = google ? "Google Calendar link" : "Canvas Calendar link";
+      document.getElementById("info-canvas").textContent = (google ? googleUrl : canvasUrl) || "Not set";
+    }
+
     function showDashboard(data) {
       document.getElementById("dashboard-screen").classList.remove("hidden");
       document.getElementById("signout-btn").classList.remove("hidden");
 
       document.getElementById("info-email").textContent = data.email || "—";
       document.getElementById("info-phone").textContent = data.phone || "Not set";
-      document.getElementById("info-canvas").textContent = data.canvas_url || "Not set";
-
       if (data.phone) document.getElementById("phone").value = data.phone;
       if (data.canvas_url) document.getElementById("canvas-url").value = data.canvas_url;
+      if (data.google_calendar_url) document.getElementById("google-url").value = data.google_calendar_url;
+      if (data.google_calendar_available) {
+        document.getElementById("source-field").classList.remove("hidden");
+        document.getElementById("calendar-source").value = data.calendar_source || "canvas";
+      }
+      applyCalendarSource();
+      showCalendarInfo(data.calendar_source || "canvas", data.canvas_url, data.google_calendar_url);
       if (data.timezone) document.getElementById("timezone").value = data.timezone;
       if (data.send_time != null) document.getElementById("send-time").value = data.send_time;
       document.getElementById("sms-consent").checked = !!data.sms_consent;
@@ -627,13 +665,24 @@
       if (!phone) {
         msg.className = "msg error"; msg.textContent = "Please enter a valid 10-digit US phone number."; msg.style.display = "block"; return;
       }
+      const payload = { action: "update", phone, canvas_url, timezone, send_time, sms_consent: document.getElementById("sms-consent").checked };
+      const sourceAvailable = !document.getElementById("source-field").classList.contains("hidden");
+      const calendar_source = sourceAvailable ? document.getElementById("calendar-source").value : "canvas";
+      const google_calendar_url = document.getElementById("google-url").value.trim();
+      if (sourceAvailable) {
+        payload.calendar_source = calendar_source;
+        if (google_calendar_url) payload.google_calendar_url = google_calendar_url;
+        if (calendar_source === "google" && !google_calendar_url) {
+          msg.className = "msg error"; msg.textContent = "Please paste your Google Calendar link."; msg.style.display = "block"; return;
+        }
+      }
       btn.disabled = true; btn.textContent = "Saving..."; msg.style.display = "none";
 
       try {
         const res = await fetch(`${API}/user`, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: "update", phone, canvas_url, timezone, send_time, sms_consent: document.getElementById("sms-consent").checked })
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
         if (!res.ok) {
@@ -641,7 +690,7 @@
           btn.disabled = false; btn.textContent = "Save changes"; return;
         }
         document.getElementById("info-phone").textContent = phone;
-        document.getElementById("info-canvas").textContent = canvas_url;
+        showCalendarInfo(calendar_source, canvas_url, google_calendar_url);
         updateSchedule(timezone, send_time);
         setReminderBadge(document.getElementById("unsub-btn").dataset.active === "true" && document.getElementById("sms-consent").checked);
         msg.className = "msg success"; msg.textContent = "Settings saved."; msg.style.display = "block";
