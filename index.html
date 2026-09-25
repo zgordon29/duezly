@@ -9,63 +9,41 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png" />
-  <meta name="description" content="Duezly texts you every morning with your Canvas assignments due today, tomorrow, and this week. No app. No login. Just a text." />
+  <meta name="description" content="Duezly texts you every morning with your Canvas assignments due today, tomorrow, and this week. No app. Just a text." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
-    /* ── Light theme (default) ── */
+    /* Same palette and light/dark themes as the live site, with a real font and more room. */
     :root {
       --orange: #d97706;
       --orange-accent: #f97316;
+      --orange-deep: #c2410c;
       --yellow: #f59e0b;
       --text: #1c1917;
       --muted: #78716c;
       --border: #e7e5e4;
       --bg: #ffffff;
       --bg-warm: #fef9f0;
-      --bg-soft: #fafaf9;
-
-      --nav-bg: rgba(255,255,255,0.92);
-      --nav-border: #e7e5e4;
-
-      --hero-bg: linear-gradient(145deg, #c2410c 0%, #f97316 50%, #fbbf24 100%);
-      --hero-glow: radial-gradient(ellipse at 65% 25%, rgba(255,255,255,0.18) 0%, transparent 55%);
-      --hero-p-color: rgba(255,255,255,0.88);
-      --hero-note-color: rgba(255,255,255,0.7);
-      --hero-badge-bg: rgba(255,255,255,0.25);
-      --hero-badge-border: rgba(255,255,255,0.4);
-      --hero-badge-color: #fff;
-      --hero-btn-bg: #fff;
-      --hero-btn-color: #d97706;
-      --hero-btn-shadow: rgba(0,0,0,0.15);
-
-      --step-bg: #ffffff;
-      --step-border: #fde68a;
-      --step-icon-bg: linear-gradient(135deg, #fef3c7, #fde68a);
-      --step-icon-border: transparent;
-
-      --preview-bg: #0f172a;
-      --bubble-bg: #f97316;
-      --bubble-color: #fff;
-
       --card-bg: #ffffff;
       --card-border: #fde68a;
+      --nav-bg: rgba(255,255,255,0.9);
 
-      --ical-bg: #fffbeb;
-      --ical-border: #fde68a;
-      --ical-text: #374151;
-      --ical-code-bg: #fde68a;
-      --ical-code-color: #92400e;
-      --ical-title-color: #b45309;
+      --hero-bg: linear-gradient(145deg, #c2410c 0%, #f97316 50%, #fbbf24 100%);
+      --hero-glow: radial-gradient(ellipse at 75% 20%, rgba(255,255,255,0.22) 0%, transparent 55%);
+      --hero-title: #fff;
+      --hero-p: rgba(255,255,255,0.9);
+      --hero-note: rgba(255,255,255,0.78);
+      --hero-btn-bg: #fff;
+      --hero-btn-color: #c2410c;
+      --hero-btn-shadow: rgba(124, 45, 18, 0.35);
 
-      --faq-bg: var(--bg);
-      --faq-item-bg: transparent;
-      --faq-hover: var(--bg-warm);
-
-      --select-bg: rgba(0,0,0,0.06);
-      --select-color: #1c1917;
-      --select-border: #d6d3d1;
+      --num-bg: linear-gradient(135deg, #fef3c7, #fde68a);
+      --num-color: #b45309;
+      --chip-bg: #fff;
+      --chip-border: #e7e5e4;
+      --preview-bg: #0f172a;
+      --shadow: 0 18px 50px -24px rgba(124, 45, 18, 0.35);
     }
-
-    /* ── Dark theme ── */
     body.dark {
       --orange: #f97316;
       --orange-accent: #fb923c;
@@ -75,505 +53,385 @@
       --border: #1e293b;
       --bg: #0f172a;
       --bg-warm: #111827;
-      --bg-soft: #1e293b;
-
-      --nav-bg: rgba(15,23,42,0.92);
-      --nav-border: #1e293b;
+      --card-bg: #1e293b;
+      --card-border: #2d3748;
+      --nav-bg: rgba(15,23,42,0.88);
 
       --hero-bg: #0f172a;
-      --hero-glow: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.2) 0%, transparent 65%);
-      --hero-p-color: #94a3b8;
-      --hero-note-color: #94a3b8;
-      --hero-badge-bg: rgba(249,115,22,0.15);
-      --hero-badge-border: rgba(249,115,22,0.35);
-      --hero-badge-color: #fb923c;
+      --hero-glow: radial-gradient(ellipse at 70% 10%, rgba(249,115,22,0.28) 0%, transparent 60%);
+      --hero-p: #a8b3c4;
+      --hero-note: #94a3b8;
       --hero-btn-bg: linear-gradient(135deg, #ea580c, #f59e0b);
       --hero-btn-color: #fff;
       --hero-btn-shadow: rgba(249,115,22,0.4);
 
-      --step-bg: #1e293b;
-      --step-border: #2d3748;
-      --step-icon-bg: rgba(249,115,22,0.12);
-      --step-icon-border: rgba(249,115,22,0.25);
-
+      --num-bg: rgba(249,115,22,0.14);
+      --num-color: #fb923c;
+      --chip-bg: #1e293b;
+      --chip-border: #334155;
       --preview-bg: #060d1a;
-      --bubble-bg: linear-gradient(135deg, #ea580c, #f59e0b);
-      --bubble-color: #fff;
-
-      --card-bg: #1e293b;
-      --card-border: #2d3748;
-
-      --ical-bg: rgba(249,115,22,0.08);
-      --ical-border: rgba(249,115,22,0.25);
-      --ical-text: #94a3b8;
-      --ical-code-bg: rgba(249,115,22,0.2);
-      --ical-code-color: #fb923c;
-      --ical-title-color: #fb923c;
-
-      --faq-bg: var(--bg);
-      --faq-item-bg: #1e293b;
-      --faq-hover: rgba(249,115,22,0.06);
-
-      --select-bg: rgba(255,255,255,0.08);
-      --select-color: #f1f5f9;
-      --select-border: #334155;
+      --shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.7);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      -webkit-font-smoothing: antialiased;
-      transition: background 0.2s, color 0.2s;
+      font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text); background: var(--bg);
+      -webkit-font-smoothing: antialiased; transition: background .2s, color .2s;
     }
+    a { color: inherit; }
+    .hidden { display: none !important; }
+    .inner { max-width: 1080px; margin: 0 auto; }
 
-    /* ── Nav ── */
+    /* Nav */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: var(--nav-bg);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--nav-border);
-      padding: 0 24px;
-      height: 56px;
-      display: flex; align-items: center; justify-content: space-between;
+      background: var(--nav-bg); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: 62px; padding: 0 24px;
     }
-    .nav-logo { font-size: 1.3rem; font-weight: 900; letter-spacing: -0.5px;
+    nav .inner { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 1.45rem; font-weight: 900; letter-spacing: -0.5px; }
+    .nav-logo span {
       background: linear-gradient(135deg, var(--orange), var(--yellow));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .nav-right { display: flex; gap: 12px; align-items: center; }
-    .nav-cta {
-      background: linear-gradient(135deg, #c2410c, #f59e0b);
-      color: #fff; padding: 8px 18px; border-radius: 8px;
-      font-size: 0.875rem; font-weight: 700;
-      text-decoration: none; transition: opacity 0.15s, transform 0.1s;
+    .sun { width: 24px; height: 24px; }
+    .nav-right { display: flex; gap: 22px; align-items: center; }
+    .nav-link { font-size: 0.95rem; font-weight: 700; color: var(--muted); text-decoration: none; }
+    .nav-link:hover { color: var(--orange); }
+    .nav-signout { font: inherit; font-size: 0.95rem; font-weight: 700; color: var(--muted); background: none; border: 0; cursor: pointer; }
+    .nav-cta, .btn {
+      background: linear-gradient(135deg, #c2410c, #f59e0b); color: #fff;
+      padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 0.95rem;
+      text-decoration: none; transition: transform .12s, box-shadow .15s; display: inline-block;
+      box-shadow: 0 6px 18px -8px rgba(234, 88, 12, .7);
     }
-    .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
-    .nav-signout { font-size: 0.875rem; color: var(--muted); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
-    .nav-signout:hover { color: var(--orange); }
-    .theme-select {
-      font-size: 0.8rem; font-weight: 600;
-      background: var(--select-bg);
-      color: var(--select-color);
-      border: 1px solid var(--select-border);
-      border-radius: 7px;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-family: inherit;
-      outline: none;
-      transition: background 0.15s;
-    }
-    .theme-select:hover { opacity: 0.85; }
-    body.dark .theme-select option { background: #1e293b; color: #f1f5f9; }
-    .hidden { display: none; }
+    .nav-cta:hover, .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -8px rgba(234, 88, 12, .8); }
 
-    /* ── Hero ── */
-    .hero {
-      background: var(--hero-bg);
-      padding: 88px 24px;
-      position: relative; overflow: hidden;
-    }
-    .hero::before {
-      content: "";
-      position: absolute; inset: 0;
-      background: var(--hero-glow);
-      pointer-events: none;
-    }
-    .hero-content {
-      position: relative;
-      max-width: 680px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 20px;
-    }
+    /* Hero */
+    .hero { background: var(--hero-bg); padding: 80px 24px 88px; position: relative; overflow: hidden; }
+    .hero::before { content: ""; position: absolute; inset: 0; background: var(--hero-glow); pointer-events: none; }
+    .hero .inner { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; }
     .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--hero-badge-bg);
-      border: 1px solid var(--hero-badge-border);
-      color: var(--hero-badge-color);
-      padding: 5px 14px; border-radius: 999px;
-      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.3px;
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px;
+      background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); color: #fff;
+      font-size: .85rem; font-weight: 800; margin-bottom: 22px;
     }
-    .hero h1 {
-      font-size: clamp(2.2rem, 7vw, 3.4rem);
-      font-weight: 900; color: #fff;
-      line-height: 1.1; letter-spacing: -1px;
-      width: 100%;
-    }
+    body.dark .hero-badge { background: rgba(249,115,22,.15); border-color: rgba(249,115,22,.35); color: #fb923c; }
+    .hero-badge i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 4px rgba(255,255,255,.25); }
+    .hero h1 { font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 900; line-height: 1.02; letter-spacing: -1.5px; color: var(--hero-title); margin-bottom: 20px; }
     body.dark .hero h1 {
-      background: linear-gradient(135deg, #fff 0%, #fb923c 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      padding-bottom: 6px;
+      background: linear-gradient(135deg, #fff 30%, #fb923c 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; padding-bottom: 6px;
     }
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.1rem);
-      color: var(--hero-p-color);
-      max-width: 560px;
-      line-height: 1.7;
-    }
+    .hero p.lede { font-size: 1.2rem; line-height: 1.65; color: var(--hero-p); max-width: 470px; margin-bottom: 30px; font-weight: 600; }
+    .hero-actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
     .hero-btn {
-      display: inline-block;
-      background: var(--hero-btn-bg);
-      color: var(--hero-btn-color);
-      padding: 15px 36px; border-radius: 12px;
-      font-size: 1rem; font-weight: 800;
-      text-decoration: none;
-      transition: transform 0.1s, box-shadow 0.15s;
-      box-shadow: 0 4px 20px var(--hero-btn-shadow);
+      background: var(--hero-btn-bg); color: var(--hero-btn-color); padding: 16px 32px; border-radius: 12px;
+      font-size: 1.05rem; font-weight: 900; text-decoration: none; box-shadow: 0 10px 30px -8px var(--hero-btn-shadow);
+      transition: transform .12s;
     }
-    .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px var(--hero-btn-shadow); }
-    .hero-note { color: var(--hero-note-color); font-size: 0.82rem; }
+    .hero-btn:hover { transform: translateY(-2px); }
+    .hero-link { color: var(--hero-note); font-weight: 800; text-decoration: none; }
+    .hero-link:hover { color: #fff; }
+    .hero-note { margin-top: 18px; color: var(--hero-note); font-size: .9rem; font-weight: 600; }
+    .hero-note b { color: var(--hero-title); }
+    body.dark .hero-note b { color: #fb923c; }
 
-    /* ── Sections ── */
-    .section { padding: 72px 24px; }
-    .section-inner { max-width: 620px; margin: 0 auto; }
-    .section-label {
-      font-size: 0.78rem; font-weight: 800; letter-spacing: 1px;
-      color: var(--orange); text-transform: uppercase; margin-bottom: 10px;
+    .phone {
+      width: 300px; margin: 0 auto; border-radius: 44px; padding: 11px; background: #111827;
+      box-shadow: 0 40px 80px -30px rgba(67, 20, 7, .65), inset 0 0 0 2px #374151;
+      transform: rotate(3deg); animation: float 6s ease-in-out infinite;
     }
-    .section-title { font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 900; line-height: 1.15; margin-bottom: 14px; letter-spacing: -0.5px; color: var(--text); }
-    .section-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-bottom: 40px; }
+    @keyframes float { 50% { transform: rotate(3deg) translateY(-8px); } }
+    .phone-screen { border-radius: 34px; overflow: hidden; background: #f3f4f6; }
+    .phone-top { background: #f3f4f6; padding: 16px 16px 10px; text-align: center; font-size: .72rem; color: #6b7280; font-weight: 700; }
+    .phone-top strong { display: block; color: #111827; font-size: .85rem; }
+    .phone-msg { padding: 0 12px 16px; }
+    .phone-msg img { width: 100%; border-radius: 18px; display: block; }
+    .phone-msg p { background: #e5e7eb; color: #111827; margin-top: 6px; padding: 9px 12px; border-radius: 16px 16px 16px 4px; font-size: .78rem; font-weight: 600; line-height: 1.4; }
 
-    /* ── How it works ── */
+    /* Sections */
+    .section { padding: 88px 24px; }
+    .section-head { max-width: 620px; margin-bottom: 44px; }
+    .section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+    .section-label { font-size: .8rem; font-weight: 900; letter-spacing: 1.2px; color: var(--orange); text-transform: uppercase; margin-bottom: 10px; }
+    .section-title { font-size: clamp(1.9rem, 4.4vw, 2.7rem); font-weight: 900; line-height: 1.1; letter-spacing: -1px; margin-bottom: 14px; }
+    .section-sub { color: var(--muted); font-size: 1.08rem; line-height: 1.7; font-weight: 600; }
+
+    /* How it works */
     .how { background: var(--bg-warm); }
-    .steps { display: flex; flex-direction: column; gap: 14px; }
-    .step {
-      background: var(--step-bg);
-      border: 1.5px solid var(--step-border);
-      border-radius: 16px;
-      padding: 22px 24px;
-      display: flex; gap: 18px; align-items: flex-start;
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .step { background: var(--card-bg); border: 1.5px solid var(--card-border); border-radius: 18px; padding: 24px 22px; }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 12px; background: var(--num-bg); color: var(--num-color);
+      display: grid; place-items: center; font-weight: 900; font-size: 1.1rem; margin-bottom: 16px;
     }
-    .step-icon {
-      width: 44px; height: 44px; flex-shrink: 0;
-      background: var(--step-icon-bg);
-      border: 1px solid var(--step-icon-border);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem;
-    }
-    .step h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; color: var(--text); }
-    .step p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+    .step h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; }
+    .step p { font-size: .93rem; color: var(--muted); line-height: 1.6; font-weight: 600; }
 
-    /* ── SMS Preview ── */
-    .preview-wrap { background: var(--preview-bg); }
-    .preview-wrap .section-label { color: var(--orange-accent); }
-    .preview-wrap .section-title { color: #fff; }
-    .preview-wrap .section-sub { color: #94a3b8; margin-bottom: 32px; }
-    .phone-mockup {
-      background: #1e293b;
-      border-radius: 20px;
-      padding: 24px;
-      max-width: 300px;
-      margin: 0 auto;
-      border: 1px solid #334155;
+    /* Preview */
+    .preview { background: var(--preview-bg); color: #f1f5f9; }
+    .preview .section-label { color: #fb923c; }
+    .preview .section-sub { color: #94a3b8; }
+    .preview .inner { display: grid; grid-template-columns: .9fr 1.1fr; gap: 56px; align-items: center; }
+    .style-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    .chip {
+      font: inherit; font-weight: 800; font-size: .92rem; cursor: pointer; padding: 9px 16px; border-radius: 999px;
+      border: 1.5px solid #334155; background: #1e293b; color: #cbd5e1; display: flex; align-items: center; gap: 8px;
+      transition: border-color .15s, color .15s;
     }
-    .phone-sender { font-size: 0.75rem; color: #64748b; margin-bottom: 10px; text-align: center; }
-    .bubble {
-      background: var(--bubble-bg);
-      border-radius: 18px 18px 18px 4px;
-      padding: 16px 18px;
-      font-size: 0.82rem;
-      color: var(--bubble-color);
-      line-height: 1.8;
-      white-space: pre-line;
-      font-family: monospace;
+    .chip i { width: 12px; height: 12px; border-radius: 50%; }
+    .chip[aria-pressed="true"] { border-color: #fb923c; color: #fff; background: rgba(249,115,22,.14); }
+    .chip:hover { color: #fff; }
+    .preview-note { margin-top: 22px; color: #94a3b8; font-size: .92rem; font-weight: 600; line-height: 1.6; }
+    .preview-note b { color: #fb923c; }
+    .preview-frame {
+      background: #1e293b; border: 1px solid #334155; border-radius: 24px; padding: 18px;
+      max-width: 400px; margin: 0 auto; width: 100%;
     }
+    .preview-frame .sender { text-align: center; font-size: .78rem; color: #64748b; font-weight: 700; margin-bottom: 12px; }
+    .preview-frame img { width: 100%; border-radius: 16px; display: block; transition: opacity .2s; }
 
-    /* ── Signup ── */
-    .signup-bg { background: var(--bg-warm); }
-    .signup-card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: 20px;
-      padding: 36px 32px;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+    /* Pricing + signup */
+    .signup { background: var(--bg-warm); }
+    .signup .inner { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+    .card { background: var(--card-bg); border: 1.5px solid var(--card-border); border-radius: 22px; padding: 34px 32px; box-shadow: var(--shadow); }
+    .price { font-size: 3.6rem; font-weight: 900; letter-spacing: -2px; line-height: 1; margin: 6px 0 4px; }
+    .price small { font-size: 1.1rem; color: var(--muted); letter-spacing: 0; font-weight: 800; }
+    .price-sub { color: var(--muted); font-weight: 700; margin-bottom: 22px; }
+    .checks { list-style: none; display: grid; gap: 10px; margin-bottom: 28px; }
+    .checks li { display: flex; gap: 10px; font-weight: 700; }
+    .checks li::before { content: ""; flex-shrink: 0; width: 20px; height: 20px; margin-top: 1px; border-radius: 50%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.5l2.5 2.5L10 3.5' fill='none' stroke='%23d97706' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat, var(--num-bg); }
+    .btn-google {
+      display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+      padding: 14px; font-size: 1.02rem; text-align: center;
     }
-    .signup-card h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; color: var(--text); }
-    .signup-card .sub { font-size: 0.875rem; color: var(--muted); margin-bottom: 28px; }
-    .submit-btn {
-      width: 100%; padding: 14px;
-      background: linear-gradient(135deg, #c2410c, #f59e0b);
-      color: #fff; border: none; border-radius: 10px;
-      font-size: 1rem; font-weight: 800;
-      cursor: pointer; transition: opacity 0.15s, transform 0.1s;
-    }
-    .submit-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .fine { font-size: .82rem; color: var(--muted); margin-top: 14px; line-height: 1.6; font-weight: 600; }
+    .card h3 { font-size: 1.15rem; font-weight: 900; margin-bottom: 14px; }
+    .ical ol { counter-reset: s; list-style: none; display: grid; gap: 12px; }
+    .ical li { counter-increment: s; position: relative; padding-left: 38px; min-height: 26px; font-weight: 600; line-height: 1.55; color: var(--text); font-size: .96rem; }
+    .ical li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 26px; height: 26px; border-radius: 8px; background: var(--num-bg); color: var(--num-color); display: grid; place-items: center; font-weight: 900; font-size: .85rem; }
+    .ical code { background: var(--num-bg); color: var(--num-color); padding: 1px 7px; border-radius: 6px; font-size: .85rem; font-weight: 800; }
 
-    /* ── iCal instructions ── */
-    .ical-box {
-      background: var(--ical-bg);
-      border: 1.5px solid var(--ical-border);
-      border-radius: 14px;
-      padding: 24px 28px;
-      margin-top: 28px;
-    }
-    .ical-box h3 { font-size: 0.9rem; font-weight: 800; color: var(--ical-title-color); margin-bottom: 12px; }
-    .ical-box ol { padding-left: 18px; }
-    .ical-box li { font-size: 0.875rem; color: var(--ical-text); line-height: 1.9; }
-    .ical-box code { background: var(--ical-code-bg); color: var(--ical-code-color); padding: 1px 7px; border-radius: 5px; font-size: 0.8rem; font-weight: 700; }
-
-    /* ── FAQ ── */
-    .faq { background: var(--faq-bg); }
+    /* FAQ */
+    .faq .inner { max-width: 760px; }
     .faq-list { display: flex; flex-direction: column; gap: 12px; }
-    .faq-item {
-      background: var(--faq-item-bg);
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-    }
+    .faq-item { border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--card-bg); }
     body.dark .faq-item { border-color: #334155; }
     .faq-question {
-      width: 100%; text-align: left;
-      padding: 18px 20px;
-      background: none; border: none; cursor: pointer;
-      font-size: 0.95rem; font-weight: 700; color: var(--text);
-      font-family: inherit;
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 12px;
+      width: 100%; text-align: left; padding: 20px 22px; background: none; border: 0; cursor: pointer;
+      font: inherit; font-size: 1.05rem; font-weight: 800; color: var(--text);
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
     }
-    .faq-question:hover { background: var(--faq-hover); }
-    .faq-chevron { font-size: 0.75rem; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
-    .faq-item.open .faq-chevron { transform: rotate(180deg); }
-    .faq-answer {
-      display: none;
-      padding: 0 20px 18px;
-      font-size: 0.875rem; color: var(--muted); line-height: 1.7;
-    }
+    .faq-chevron { width: 28px; height: 28px; border-radius: 50%; background: var(--num-bg); color: var(--num-color);
+      display: grid; place-items: center; font-size: 1.1rem; font-weight: 900; flex-shrink: 0; transition: transform .2s; }
+    .faq-item.open .faq-chevron { transform: rotate(45deg); }
+    .faq-answer { display: none; padding: 0 22px 20px; color: var(--muted); line-height: 1.7; font-weight: 600; }
     .faq-item.open .faq-answer { display: block; }
-    @media (max-width: 480px) {
-      .faq-question { font-size: 1rem; padding: 20px 18px; }
-      .faq-answer { font-size: 0.95rem; padding: 0 18px 22px; line-height: 1.75; }
-    }
 
-    /* ── Footer ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 32px 24px;
-      text-align: center;
-      background: var(--bg);
-    }
-    footer p { font-size: 0.82rem; color: var(--muted); }
-    footer a { color: var(--muted); text-decoration: none; }
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 36px 24px; }
+    footer .inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    footer p, footer a { font-size: .88rem; color: var(--muted); text-decoration: none; font-weight: 700; }
     footer a:hover { color: var(--orange); }
-    .footer-links { display: flex; justify-content: center; gap: 20px; margin-top: 8px; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .legal { flex-basis: 100%; order: 3; font-size: .78rem !important; font-weight: 600 !important; opacity: .85; }
+    .theme-toggle { font: inherit; font-size: .85rem; font-weight: 800; cursor: pointer; color: var(--text);
+      background: var(--chip-bg); border: 1.5px solid var(--chip-border); border-radius: 999px; padding: 6px 14px; }
 
-    /* ── Mobile ── */
-    @media (max-width: 480px) {
-      .signup-card { padding: 24px 18px; }
-      .hero { padding: 56px 20px 64px; }
-      .section { padding: 56px 20px; }
+    @media (max-width: 900px) {
+      .hero .inner, .preview .inner, .signup .inner { grid-template-columns: 1fr; }
+      .hero { padding: 56px 20px 72px; }
+      .hero .inner { gap: 48px; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .nav-link { display: none; }
+    }
+    @media (max-width: 560px) {
+      .steps { grid-template-columns: 1fr; }
+      .section { padding: 64px 20px; }
       nav { padding: 0 16px; }
+      .card { padding: 26px 20px; }
+      .phone { width: 270px; }
+      footer .inner { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Nav -->
-  <nav>
-    <div class="nav-logo">Duezly ☀️</div>
+<nav>
+  <div class="inner">
+    <a class="nav-logo" href="index.html">
+      <span>Duezly</span>
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5.5" fill="#f59e0b"/><g stroke="#f59e0b" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+    </a>
     <div class="nav-right">
+      <a class="nav-link" href="#how">How it works</a>
+      <a class="nav-link" href="#styles">Styles</a>
+      <a class="nav-link" href="#faq">FAQ</a>
       <button class="nav-signout hidden" id="signout-btn" onclick="signOut()">Sign out</button>
       <a href="signup.html" id="nav-cta" class="nav-cta">Get started</a>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">✉️ Daily SMS homework reminders</div>
+<section class="hero">
+  <div class="inner">
+    <div>
+      <div class="hero-badge"><i></i>Daily homework reminders by text</div>
       <h1>Never miss an assignment again.</h1>
-      <p>Duezly texts you every morning with everything due today, tomorrow, and this week — pulled straight from your Canvas calendar.</p>
-      <a href="signup.html" class="hero-btn">Get started 🎉</a>
-      <p class="hero-note">14-day free trial, then $2.99/month — cancel anytime. No app. Sign in with Google and you're set up in 2 minutes.</p>
+      <p class="lede">Duezly texts you every morning with everything due today, tomorrow, and this week, pulled straight from your Canvas calendar.</p>
+      <div class="hero-actions">
+        <a href="signup.html" class="hero-btn">Start your free trial</a>
+        <a href="#styles" class="hero-link">See a sample text &darr;</a>
+      </div>
+      <p class="hero-note"><b>14 days free</b>, then $2.99/month. Cancel anytime. No app to download.</p>
     </div>
-  </section>
+    <div class="phone" aria-hidden="true">
+      <div class="phone-screen">
+        <div class="phone-top"><strong>Duezly</strong>Today 8:00 AM</div>
+        <div class="phone-msg">
+          <img src="themes/sunrise.jpg" alt="" />
+          <p>Duezly - Mon 9/28: 3 due today, 2 tomorrow. Reply STOP to opt out</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <!-- How it works -->
-  <section class="section how">
-    <div class="section-inner">
+<section class="section how" id="how">
+  <div class="inner">
+    <div class="section-head">
       <div class="section-label">How it works</div>
       <h2 class="section-title">Set up once. Never think about it again.</h2>
-      <p class="section-sub">Three steps and you're done. Duezly handles everything from there.</p>
-      <div class="steps">
-        <div class="step">
-          <div class="step-icon">✅</div>
-          <div>
-            <h3>Sign in and subscribe</h3>
-            <p>Sign in with Google and start your 14-day free trial — no charge until day 15, then $2.99/month. Cancel anytime.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-icon">📅</div>
-          <div>
-            <h3>Connect your Canvas calendar</h3>
-            <p>Paste your Canvas Calendar link — a read-only link to your assignments. No password needed.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-icon">⏰</div>
-          <div>
-            <h3>We check Canvas at your chosen time</h3>
-            <p>Duezly reads your calendar and sorts what's due today, tomorrow, and later this week.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-icon">📱</div>
-          <div>
-            <h3>You get a text — that's it</h3>
-            <p>A clean, readable text on your phone before your day starts. Reply STOP anytime to cancel.</p>
-          </div>
-        </div>
-      </div>
+      <p class="section-sub">About two minutes of setup. Duezly handles everything after that.</p>
     </div>
-  </section>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3>Sign in with Google</h3><p>Start your 14-day free trial. No charge until day 15.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Paste your Canvas link</h3><p>A read-only calendar link. No Canvas password needed.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Pick a time and style</h3><p>Any hour from 5 AM to noon, as a picture or plain text.</p></div>
+      <div class="step"><div class="step-num">4</div><h3>Get your daily text</h3><p>Today, tomorrow, and this week. Reply STOP anytime.</p></div>
+    </div>
+  </div>
+</section>
 
-  <!-- SMS Preview -->
-  <section class="section preview-wrap">
-    <div class="section-inner" style="text-align:center;">
+<section class="section preview" id="styles">
+  <div class="inner">
+    <div>
       <div class="section-label">What it looks like</div>
       <h2 class="section-title">A text you'll actually read.</h2>
-      <p class="section-sub">Clean, simple, and straight to the point — every morning.</p>
-      <div class="phone-mockup">
-        <div class="phone-sender">Duezly · 8:00 AM</div>
-        <div class="bubble">Duezly - Tue 6/9
-TODAY: Econ 202 Problem Set (11:59pm); Bio Lab Report (8am)
-TMRW: History Essay Draft (11:59pm)
-2 more due this week (next: Calc Midterm Thu)
-Reply STOP to opt out</div>
+      <p class="section-sub">Pick a picture style or keep it plain text. Switch anytime from your dashboard.</p>
+      <div class="style-chips" id="chips">
+        <button class="chip" data-theme="sunrise" aria-pressed="true"><i style="background:#f97316"></i>Sunrise</button>
+        <button class="chip" data-theme="bubblegum" aria-pressed="false"><i style="background:#ec4899"></i>Bubblegum</button>
+        <button class="chip" data-theme="mint" aria-pressed="false"><i style="background:#14b8a6"></i>Mint</button>
+        <button class="chip" data-theme="midnight" aria-pressed="false"><i style="background:#4f46e5"></i>Midnight</button>
+        <button class="chip" data-theme="notebook" aria-pressed="false"><i style="background:#60a5fa"></i>Notebook</button>
+        <button class="chip" data-theme="text" aria-pressed="false"><i style="background:#94a3b8"></i>Plain text</button>
       </div>
+      <p class="preview-note"><b>Exams and quizzes jump to the top</b> with a tag, so they never get buried. Due times are included whenever Canvas has them.</p>
     </div>
-  </section>
-
-  <!-- Signup -->
-  <section class="section signup-bg" id="signup">
-    <div class="section-inner">
-      <div class="section-label">Get started</div>
-      <h2 class="section-title">Sign up in 30 seconds. 🚀</h2>
-      <p class="section-sub">14-day free trial, then $2.99/month — cancel anytime. Sign in with Google, enter your Canvas link, and you're done.</p>
-      <div class="signup-card" style="text-align:center;">
-        <div style="font-size:2rem;margin-bottom:12px;">👋</div>
-        <h2 style="margin-bottom:8px;">Create your account</h2>
-        <p class="sub" style="margin-bottom:28px;">Sign in with Google to get started. We only use your email to identify your account — we never post anything.</p>
-        <a href="signup.html" class="submit-btn" style="display:block;text-decoration:none;text-align:center;">Sign in with Google →</a>
-        <p style="font-size:0.78rem;color:var(--muted);margin-top:14px;">After signing in, you'll land on your dashboard — click Subscribe to go to checkout, then add your Canvas link and phone number.</p>
-      </div>
-
-      <div class="ical-box" id="ical-instructions" style="margin-top:28px;">
-        <h3>🔗 How to find your Canvas Calendar link</h3>
-        <ol>
-          <li>Go to your school's Canvas site and log in.</li>
-          <li>Click <strong>Calendar</strong> in the left sidebar.</li>
-          <li>Scroll to the bottom right and click <code>Calendar Feed</code>.</li>
-          <li>Copy the URL — it will contain <code>instructure.com/feeds/calendars/</code></li>
-          <li>Paste it in your dashboard after signing in.</li>
-        </ol>
-      </div>
+    <div class="preview-frame">
+      <div class="sender">Duezly &middot; 8:00 AM</div>
+      <img id="style-img" src="themes/sunrise.jpg" alt="Sunrise style reminder" />
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- FAQ -->
-  <section class="section faq">
-    <div class="section-inner">
+<section class="section signup" id="signup">
+  <div class="inner">
+    <div class="card">
+      <div class="section-label">Pricing</div>
+      <div class="price">$2.99<small> /month</small></div>
+      <p class="price-sub">after a 14-day free trial</p>
+      <ul class="checks">
+        <li>A reminder every morning at your time</li>
+        <li>All picture styles, or plain text</li>
+        <li>Exams and quizzes flagged</li>
+        <li>Cancel anytime from your dashboard</li>
+      </ul>
+      <a href="signup.html" class="btn btn-google">Sign in with Google &rarr;</a>
+      <p class="fine">We only use your email to identify your account. We never post anything.</p>
+    </div>
+    <div class="card ical" id="ical-instructions">
+      <div class="section-label">Before you start</div>
+      <h3>Find your Canvas calendar link</h3>
+      <ol>
+        <li>Log in to your school's Canvas site.</li>
+        <li>Click <strong>Calendar</strong> in the left sidebar.</li>
+        <li>At the bottom right, click <strong>Calendar Feed</strong>.</li>
+        <li>Copy the link. It contains <code>instructure.com/<wbr>feeds/<wbr>calendars/</code></li>
+        <li>Paste it when you set up Duezly.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="section faq" id="faq">
+  <div class="inner">
+    <div class="section-head center">
       <div class="section-label">FAQ</div>
       <h2 class="section-title">Common questions.</h2>
-      <p class="section-sub">Everything you need to know before signing up.</p>
-      <div class="faq-list">
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Does this work for my school? <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">If your school uses Canvas, yes! We support any Canvas school — just grab your Canvas Calendar link from the Canvas calendar page and paste it in your dashboard.</div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            What does the text message look like? <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">You get a clean daily text with assignments due today, tomorrow, and later this week — including the due time when Canvas provides it. On Fridays and Sundays the message has a little personality too. 😄</div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Can I choose when I get the text? <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">Yes! In your dashboard you can pick any time from 5 AM to 12 PM and set your timezone. We support all US timezones.</div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Is my Canvas data safe? <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">We only read your Canvas Calendar link — a read-only link Canvas generates for you. We never ask for your Canvas username or password, and we never access your grades, messages, or account.</div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            How do I stop the texts? <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">Reply <strong>STOP</strong> to any text and you'll be unsubscribed immediately. You can also unsubscribe or delete your account anytime from your dashboard.</div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Is Duezly free? <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">Duezly offers a 14-day free trial — your card won't be charged until day 15, then $2.99/month. No hidden fees, cancel anytime. You can cancel during the trial at no charge.</div>
-        </div>
-
-      </div>
     </div>
-  </section>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Does this work for my school? <span class="faq-chevron">+</span></button>
+        <div class="faq-answer">If your school uses Canvas, yes. Any Canvas school works. Just grab your Canvas calendar link and paste it in during setup.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What does the text look like? <span class="faq-chevron">+</span></button>
+        <div class="faq-answer">Everything due today, tomorrow, and later this week, with due times when Canvas has them. You choose a picture style or plain text, and exams and quizzes are always sorted to the top.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Can I choose when I get the text? <span class="faq-chevron">+</span></button>
+        <div class="faq-answer">Yes. Pick any hour from 5 AM to 12 PM in your dashboard and set your timezone. All US timezones are supported.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Is my Canvas data safe? <span class="faq-chevron">+</span></button>
+        <div class="faq-answer">We only read the read-only calendar link Canvas creates for you. We never ask for your Canvas username or password, and we can't see your grades, messages, or account.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How do I stop the texts? <span class="faq-chevron">+</span></button>
+        <div class="faq-answer">Reply <strong>STOP</strong> to any text and the texts stop right away. Replying STOP doesn't cancel billing, so to stop paying, cancel your subscription from your dashboard. You can also pause reminders or delete your account there.</div></div>
+      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How much does it cost? <span class="faq-chevron">+</span></button>
+        <div class="faq-answer">14 days free, then $2.99/month. Your card isn't charged until day 15, and if you cancel during the trial you pay nothing.</div></div>
+    </div>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2026 Duezly. All rights reserved.</p>
+<footer>
+  <div class="inner">
+    <p>&copy; 2026 Duezly &middot; <a href="mailto:hello@duezly.com">hello@duezly.com</a></p>
     <div class="footer-links">
       <a href="privacy-policy.html">Privacy Policy</a>
       <a href="terms.html">Terms &amp; Conditions</a>
       <a href="sms-opt-in.html">SMS Opt-In</a>
     </div>
-    <div style="margin-top:12px;">
-      <select id="theme-select" class="theme-select" onchange="setTheme(this.value)">
-        <option value="light">☀️ Light</option>
-        <option value="dark">🌙 Dark</option>
-      </select>
-    </div>
-  </footer>
+    <p class="legal">Canvas is a trademark of Instructure, Inc. Duezly is an independent service and is not affiliated with or endorsed by Instructure.</p>
+    <button class="theme-toggle" id="theme-toggle" onclick="setTheme(document.body.classList.contains('dark') ? 'light' : 'dark')"></button>
+  </div>
+</footer>
 
-  <script>
-    function setTheme(theme) {
-      document.body.classList.toggle("dark", theme === "dark");
-      localStorage.setItem("duezly_theme", theme);
-      const sel = document.getElementById("theme-select");
-      if (sel) sel.value = theme;
-    }
-
-    function toggleFaq(btn) {
-      btn.closest(".faq-item").classList.toggle("open");
-    }
-
-    function signOut() {
-      localStorage.removeItem("duezly_token");
-      window.location.href = "index.html";
-    }
-
-    // Apply saved theme on load
-    const savedTheme = localStorage.getItem("duezly_theme") || "dark";
-    setTheme(savedTheme);
-
-    if (localStorage.getItem("duezly_token")) {
-      document.getElementById("nav-cta").textContent = "My Dashboard";
-      document.getElementById("nav-cta").href = "dashboard.html";
-      document.getElementById("signout-btn").classList.remove("hidden");
-    }
-  </script>
-
+<script>
+  function setTheme(theme) {
+    document.body.classList.toggle("dark", theme === "dark");
+    try { localStorage.setItem("duezly_theme", theme); } catch (e) {}
+    document.getElementById("theme-toggle").textContent = theme === "dark" ? "Light mode" : "Dark mode";
+  }
+  function toggleFaq(btn) { btn.closest(".faq-item").classList.toggle("open"); }
+  function signOut() {
+    localStorage.removeItem("duezly_token");
+    window.location.href = "index.html";
+  }
+  document.getElementById("chips").addEventListener("click", e => {
+    const chip = e.target.closest(".chip"); if (!chip) return;
+    document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === chip));
+    const img = document.getElementById("style-img");
+    img.src = `themes/${chip.dataset.theme}.jpg`;
+    img.alt = `${chip.textContent.trim()} style reminder`;
+  });
+  let saved = "dark";
+  try { saved = localStorage.getItem("duezly_theme") || "dark"; } catch (e) {}
+  setTheme(saved);
+  if (localStorage.getItem("duezly_token")) {
+    const cta = document.getElementById("nav-cta");
+    cta.textContent = "My Dashboard"; cta.href = "dashboard.html";
+    document.getElementById("signout-btn").classList.remove("hidden");
+  }
+</script>
 </body>
 </html>
