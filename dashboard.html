@@ -270,11 +270,11 @@
     <div id="subscribe-section" class="hidden">
       <div class="card setup-card">
         <div class="card-title">Get Started with Duezly</div>
-        <p class="setup-desc">Duezly texts you a daily summary of your upcoming Canvas assignments straight to your phone every morning. $1.99/month after a 14-day free trial. Cancel anytime.</p>
+        <p class="setup-desc">Duezly texts you a daily summary of your upcoming Canvas assignments straight to your phone every morning. $2.99/month after a 14-day free trial. Cancel anytime.</p>
 
         <p class="sms-notice">Duezly works by texting you — SMS consent is needed to receive your daily reminders. You can add your phone number and Canvas link after subscribing.</p>
 
-        <button class="btn btn-primary" id="sub-btn" onclick="subscribe()">Subscribe — $1.99/mo</button>
+        <button class="btn btn-primary" id="sub-btn" onclick="subscribe()">Subscribe — $2.99/mo</button>
         <div class="msg" id="sub-msg"></div>
         <p class="setup-fine">14-day free trial &middot; Cancel anytime &middot; No spam</p>
       </div>
@@ -493,7 +493,7 @@
         cancelingNoteEl.style.display = "none";
         reactivateBtn.style.display = "none";
       } else if (subStatus === "active") {
-        statusEl.textContent = "Active – $1.99/mo";
+        statusEl.textContent = "Active – $2.99/mo";
         cancelBtn.style.display = "block";
         cancelingNoteEl.style.display = "none";
         reactivateBtn.style.display = "none";
@@ -620,12 +620,12 @@
         const data = await res.json();
         if (!res.ok) {
           msg.className = "msg error"; msg.textContent = data.message || "Failed to start checkout. Please try again."; msg.style.display = "block";
-          btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo"; return;
+          btn.disabled = false; btn.textContent = "Subscribe — $2.99/mo"; return;
         }
         window.location.href = data.checkout_url;
       } catch {
         msg.className = "msg error"; msg.textContent = "Network error — please try again."; msg.style.display = "block";
-        btn.disabled = false; btn.textContent = "Subscribe — $1.99/mo";
+        btn.disabled = false; btn.textContent = "Subscribe — $2.99/mo";
       }
     }
 
@@ -769,7 +769,7 @@
     async function reactivateSubscription() {
       const msgEl = document.getElementById("cancel-sub-msg");
       const btnEl = document.getElementById("reactivate-sub-btn");
-      if (!confirm("Reactivate your subscription? You'll continue to be billed $1.99/month.")) return;
+      if (!confirm("Reactivate your subscription? You'll continue to be billed $2.99/month.")) return;
       btnEl.disabled = true; btnEl.textContent = "Reactivating…"; msgEl.style.display = "none";
       try {
         const res = await fetch(`${API}/user`, {
@@ -781,7 +781,7 @@
         if (res.ok) {
           btnEl.style.display = "none";
           document.getElementById("cancel-sub-btn").style.display = "block";
-          document.getElementById("sub-status-value").textContent = "Active – $1.99/mo";
+          document.getElementById("sub-status-value").textContent = "Active – $2.99/mo";
           document.getElementById("canceling-note").style.display = "none";
         } else {
           msgEl.className = "msg error"; msgEl.textContent = data.message; msgEl.style.display = "block";

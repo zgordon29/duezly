@@ -191,7 +191,7 @@
 
   <div class="page-header">
     <h1>Subscribe to Duezly</h1>
-    <p>Daily SMS homework reminders from Canvas — $1.99/month after a 14-day free trial.</p>
+    <p>Daily SMS homework reminders from Canvas — $2.99/month after a 14-day free trial.</p>
   </div>
 
   <main>
@@ -221,7 +221,7 @@
           <span>Yes, I want to receive daily automated SMS homework reminders from Duezly. ~1 msg/day. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for info. Consent is not required to subscribe. See our <a href="privacy-policy.html" onclick="event.stopPropagation()">Privacy Policy</a> and <a href="terms.html" onclick="event.stopPropagation()">Terms</a>.</span>
         </label>
 
-        <button id="subscribe-btn" class="btn btn-primary" onclick="subscribe()">Subscribe — $1.99/mo</button>
+        <button id="subscribe-btn" class="btn btn-primary" onclick="subscribe()">Subscribe — $2.99/mo</button>
         <div class="msg" id="subscribe-msg"></div>
         <p class="fine">14-day free trial &middot; Cancel anytime &middot; No spam</p>
         <p class="fine" style="margin-top:6px;">Your Canvas Calendar link and reminder time can be set from your dashboard after subscribing.</p>
@@ -294,7 +294,7 @@
             msg.textContent = saveData.message || "Failed to save. Please try again.";
             msg.style.display = "block";
             btn.disabled = false;
-            btn.textContent = "Subscribe — $1.99/mo";
+            btn.textContent = "Subscribe — $2.99/mo";
             return;
           }
         }
@@ -312,14 +312,14 @@
           msg.textContent = "Failed to start checkout. Please try again.";
           msg.style.display = "block";
           btn.disabled = false;
-          btn.textContent = "Subscribe — $1.99/mo";
+          btn.textContent = "Subscribe — $2.99/mo";
         }
       } catch {
         msg.className = "msg error";
         msg.textContent = "Network error — please try again.";
         msg.style.display = "block";
         btn.disabled = false;
-        btn.textContent = "Subscribe — $1.99/mo";
+        btn.textContent = "Subscribe — $2.99/mo";
       }
     }
 
